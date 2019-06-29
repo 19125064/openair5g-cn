@@ -17,7 +17,7 @@
 #include "sctp_default_values.h"
 #include "common_defs.h"
 #include "amf_default_values.h"
-#include "config.h"
+#include "bupt_config.h"
 
 
 amf_config_t                            amf_config = {.rw_lock = PTHREAD_RWLOCK_INITIALIZER, 0};

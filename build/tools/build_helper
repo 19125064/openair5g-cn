@@ -224,6 +224,8 @@ check_install_amf_software()
       cmake \
       libconfig8-dev \
       libgcrypt11-dev \
+      openssl \
+      libssl-dev \
       g++ \
       gcc \
       git \
