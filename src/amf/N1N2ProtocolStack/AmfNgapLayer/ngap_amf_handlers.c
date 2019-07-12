@@ -38,7 +38,11 @@
 #include  "Ngap_UserLocationInformationEUTRA.h"
 #include  "Ngap_AllowedNSSAI-Item.h"
 
+#include  "asn1_conversions.h"
+#include  "conversions.h"
+#include  "amf_config.h"
 #include  "Ngap_AMFSetID.h"
+#include  "Ngap_Cause.h"
 
 extern hash_table_ts_t g_ngap_gnb_coll;
 extern uint32_t nb_gnb_associated;
@@ -282,10 +286,9 @@ ngap_amf_generate_ng_setup_failure (
 */
 	
 int ng_setup_request_to_send_response(const sctp_assoc_id_t assoc_id,
-			const sctp_stream_id_t stream, Ngap_NGAP_PDU_t *setup_req_pdu)
+			const sctp_stream_id_t stream)
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
-    OAILOG_DEBUG(LOG_NGAP,"encode ng setup response msg and send it to gNB\n");	
+    OAILOG_FUNC_IN (LOG_NGAP);	
     int assoc[1];
     sctp_data_t * sctp_data_p = NULL;
     Ngap_NGAP_PDU_t 		*pdu = NULL; 
@@ -294,7 +297,7 @@ int ng_setup_request_to_send_response(const sctp_assoc_id_t assoc_id,
     int rc = RETURNok;
 	int ret;
 	char errbuf[512] = {0};
-	pdu = make_NGAP_SetupResponse();
+	pdu = make_NGAP_SetupResponse(amf_config.relative_capacity);
     //printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");	
     //asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
     //printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");	
@@ -328,15 +331,19 @@ int ng_setup_request_to_send_response(const sctp_assoc_id_t assoc_id,
 	{
 		//printf("ng_setup_request_to_send_response send sctp client size:%d, succ \n", length);
 	}	
-        OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
-	//return 0;
+    OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
+	
 }
 	
 
-int ng_setup_request_to_send_failure(const sctp_assoc_id_t assoc_id,
-		const sctp_stream_id_t stream, Ngap_NGAP_PDU_t *setup_req_pdu)
+int ngap_amf_generate_ng_setup_failure(
+	const sctp_assoc_id_t assoc_id,
+	uint16_t      sctp_stream_id_t,
+    const Ngap_Cause_PR cause_type,
+    const long cause_value,
+    const long time_to_wait)
 {
-    //printf("\n\nNGAP_SetupFailure-------------encode\n");
+    OAILOG_FUNC_IN (LOG_NGAP);
 	
 	int assoc[1];
 	sctp_data_t * sctp_data_p = NULL;
@@ -346,13 +353,16 @@ int ng_setup_request_to_send_failure(const sctp_assoc_id_t assoc_id,
 	int rc = RETURNok;
 	int ret;
     char errbuf[512] = {0};
-    pdu = make_NGAP_SetupFailure();
-
-    
+    pdu = make_NGAP_SetupFailure(cause_type, cause_value, time_to_wait);
+   
     size_t errlen = sizeof(errbuf);
     ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
-    if(ret != 0) {
-        fprintf(stderr,"Constraintvalidationfailed:%s\n", errbuf);
+    if(ret != 0) 
+	{
+		OAILOG_ERROR(LOG_NGAP,"Constraint  validation  failed :%s\n", errbuf);
+		rc = RETURNerror;
+		//goto ERROR;
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
     }
 	
 	size_t buffer_size = 1000;
@@ -362,25 +372,31 @@ int ng_setup_request_to_send_failure(const sctp_assoc_id_t assoc_id,
 	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
 	if(er.encoded < 0)
 	{
-		//printf("encode failued\n");
-		return -1;
+		OAILOG_ERROR(LOG_NGAP,"ng_setup_failure encode failed\n");
+		rc = RETURNerror;
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+		//goto ERROR;
 	}
 			  
 	bstring b = blk2bstr(buffer, er.encoded);
 					
-	//printf("ngap_setup_failure assoc_id:%u, stream:%u,len:%d\n",assoc_id, stream, er.encoded); 
-	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream, 0);
-			
+	//rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id,stream, 0);
+	//ngsetup request  stream_no: must be 0;
+	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, sctp_stream_id_t, 0);	
 	if(rc != RETURNok)
 	{
-		//printf("ngap_setup_failure send sctp client failed\n"); 
+		OAILOG_ERROR(LOG_NGAP,"ngap_setup_failure, ngap send sctp failed");
+		rc = RETURNerror;
+		//goto ERROR;
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 	}
-	else
-	{
-		//printf("ngap_setup_failure send sctp client size:%d, succ \n", length);
-	}
-    
-    return  0;
+#if 0
+ERROR:
+	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
+	free(buffer);
+    buffer = NULL;
+#endif
+    OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
 }
 
 
@@ -443,213 +459,230 @@ ngap_amf_handle_ng_setup_request(
 	Ngap_NGAP_PDU_t *pdu){
 
     OAILOG_FUNC_IN (LOG_NGAP);
+	
     int rc = RETURNok;
     Ngap_NGSetupRequestIEs_t * ngSetupRequest_p = NULL;
 	Ngap_NGSetupRequestIEs_t * ngSetupRequestIEs_p = NULL;
-    gnb_description_t   * gnb_association = NULL;
+    gnb_description_t   * gnb_association = NULL; 
+	//gnb_description_t   * gnb_ref = NULL;
     uint32_t              gnb_id = 0;
     char                 *gnb_name = NULL;
     int				      gnb_name_size = 0;
     int                   ta_ret = 0;
     uint32_t              max_gnb_connected = 0;
     int i = 0;
+	uint16_t                                mcc = 0;
+    uint16_t                                mnc = 0;
+    uint16_t                                mnc_len = 0;
+	
     Ngap_NGSetupRequest_t                  *container = NULL;
     Ngap_NGSetupRequestIEs_t               *ie = NULL;
     Ngap_NGSetupRequestIEs_t               *ie_gnb_name = NULL;
 
-    //OAILOG_DEBUG(LOG_NGAP,"decode ng setup request dump-------");
-	
+
     DevAssert (pdu != NULL);
-    printf("----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------\n");
+    OAILOG_INFO(LOG_NGAP,"----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------\n");
     asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
-    printf("----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------\n");
-    container = &pdu->choice.initiatingMessage->value.choice.NGSetupRequest;
+    OAILOG_INFO(LOG_NGAP,"----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------\n");
+
+	container = &pdu->choice.initiatingMessage->value.choice.NGSetupRequest;
+
 	
-	for (i = 0; i < container->protocolIEs.list.count; i++)
+	//@1
+	//ng setup request: stream_id must be 0;
+    if( stream != 0 )  
+    {   
+        OAILOG_WARNING(LOG_NGAP, "ngap_setup_request,stream_id:%u====== \n", stream);
+		//@7
+        rc = ngap_amf_generate_ng_setup_failure(assoc_id, 
+                                                stream, 
+                                                Ngap_Cause_PR_protocol, 
+                                                Ngap_CauseProtocol_unspecified, 
+                                                Ngap_TimeToWait_v10s);
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
+    
+
+    if((gnb_association = ngap_is_gnb_assoc_id_in_list(assoc_id)) == NULL) 
 	{
-        Ngap_NGSetupRequestIEs_t *setupRequestIes_p = NULL;
-        setupRequestIes_p = container->protocolIEs.list.array[i];
-		if(!setupRequestIes_p)
-			continue;
-		switch(setupRequestIes_p->id)
-	    {
-            case Ngap_ProtocolIE_ID_id_GlobalRANNodeID:
+        OAILOG_ERROR(LOG_NGAP, "Ignoring ng setup from unknown assoc %u", assoc_id);
+        OAILOG_FUNC_RETURN (LOG_NGAP, RETURNok);
+    }
+
+	#if 0
+	//@2
+	if(gnb_association->ng_state == NGAP_RESETING || gnb_association->ng_state == NGAP_SHUTDOWN)
+	{   
+	    //@8
+        rc  = ngap_amf_generate_ng_setup_failure(assoc_id,
+                                                 stream,
+                                                 Ngap_Cause_PR_transport, 
+                                                 Ngap_CauseTransport_transport_resource_unavailable, 
+                                                 Ngap_TimeToWait_v20s);
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
+    #endif
+	
+    OAILOG_INFO(LOG_NGAP,"New ng setup request incoming from \n");
+
+	//RANNodeName
+    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container, Ngap_ProtocolIE_ID_id_RANNodeName, false);
+    if (ie) 
+	{  
+	   gnb_name = (char *) ie->value.choice.RANNodeName.buf;
+       gnb_name_size = (int) ie->value.choice.RANNodeName.size;
+	  
+	   OAILOG_DEBUG(LOG_NGAP,"RANNodeName, gnb_name_size:%d,gnb_name:%s,\n", gnb_name_size, gnb_name);
+    }
+	else
+	{
+	   // free ?
+       rc = RETURNerror;
+       OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
+
+	//GlobalRANNodeID
+    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container, Ngap_ProtocolIE_ID_id_GlobalRANNodeID, false);
+    if (ie)
+	{
+    	switch(ie->value.choice.GlobalRANNodeID.present)
+		{
+    	    case Ngap_GlobalRANNodeID_PR_globalGNB_ID:
 			{
-				Ngap_GlobalRANNodeID_t *ngap_GlobalRANNodeID = NULL;
-	            ngap_GlobalRANNodeID = &setupRequestIes_p->value.choice.GlobalRANNodeID;
-				if(!ngap_GlobalRANNodeID)
-				    break;
-				switch(ngap_GlobalRANNodeID->present)
-				{
-				    case Ngap_GlobalRANNodeID_PR_NOTHING:
-					{
-						 //printf("Ngap_ProtocolIE_ID_id_GlobalRANNodeID nothing------------\n");
-				    }
-					break;
-				    case Ngap_GlobalRANNodeID_PR_globalGNB_ID:
-					{
-						 //printf("Ngap_GlobalRANNodeID_PR_globalGNB_ID----------\n");
-
-						 #if 0
-                         if(ng_setup_request_find_GlobalRANNodeID(ngap_GlobalRANNodeID)  == -1)
-                         {
-                             //return failure
-						 }
-						 #endif
-
-						 Ngap_GlobalGNB_ID_t 	*globalGNB_ID = ngap_GlobalRANNodeID->choice.globalGNB_ID;
-
-                         //pLMNIdentity
-						 size_t i  = 0;
-						 //OAILOG_DEBUG (LOG_NGAP,"pLMNIdentity:");
-						 for(; i< globalGNB_ID->pLMNIdentity.size;i++)
-						 {
-						    //OAILOG_DEBUG (LOG_NGAP,"0x%x",globalGNB_ID->pLMNIdentity.buf[i]);
-						 }
-						
-						 //gNB_ID
-						 switch(globalGNB_ID->gNB_ID.present)
-						 {
-                            case Ngap_GNB_ID_PR_NOTHING:	/* No components present */
-							break;
-	                        case Ngap_GNB_ID_PR_gNB_ID:
-							{   
-								//OAILOG_DEBUG (LOG_NGAP,"gNB_ID:");
-								BIT_STRING_t	gNB_ID = globalGNB_ID->gNB_ID.choice.gNB_ID;
-								size_t i  = 0;
-								for(; i < gNB_ID.size ; i++)
-								{
-								    //OAILOG_DEBUG (LOG_NGAP,"0x%x", gNB_ID.buf[i]);
-								}	
-	                        }
-							break;
-							
-	                        case Ngap_GNB_ID_PR_choice_Extensions:
-							break;
-						 } 
-						 
-				    }
-					break;
-	                case Ngap_GlobalRANNodeID_PR_globalNgENB_ID:
-						 
-					break;
-	                case Ngap_GlobalRANNodeID_PR_globalN3IWF_ID:
-						
-					break;
-	                case Ngap_GlobalRANNodeID_PR_choice_Extensions:
-						
-					break;
-					default:
-					{
-						//printf("Ngap_ProtocolIE_ID_id_GlobalRANNodeID,unknown protocol IE id(%d)\n",ngap_GlobalRANNodeID->present);
-					}		
-                    break;
-				}
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_RANNodeName:
-			{    
-				 unsigned char RANNodeName[setupRequestIes_p->value.choice.RANNodeName.size + 1];
-				 memset(RANNodeName, 0, setupRequestIes_p->value.choice.RANNodeName.size + 1);
-				 memcpy(RANNodeName,setupRequestIes_p->value.choice.RANNodeName.buf,setupRequestIes_p->value.choice.RANNodeName.size);
-				 //OAILOG_DEBUG (LOG_NGAP,"RANNodeName:%s", RANNodeName);
-            }		
-            break;
-            case Ngap_ProtocolIE_ID_id_SupportedTAList:
-            {  
-                Ngap_SupportedTAList_t	 SupportedTAList = setupRequestIes_p->value.choice.SupportedTAList;
-				int i = 0;
-				for(; i < SupportedTAList.list.count; i++)
-				{
-				  	Ngap_SupportedTAItem_t  *supportTA = SupportedTAList.list.array[i];
-					if(!supportTA)
-						continue;
-					
-				    //printf("TAC",supportTA->tAC.buf);
-
-					//Ngap_TAC_t	 tAC;
-                    //OAILOG_DEBUG (LOG_NGAP,"tAC:");
-					size_t i = 0;
-					for(; i < supportTA->tAC.size;i++)
-					{
-                       //OAILOG_DEBUG (LOG_NGAP,"0x%x",supportTA->tAC.buf[i]);  
-					}
-
-					//OAILOG_DEBUG (LOG_NGAP,"broadcastPLMNList:");
-	                //Ngap_BroadcastPLMNList_t	 broadcastPLMNList;
-					int j = 0;
-					for(; j< supportTA->broadcastPLMNList.list.count; j++)
-					{
-                         Ngap_BroadcastPLMNItem_t *plmnItem = supportTA->broadcastPLMNList.list.array[j];
-                         if(!plmnItem)
-							 continue;
-						 Ngap_PLMNIdentity_t	 pLMNIdentity  =  plmnItem->pLMNIdentity;
-						 size_t i  = 0;
-						 //OAILOG_DEBUG (LOG_NGAP,"pLMNIdentity:");
-						 for(; i< plmnItem->pLMNIdentity.size; i++)
-						 {
-                             //OAILOG_DEBUG (LOG_NGAP,"0x%x",pLMNIdentity.buf[i]);
-						 }
-						 
-                         Ngap_SliceSupportList_t	 tAISliceSupportList = plmnItem->tAISliceSupportList;
-						 
-						 size_t k = 0;
-						 for(; k < tAISliceSupportList.list.count; k++)
-						 {
-                             Ngap_SliceSupportItem_t  *slisupportItem =  tAISliceSupportList.list.array[k];
-                             if(!slisupportItem)
-							 	continue;
-
-                             //OAILOG_DEBUG (LOG_NGAP,"s_NSSAI:");
-							 Ngap_S_NSSAI_t	 s_NSSAI = slisupportItem->s_NSSAI;
-                             
-							 
-							 Ngap_SST_t	 sST = s_NSSAI.sST;
-							 //OAILOG_DEBUG (LOG_NGAP,"sST:");
-							 size_t i  = 0;
-							 for(; i< sST.size; i++)
-							 {
-                                //OAILOG_DEBUG (LOG_NGAP,"0x%x",sST.buf[i]);
-							 }
-							 //OAILOG_DEBUG (LOG_NGAP,"sD:");
-	                         Ngap_SD_t	*sD = s_NSSAI.sD;
-							 if(!sD)
-							 	continue;
-							 i = 0;
-							 for(; i< sD->size; i++)
-							 {
-                                //OAILOG_DEBUG (LOG_NGAP,"0x%x",sD->buf[i]);
-							 }
-						 }
-					}
-					
-				}
-			    break;
-            }
-			break;
-            case Ngap_ProtocolIE_ID_id_DefaultPagingDRX:
-			{
-				 //OAILOG_DEBUG (LOG_NGAP,"PagingDRX:0x%x",setupRequestIes_p->value.choice.PagingDRX);
-		        //printf("PagingDRX:%ld\n",setupRequestIes_p->value.choice.PagingDRX);
-            }
-			break;
-            default:
-			{
-		   	    //printf("Unknown protocol IE id (%d) for message ngsetup_request_ies\n", (int)setupRequestIes_p->id);
-            }
+			   Ngap_GlobalGNB_ID_t	*globalGNB_ID = ie->value.choice.GlobalRANNodeID.choice.globalGNB_ID;
+			   if(globalGNB_ID)
+			   {
+                  //gnb_id
+                  switch(globalGNB_ID->gNB_ID.present)
+                  {
+                     case Ngap_GNB_ID_PR_NOTHING:	/* No components present */
+					 break;
+	                 case Ngap_GNB_ID_PR_gNB_ID:
+					 {
+						 gnb_id  = BIT_STRING_to_uint32(&globalGNB_ID->gNB_ID.choice.gNB_ID);   
+	                 }	   
+					 break;
+	                 case Ngap_GNB_ID_PR_choice_Extensions:
+					 break;
+				  }
+			   }
+			   
+               //pLMNIdentity
+               uint32_t pLMNIdentity_size =  globalGNB_ID->pLMNIdentity.size;
+			   //char pLMNIdentity_buf[pLMNIdentity_size];
+			   //memcpy(pLMNIdentity_buf, globalGNB_ID->pLMNIdentity.buf, pLMNIdentity_size);
+               
+  
+               const Ngap_PLMNIdentity_t * const plmn = &globalGNB_ID->pLMNIdentity;
+               
+               DevAssert (plmn != NULL);
+               TBCD_TO_MCC_MNC (plmn, mcc, mnc, mnc_len);
+			   
+               OAILOG_DEBUG(LOG_NGAP," pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x\n", 
+			   pLMNIdentity_size, mcc, mnc, mnc_len);
+			   
+    		}
 		    break;
-		}
-	 }
+    	    case Ngap_GlobalRANNodeID_PR_globalNgENB_ID:
+		   	
+    	    break;
+    	    case Ngap_GlobalRANNodeID_PR_globalN3IWF_ID:
+		   	
+    	    break;
+    	    case Ngap_GlobalRANNodeID_PR_choice_Extensions:
+		   	
+    	    break;
+    	    default: //Ngap_GlobalRANNodeID_PR_NOTHING
+    	   
+    	    break;
+    	}
+    }
+	else
+	{
+	   //free  ?
+       rc = RETURNerror;
+       OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
 
-	 //ng_setup_request_to_send_failure(assoc_id, stream, pdu);
-	 rc = ng_setup_request_to_send_response(assoc_id, stream, pdu);
-	 //ng_setup_request_to_send_downlink_nas_transport(assoc_id, stream, pdu);
-         if (rc == RETURNok) {
-           update_amf_app_stats_connected_gnb_add();
-         }
+	gnb_association->gnb_id = gnb_id;
+	
+    //@3
+	max_gnb_connected = amf_config.max_gnbs;
+	//#nb_gnb_associated
+	if(nb_gnb_associated >= max_gnb_connected)
+	{
+         OAILOG_ERROR (LOG_NGAP, "There is too much gNB connected to MME, rejecting the association\n");
+         OAILOG_DEBUG (LOG_NGAP, "Connected = %d, maximum allowed = %d\n", nb_gnb_associated, max_gnb_connected);
+
+		 //@9
+         rc = ngap_amf_generate_ng_setup_failure(assoc_id,
+		  	                                     stream,
+                                                 Ngap_Cause_PR_misc,
+                                                 Ngap_CauseMisc_control_processing_overload,
+                                                 Ngap_TimeToWait_v20s);
+         OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+    }
+
+
+	
+    //@4
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container, Ngap_ProtocolIE_ID_id_SupportedTAList, false);
+	if (ie)
+	{
+		ta_ret	= ngap_amf_compare_ta_lists(&ie->value.choice.SupportedTAList);
+		if (ta_ret != TA_LIST_RET_OK)
+		{
+			OAILOG_ERROR (LOG_NGAP, "No Common PLMN with gNB, generate_ng_setup_failure\n");
+			//@10
+			rc = ngap_amf_generate_ng_setup_failure(assoc_id,
+			  	                                    stream,
+													Ngap_Cause_PR_misc,
+													Ngap_CauseMisc_unknown_PLMN,
+													Ngap_TimeToWait_v20s);
+			OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+		}
+	}
+	
+
+	
+    //@5
+    //gnb_id,gnb_name,default_paging_drx
+    gnb_association->gnb_id = gnb_id;
+	if (gnb_name != NULL) 
+	{
+        memcpy(gnb_association->gnb_name, gnb_name,gnb_name_size);
+        gnb_association->gnb_name[gnb_name_size] = '\0';
+    }
+    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container,Ngap_ProtocolIE_ID_id_DefaultPagingDRX, false);
+    if (ie) 
+    {
+       gnb_association->default_paging_drx = ie->value.choice.PagingDRX;
+    }
+	
+  
+
+	OAILOG_DEBUG(LOG_NGAP, "gnb_id:%d, gnb_name:%s,default_paging_drx:%d\n", 
+	gnb_association->gnb_id, gnb_association->gnb_name, gnb_association->default_paging_drx);
+
+    rc = ngap_generate_ng_setup_response(gnb_association);
+    if (rc == RETURNok) 
+	{
+        update_amf_app_stats_connected_gnb_add();
+    }
     OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 	 //return 0;
-
+    #if 0
+	if(ngSetupRequest_p->globalRANNodeID.choice.globalGNB_ID.gNB_ID.present == GNB_ID_PR_gNB_ID){  //which gnb id ??
+      uint8_t * gnb_id_buf = ngSetupRequest_p->globalRANNodeID.choice.globalGNB_ID.gNB_ID.choice.gNB_ID.buf;
+      if(ngSetupRequest_p->globalRANNodeID.choice.globalGNB_ID.gNB_ID.choice.gNB_ID.size != 28){
+        //TODO: handle case that size !=28
+      }
+      gnb_id = (gnb_id_buf[0] << 20) + (gnb_id_buf[1] << 12) + (gnb_id_buf[2] << 4) + ((gnb_id_buf[3] & 0xf0) >> 4);
+      OAILOG_MESSAGE_ADD (context, "gNB id: %07x", gnb_id);
+    } else {
+    }
+	#endif
+	 
 
 
     #if 0
@@ -755,10 +788,10 @@ ngap_amf_handle_ng_setup_request(
 		    break;
 		}
 	 }
-  unsigned char b[100]="112sd";
-  bstring bb =  blk2bstr(b, 100);
-  printf("before ngap_generate_downlink_nas_transport(assoc_id(%d))",assoc_id);
-  ngap_generate_downlink_nas_transport(assoc_id,assoc_id,&bb);
+     unsigned char b[100]="112sd";
+     bstring bb =  blk2bstr(b, 100);
+     printf("before ngap_generate_downlink_nas_transport(assoc_id(%d))",assoc_id);
+     ngap_generate_downlink_nas_transport(assoc_id,assoc_id,&bb);
 
 	 return 0;
 	 #endif
@@ -941,12 +974,71 @@ ngap_amf_handle_ng_setup_failure(
 	 return 0;
 }
 
-static int
+
+int
 ngap_generate_ng_setup_response(
   gnb_description_t * gnb_association)
 {
+	OAILOG_FUNC_IN (LOG_NGAP); 
+	
+	int assoc[1];
+	sctp_data_t * sctp_data_p = NULL;
+	Ngap_NGAP_PDU_t		   *pdu = NULL; 
+	uint8_t * buffer_p = NULL;
+	uint32_t length = 0;
+	int rc = RETURNok;
+	int ret;
+	char errbuf[512] = {0};
 
+    sctp_assoc_id_t assoc_id = gnb_association->sctp_assoc_id;
+	sctp_stream_id_t stream  = gnb_association->instreams;
+	
+	pdu = make_NGAP_SetupResponse(amf_config.relative_capacity);
+	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
+	//asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
+	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
+	size_t errlen = sizeof(errbuf);
+	ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+	if(ret != 0) 
+	{
+		OAILOG_ERROR(LOG_NGAP, "Constraintvalidationfailed:%s\n", errbuf);
+		rc = RETURNerror;
+		//goto ERROR; 
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
+		   
+	size_t buffer_size = 1000;
+	void *buffer = calloc(1,buffer_size);
+	asn_enc_rval_t er;
+				   
+	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
+	if(er.encoded < 0)
+	{
+		OAILOG_ERROR(LOG_NGAP, "setup response encode failed:%s\n", errbuf);
+		rc = RETURNerror;
+		//goto ERROR; 
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
+					 
+	bstring b = blk2bstr(buffer, er.encoded);
+						  
+	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream, 0);			   
+	if(rc != RETURNok)
+	{
+		OAILOG_ERROR(LOG_NGAP,"ngap_setup_response assoc_id:%u, stream:%u,len:%d\n",assoc_id, stream, er.encoded); 
+		rc = RETURNerror;
+		//goto ERROR;
+		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
 
+#if 0	 
+ERROR:
+	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
+	free(buffer);
+    buffer = NULL;
+#endif
+
+    OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
 }
 
 int

@@ -247,6 +247,22 @@
 #include "Ngap_NGAP-PDU.h"
 #include "log.h"
 
+#define NGAP_FIND_PROTOCOLIE_BY_ID(IE_TYPE, ie, container, IE_ID, mandatory) \
+  do {\
+    IE_TYPE **ptr; \
+    ie = NULL; \
+    for (ptr = container->protocolIEs.list.array; \
+         ptr < &container->protocolIEs.list.array[container->protocolIEs.list.count]; \
+         ptr++) { \
+      if((*ptr)->id == IE_ID) { \
+        ie = *ptr; \
+        break; \
+      } \
+    } \
+    if (mandatory) DevAssert(ie != NULL); \
+  } while(0)
+
+
 typedef int (*ngap_message_decoded_callback)(
     const sctp_assoc_id_t             assoc_id,
     const sctp_stream_id_t            stream,

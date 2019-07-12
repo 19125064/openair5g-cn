@@ -44,7 +44,7 @@ Ngap_NGSetupResponseIEs_t *make_AMFName_ie(const char *name)
 
 
 //RelativeAMFCapacity
-Ngap_NGSetupResponseIEs_t * make_RelativeAMFCapacity_ie(Ngap_RelativeAMFCapacity_t RelativeAMFCapacity)
+Ngap_NGSetupResponseIEs_t * make_RelativeAMFCapacity_ie(Ngap_RelativeAMFCapacity_t  RelativeAMFCapacity)
 {
     OAILOG_FUNC_IN (LOG_NGAP);
 	Ngap_NGSetupResponseIEs_t *ie = NULL;
@@ -143,7 +143,7 @@ void add_NGSetupResponse_ie(Ngap_NGSetupResponse_t *ngapSetupResponse, Ngap_NGSe
     OAILOG_FUNC_RETURN (LOG_NGAP,0);
 }
 
-Ngap_NGAP_PDU_t *make_NGAP_SetupResponse()
+Ngap_NGAP_PDU_t *make_NGAP_SetupResponse(Ngap_RelativeAMFCapacity_t  RelativeAMFCapacity)
 {
     //OAILOG_DEBUG(LOG_NGAP,"encode ng setup response dump-----");
     OAILOG_FUNC_IN (LOG_NGAP);	
@@ -176,7 +176,7 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupResponse()
 
 
 	//RelativeAMFCapacity
-	ie  = make_RelativeAMFCapacity_ie(0x80);
+	ie  = make_RelativeAMFCapacity_ie(RelativeAMFCapacity);
 	add_NGSetupResponse_ie(ngapSetupResponse, ie);
 	
     //PLMNSupportList

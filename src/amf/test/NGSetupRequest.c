@@ -155,7 +155,7 @@ Ngap_NGSetupRequestIEs_t *make_RANNodeName_ie(const char *name) {
 	ie->criticality = Ngap_Criticality_reject;
 	ie->value.present = Ngap_NGSetupRequestIEs__value_PR_RANNodeName;
 	OCTET_STRING_fromBuf (&ie->value.choice.RANNodeName, name, strlen (name));
- return ie;
+    return ie;
 }
 
 Ngap_NGSetupRequestIEs_t *make_DefaultPagingDRX_ie(e_Ngap_PagingDRX drx ) {
@@ -328,7 +328,7 @@ int main( int argc, char * argv[]) {
 	uint32_t length = 0;
 	Ngap_NGAP_PDU_t *pdu;
 	pdu = make_NGAP_SetupRequest();
-
+	
     // debug
     asn_fprint(stderr, &asn_DEF_Ngap_NGAP_PDU, pdu);
 

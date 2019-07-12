@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+
+#include "log.h"
 #include "ngap_amf_setup_failure.h"
 
 #include "Ngap_ProtocolIE-Field.h"
@@ -25,8 +27,9 @@
 void add_NGSetupFailure_ie(Ngap_NGSetupFailure_t *ngapSetupFailure, Ngap_NGSetupFailureIEs_t *ie) {
     int ret;
 	ret = ASN_SEQUENCE_ADD(&ngapSetupFailure->protocolIEs.list, ie);
-    if ( ret != 0 ) {
-        fprintf(stderr, "Failed to add ie\n");
+    if ( ret != 0 )
+	{
+		OAILOG_ERROR(LOG_NGAP, "Failed to add ie\n");
     }
 }
 
@@ -97,7 +100,7 @@ Ngap_Criticality_t	procedureCriticality)
 }
 
 //TimeTOWait
-Ngap_NGSetupFailureIEs_t *make_TimeToWait_ie(e_Ngap_TimeToWait  TimeToWait)
+Ngap_NGSetupFailureIEs_t *make_TimeToWait_ie(const long  TimeToWait)
 {
     Ngap_NGSetupFailureIEs_t *ie = NULL;
     ie = calloc(1, sizeof(Ngap_NGSetupFailureIEs_t));
@@ -106,29 +109,58 @@ Ngap_NGSetupFailureIEs_t *make_TimeToWait_ie(e_Ngap_TimeToWait  TimeToWait)
     ie->value.present = Ngap_NGSetupFailureIEs__value_PR_TimeToWait;
     ie->value.choice.TimeToWait = TimeToWait;
 
-	printf("TimeToWait:0x%x\n", ie->value.choice.TimeToWait);
+	OAILOG_DEBUG(LOG_NGAP,"TimeToWait:%d\n", ie->value.choice.TimeToWait);
 	return ie;
 }
 
 
 //cause
-Ngap_NGSetupFailureIEs_t *make_Cause_radioNetwork_ie(e_Ngap_CauseRadioNetwork radioNetwork)
+Ngap_NGSetupFailureIEs_t *make_Cause_ie(const Ngap_Cause_PR ngap_cause, const long cause_value)
 {
     Ngap_NGSetupFailureIEs_t *ie = NULL;
 	ie = calloc(1, sizeof(Ngap_NGSetupFailureIEs_t));
 	ie->id = Ngap_ProtocolIE_ID_id_Cause; 
 	ie->criticality = Ngap_Criticality_ignore; 
 	ie->value.present = Ngap_NGSetupFailureIEs__value_PR_Cause;
-	ie->value.choice.Cause.present =  Ngap_Cause_PR_radioNetwork;
-	ie->value.choice.Cause.choice.radioNetwork = radioNetwork;
 
-	printf("radioNetwork:0x%x\n", ie->value.choice.Cause.choice.radioNetwork);
+    ie->value.choice.Cause.present =  ngap_cause;
+	switch(ngap_cause)
+	{
+	   //caseNgap_Cause_PR_NOTHING,	/* No components present */
+	   case Ngap_Cause_PR_radioNetwork:
+	   	   ie->value.choice.Cause.choice.radioNetwork = cause_value;
+	   break;
+	   case Ngap_Cause_PR_transport:
+	       ie->value.choice.Cause.choice.transport = cause_value;
+	   break;
+	   case Ngap_Cause_PR_nas:
+	   	   ie->value.choice.Cause.choice.nas = cause_value;
+	   break;
+	   case Ngap_Cause_PR_protocol:
+	       ie->value.choice.Cause.choice.protocol = cause_value;
+	   break;
+	   case Ngap_Cause_PR_misc:
+	   	   ie->value.choice.Cause.choice.misc = cause_value;
+	   break;
+	   //Ngap_Cause_PR_choice_Extensions
+	   default:
+	      OAILOG_DEBUG(LOG_NGAP,"don't known cause_type:%d\n",ngap_cause);
+		  free(ie);
+		  ie = NULL;
+	   break;
+         
+	}
+	
+	OAILOG_DEBUG(LOG_NGAP,"radioNetwork:0x%x\n", ie->value.choice.Cause.choice.radioNetwork);
     return ie;
 }
 
-Ngap_NGAP_PDU_t *make_NGAP_SetupFailure()
+Ngap_NGAP_PDU_t *make_NGAP_SetupFailure(
+    const Ngap_Cause_PR cause_type,
+    const long cause_value,
+    const long time_to_wait
+)
 {
-
     Ngap_NGAP_PDU_t              *pdu = NULL;
 	Ngap_NGSetupFailure_t        *ngapSetupFailure = NULL;
 	Ngap_NGSetupFailureIEs_t     *ie = NULL;
@@ -146,18 +178,18 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupFailure()
     
 
 	//Cause;
-	//e_Ngap_CauseRadioNetwork
-	ie = make_Cause_radioNetwork_ie(Ngap_CauseRadioNetwork_unspecified);
+	ie = make_Cause_ie(cause_type, cause_value);
 	add_NGSetupFailure_ie(ngapSetupFailure, ie);
-
-	
+    
 	//Ngap_TimeToWait_t	 TimeToWait;
-	//e_Ngap_TimeToWait
-    ie  = make_TimeToWait_ie(Ngap_TimeToWait_v60s);
-    add_NGSetupFailure_ie(ngapSetupFailure, ie);
-
-
-
+    //time_to_wait: -1,no constructure IE;
+	if(Ngap_TimeToWait_v1s <= time_to_wait && time_to_wait <= Ngap_TimeToWait_v60s)
+	{
+       ie  = make_TimeToWait_ie(time_to_wait);
+       add_NGSetupFailure_ie(ngapSetupFailure, ie);
+	}
+    
+    
 	#if 0
 	//CriticalityDiagnostics   // encode failed;
 	ie =  make_CriticalityDiagnostics_ie(Ngap_ProcedureCode_id_AMFConfigurationUpdate,Ngap_TriggeringMessage_unsuccessfull_outcome,Ngap_Criticality_reject);

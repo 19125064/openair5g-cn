@@ -120,10 +120,27 @@ using namespace org::openapitools::server::api;
 using namespace std;
 std::unordered_map<std::string,org::openapitools::server::model::UeContext> RecordUEContext;
 */
+void
+signal_handler(int signum)
+{
+		/* When we receive a RTMIN or SIGINT signal, stop kni processing */
+	if (signum == SIGRTMIN || signum == SIGINT){
+		printf("SIGRTMIN is received, and the KNI processing is "
+								"going to stop\n");
+		
+		printf("pro is stop sleep 1----\n");
+		//sleep(1);
+		exit(0);
+		return;
+   }
+}
+#include <stdlib.h>
 int main(
     int argc,
     char * argv[])
 {
+    //test
+    signal(SIGINT, signal_handler);
 
     char * pid_dir;
     char * pid_file_name;

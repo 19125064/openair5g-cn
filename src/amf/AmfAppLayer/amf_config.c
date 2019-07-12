@@ -46,7 +46,7 @@ static void amf_config_init (amf_config_t * config_pP)
                                
   config_pP->log_config.asn1_verbosity_level = 0;
   config_pP->config_file = NULL;
-  config_pP->max_enbs = 2;
+  config_pP->max_gnbs = 2;
   config_pP->max_ues = 2;
   config_pP->unauthenticated_imsi_supported = 0;
   /*
@@ -188,8 +188,8 @@ static int amf_config_parse_file (amf_config_t * config_pP)
     if ((config_setting_lookup_string (setting_amf,AMF_CONFIG_STRING_PID_DIRECTORY,(const char **)&astring))) {
       config_pP->pid_dir = bfromcstr (astring);
     }
-    if ((config_setting_lookup_int (setting_amf, AMF_CONFIG_STRING_MAXENB, &aint))) {
-      config_pP->max_enbs = (uint32_t) aint;
+    if ((config_setting_lookup_int (setting_amf, AMF_CONFIG_STRING_MAXGNB, &aint))) {
+      config_pP->max_gnbs = (uint32_t) aint;
     }
     if ((config_setting_lookup_int (setting_amf, AMF_CONFIG_STRING_MAXUE, &aint))) {
       config_pP->max_ues = (uint32_t) aint;
@@ -390,7 +390,7 @@ static void amf_config_display (amf_config_t * config_pP)
   OAILOG_INFO (LOG_CONFIG, "- File .................................: %s\n", bdata(config_pP->config_file));
   OAILOG_INFO (LOG_CONFIG, "- Realm ................................: %s\n", bdata(config_pP->realm));
   OAILOG_INFO (LOG_CONFIG, "- Run mode .............................: %s\n", (RUN_MODE_TEST == config_pP->run_mode) ? "TEST":"NORMAL");
-  OAILOG_INFO (LOG_CONFIG, "- Max gNBs .............................: %u\n", config_pP->max_enbs);
+  OAILOG_INFO (LOG_CONFIG, "- Max gNBs .............................: %u\n", config_pP->max_gnbs);
   OAILOG_INFO (LOG_CONFIG, "- Max UEs ..............................: %u\n", config_pP->max_ues);
   OAILOG_INFO (LOG_CONFIG, "- IMS voice over PS session in NG ......: %s\n", config_pP->_5gs_network_feature_support.ims_voice_over_ps_session_in_ng == 0 ? "false" : "true");
   OAILOG_INFO (LOG_CONFIG, "- Emergency bearer services in NG mode .: %s\n", config_pP->_5gs_network_feature_support.emergency_bearer_services_in_ng_mode == 0 ? "false" : "true");

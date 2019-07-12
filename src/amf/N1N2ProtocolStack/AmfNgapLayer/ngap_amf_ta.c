@@ -6,30 +6,31 @@
 #include "conversions.h"
 #include "ngap_common.h"
 #include "ngap_amf_ta.h"
+#include "amf_config.h"
 
-/*
 static
-  int
+int
 ngap_amf_compare_plmn (
-  const BroadcastPLMNItem_t * Item)
+  const Ngap_BroadcastPLMNItem_t * Item)
 {
   int                                     i = 0;
   uint16_t                                mcc = 0;
   uint16_t                                mnc = 0;
   uint16_t                                mnc_len = 0;
 
-  const PLMNIdentity_t * const plmn = &Item->pLMNIdentity;
+  const Ngap_PLMNIdentity_t * const plmn = &Item->pLMNIdentity;
 
   DevAssert (plmn != NULL);
   TBCD_TO_MCC_MNC (plmn, mcc, mnc, mnc_len);
 
-  for (i = 0; i < 1; i++) {
+  for (i = 0; i < 1; i++) 
+  {
     //OAILOG_TRACE (LOG_NGAP, "Comparing plmn_mcc %d/%d, plmn_mnc %d/%d plmn_mnc_len %d/%d\n",
     //    208, mcc, 93, mnc, mme_config.served_tai.plmn_mnc_len[i], mnc_len);
-
-    if ((mme_config.served_tai.plmn_mcc[i] == mcc) &&
-        (mme_config.served_tai.plmn_mnc[i] == mnc) &&
-        (mme_config.served_tai.plmn_mnc_len[i] == mnc_len))
+    
+    if ((amf_config.served_tai.plmn_mcc[i] == mcc) &&
+        (amf_config.served_tai.plmn_mnc[i] == mnc) &&
+        (amf_config.served_tai.plmn_mnc_len[i] == mnc_len))
       return TA_LIST_AT_LEAST_ONE_MATCH;
   }
 
@@ -39,7 +40,7 @@ ngap_amf_compare_plmn (
 static
   int
 ngap_amf_compare_plmns (
-  BroadcastPLMNList_t * b_plmns)
+  Ngap_BroadcastPLMNList_t * b_plmns)
 {
   int                                     i =0;
   int                                     matching_occurence = 0;
@@ -63,7 +64,7 @@ ngap_amf_compare_plmns (
 static
   int
 ngap_amf_compare_tac (
-  const TAC_t * const tac)
+  const Ngap_TAC_t * const tac)
 {
   int                                     i = 0;
   uint16_t                                tac_value = 0;
@@ -83,7 +84,7 @@ ngap_amf_compare_tac (
 
 int                                         
 ngap_amf_compare_ta_lists (                 
-  SupportedTAList_t * ta_list)            
+  Ngap_SupportedTAList_t * ta_list)            
 {   
   int                                     i;
   int                                     tac_ret,
@@ -92,7 +93,7 @@ ngap_amf_compare_ta_lists (
   DevAssert (ta_list != NULL);
 
   for (i = 0; i < ta_list->list.count; i++) {
-    SupportedTAItem_t               *ta;
+    Ngap_SupportedTAItem_t    *ta;
 
     ta = ta_list->list.array[i];
     DevAssert (ta != NULL); 
@@ -112,4 +113,4 @@ ngap_amf_compare_ta_lists (
 
   return TA_LIST_RET_OK;
 }
-*/
+

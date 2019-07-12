@@ -77,7 +77,7 @@ int
 asn_check_constraints(const asn_TYPE_descriptor_t *type_descriptor,
                       const void *struct_ptr, char *errbuf, size_t *errlen) {
     struct errbufDesc arg;
-    int ret;
+    int ret  = 0;
 
     arg.failed_type = 0;
     arg.failed_struct_ptr = 0;

@@ -11,7 +11,8 @@
 #define AMF_CONFIG_STRING_RUN_MODE                       "RUN_MODE"
 #define AMF_CONFIG_STRING_RUN_MODE_TEST                  "TEST"
 #define AMF_CONFIG_STRING_REALM                          "REALM"
-#define AMF_CONFIG_STRING_MAXENB                         "MAXENB"
+//#define AMF_CONFIG_STRING_MAXENB                         "MAXENB"
+#define AMF_CONFIG_STRING_MAXGNB                         "MAXGNB"
 #define AMF_CONFIG_STRING_MAXUE                          "MAXUE"
 #define AMF_CONFIG_STRING_RELATIVE_CAPACITY              "RELATIVE_CAPACITY"
 #define AMF_CONFIG_STRING_STATISTIC_TIMER                "AMF_STATISTIC_TIMER"
@@ -71,7 +72,7 @@ typedef struct amf_config_s {
 
   run_mode_t  run_mode;
 
-  uint32_t max_enbs;
+  uint32_t max_gnbs;
   uint32_t max_ues;
 
   uint8_t relative_capacity;

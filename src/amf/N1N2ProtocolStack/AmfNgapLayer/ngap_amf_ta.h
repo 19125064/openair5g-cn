@@ -10,6 +10,6 @@ enum {
   TA_LIST_COMPLETE_MATCH = 0x3,
 };
 
-//int ngap_amf_compare_ta_lists(SupportedTAList_t *ta_list);
+int ngap_amf_compare_ta_lists(Ngap_SupportedTAList_t *ta_list);
   
 #endif /* FILE_NGAP_AMF_TA_SEEN */   
