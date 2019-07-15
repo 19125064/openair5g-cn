@@ -115,6 +115,9 @@ static int amf_config_parse_file (amf_config_t * config_pP)
   const char                             *tac = NULL;
   const char                             *mcc = NULL;
   const char                             *mnc = NULL;
+  const char                             *amf_region_id= NULL;
+  const char                             *amf_set_id= NULL;
+  const char                             *amf_pointer = NULL;
   char                                   *if_name_ng_amf = NULL;
   char                                   *ng_amf = NULL;
   bool                                    swap = false;
@@ -258,6 +261,67 @@ static int amf_config_parse_file (amf_config_t * config_pP)
         config_pP->ngap_config.port_number = (uint16_t) aint;
       }
     }
+    //GUAMFI_LIST
+    setting = config_setting_get_member (setting_amf, AMF_CONFIG_STRING_GUAMFI_LIST);
+    if (setting != NULL) {
+      num = config_setting_length (setting);
+      if (config_pP->gummei.nb_gummei != num) {
+        if (config_pP->gummei.plmn_mcc != NULL)
+          free_wrapper ((void**) &config_pP->served_tai.plmn_mcc);
+        if (config_pP->gummei.plmn_mnc != NULL)
+          free_wrapper ((void**) &config_pP->gummei.plmn_mnc);
+        if (config_pP->gummei.plmn_mnc_len != NULL)
+          free_wrapper ((void**) &config_pP->gummei.plmn_mnc_len);
+		
+        if (config_pP->gummei.amf_region_id != NULL)
+          free_wrapper ((void**) &config_pP->gummei.amf_region_id);
+		
+		if (config_pP->gummei.amf_set_id != NULL)
+          free_wrapper ((void**) &config_pP->gummei.amf_set_id);
+		
+		if (config_pP->gummei.amf_pointer != NULL)
+          free_wrapper ((void**) &config_pP->gummei.amf_pointer);
+		
+        config_pP->gummei.plmn_mcc = calloc (num, sizeof (*config_pP->gummei.plmn_mcc));
+        config_pP->gummei.plmn_mnc = calloc (num, sizeof (*config_pP->gummei.plmn_mnc));
+        config_pP->gummei.plmn_mnc_len = calloc (num, sizeof (*config_pP->gummei.plmn_mnc_len));
+        config_pP->gummei.amf_region_id = calloc (num, sizeof (*config_pP->gummei.amf_region_id));
+		config_pP->gummei.amf_set_id = calloc (num, sizeof (*config_pP->gummei.amf_set_id));
+		config_pP->gummei.amf_pointer = calloc (num, sizeof (*config_pP->gummei.amf_pointer));
+      }
+      config_pP->gummei.nb_gummei = num;
+      AssertFatal(16 >= num , "Too many gummai configured %d", num);
+      for (i = 0; i < num; i++) {
+        sub2setting = config_setting_get_elem (setting, i);
+
+        if (sub2setting != NULL) {
+          if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MCC, &mcc))) {
+            config_pP->gummei.plmn_mcc[i] = (uint16_t) atoi (mcc);
+          }
+          if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MNC, &mnc))) {
+            config_pP->gummei.plmn_mnc[i] = (uint16_t) atoi (mnc);
+            config_pP->gummei.plmn_mnc_len[i] = strlen (mnc);
+            AssertFatal ((config_pP->gummei.plmn_mnc_len[i] == 2) || (config_pP->gummei.plmn_mnc_len[i] == 3),
+                "Bad MNC length %u, must be 2 or 3", config_pP->gummei.plmn_mnc_len[i]);
+          }
+          if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_AMF_REGION_ID, &amf_region_id))) 
+		  {
+             config_pP->gummei.amf_region_id[i] = (uint16_t) atoi (amf_region_id);
+          }
+
+		  if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_AMF_SET_ID, &amf_set_id)))
+		  {
+             config_pP->gummei.amf_set_id[i] = (uint16_t) atoi (amf_set_id);
+		  }
+
+		  if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_AMF_POINTER, &amf_pointer))) 
+		  {
+            config_pP->gummei.amf_pointer[i] = (uint16_t) atoi (amf_pointer);
+          }
+        }
+      }
+    }
+	
     // TAI list setting
     setting = config_setting_get_member (setting_amf, AMF_CONFIG_STRING_TAI_LIST);
     if (setting != NULL) {
@@ -297,7 +361,9 @@ static int amf_config_parse_file (amf_config_t * config_pP)
           }
         }
       }
-
+	
+	
+      num  = 0;
       // sort TAI list
       n = config_pP->served_tai.nb_tai;
       do {

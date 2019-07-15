@@ -44,6 +44,10 @@
 #define AMF_CONFIG_STRING_MCC                            "MCC"
 #define AMF_CONFIG_STRING_MNC                            "MNC"
 #define AMF_CONFIG_STRING_TAC                            "TAC"
+#define AMF_CONFIG_AMF_REGION_ID                         "AMF_REGION_ID"
+#define AMF_CONFIG_AMF_SET_ID 	                         "AMF_SET_ID"
+#define AMF_CONFIG_AMF_POINTER                        	 "AMF_POINTER" 
+
 
 #define AMF_CONFIG_STRING_NETWORK_INTERFACES_CONFIG      "NETWORK_INTERFACES"
 #define AMF_CONFIG_STRING_INTERFACE_NAME_FOR_NG_AMF      "AMF_INTERFACE_NAME_FOR_NG_AMF"
@@ -89,7 +93,14 @@ typedef struct amf_config_s {
   } _5gs_network_feature_support;
 
   struct {
-    int      nb;
+    uint8_t   nb_gummei;
+	uint16_t *plmn_mcc;
+    uint16_t *plmn_mnc;
+    uint16_t *plmn_mnc_len;
+    //uint16_t *tac;
+    uint16_t *amf_region_id;
+	uint16_t *amf_set_id;
+	uint16_t *amf_pointer;
     //gummei_t gummei[MAX_GUAMFI];
   } gummei;
 
