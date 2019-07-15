@@ -519,8 +519,8 @@ ERROR:
 
 int
 ngap_generate_ng_setup_response(
-	const sctp_assoc_id_t assoc,
-    const sctp_stream_id_t stream,
+  const sctp_assoc_id_t assoc,
+  const sctp_stream_id_t stream,
   gnb_description_t * gnb_association)
 {
 	OAILOG_FUNC_IN (LOG_NGAP); 
@@ -764,7 +764,6 @@ ngap_amf_handle_ng_setup_request(
 
 	
     //@4
-    #if 0
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container, Ngap_ProtocolIE_ID_id_SupportedTAList, false);
 	if (ie)
 	{
@@ -781,7 +780,7 @@ ngap_amf_handle_ng_setup_request(
 			OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 		}
 	}
-	#endif
+
 
 	
     //@5

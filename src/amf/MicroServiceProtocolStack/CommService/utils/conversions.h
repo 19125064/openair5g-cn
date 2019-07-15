@@ -146,9 +146,10 @@ do {                                    \
     BUFFER_TO_INT8((aSN)->buf, x);    \
 } while(0)
 
+
 #define OCTET_STRING_TO_INT16(aSN, x)   \
 do {                                    \
-    DevCheck((aSN)->size == 2, (aSN)->size, 0, 0);           \
+    DevCheck((aSN)->size == 2, (aSN)->size, 0, 0);       \
     BUFFER_TO_INT16((aSN)->buf, x);    \
 } while(0)
 

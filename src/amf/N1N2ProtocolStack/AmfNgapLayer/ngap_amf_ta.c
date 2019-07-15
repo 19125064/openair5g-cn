@@ -70,7 +70,8 @@ ngap_amf_compare_tac (
   uint16_t                                tac_value = 0;
 
   DevAssert (tac != NULL);
-  OCTET_STRING_TO_TAC (tac, tac_value);
+  //OCTET_STRING_TO_TAC
+  OCTET_STRING_TO_TAC_24 (tac, tac_value);
 
   for (i = 0; i < 1; i++) {
     OAILOG_TRACE (LOG_NGAP, "Comparing config tac %d, received tac = %d\n", 1, tac_value);
