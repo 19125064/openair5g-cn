@@ -284,7 +284,8 @@ ngap_amf_generate_ng_setup_failure (
   
 }
 */
-	
+
+#if 0
 int ng_setup_request_to_send_response(const sctp_assoc_id_t assoc_id,
 			const sctp_stream_id_t stream)
 {
@@ -334,11 +335,11 @@ int ng_setup_request_to_send_response(const sctp_assoc_id_t assoc_id,
     OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
 	
 }
-	
-
+#endif
+#if 0
 int ngap_amf_generate_ng_setup_failure(
 	const sctp_assoc_id_t assoc_id,
-	uint16_t      sctp_stream_id_t,
+    const sctp_stream_id_t stream_id,
     const Ngap_Cause_PR cause_type,
     const long cause_value,
     const long time_to_wait)
@@ -361,8 +362,7 @@ int ngap_amf_generate_ng_setup_failure(
 	{
 		OAILOG_ERROR(LOG_NGAP,"Constraint  validation  failed :%s\n", errbuf);
 		rc = RETURNerror;
-		//goto ERROR;
-		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+		goto ERROR;
     }
 	
 	size_t buffer_size = 1000;
@@ -374,32 +374,30 @@ int ngap_amf_generate_ng_setup_failure(
 	{
 		OAILOG_ERROR(LOG_NGAP,"ng_setup_failure encode failed\n");
 		rc = RETURNerror;
-		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
-		//goto ERROR;
+		goto ERROR;
 	}
 			  
 	bstring b = blk2bstr(buffer, er.encoded);
-					
-	//rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id,stream, 0);
+
 	//ngsetup request  stream_no: must be 0;
-	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, sctp_stream_id_t, 0);	
+	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream_id, 0);	
 	if(rc != RETURNok)
 	{
 		OAILOG_ERROR(LOG_NGAP,"ngap_setup_failure, ngap send sctp failed");
 		rc = RETURNerror;
-		//goto ERROR;
-		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+		goto ERROR;
+		
 	}
-#if 0
+
 ERROR:
 	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
 	free(buffer);
     buffer = NULL;
-#endif
+
     OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
 }
 
-
+#endif
 int ng_setup_request_to_send_downlink_nas_transport(const sctp_assoc_id_t assoc_id,
 		const sctp_stream_id_t stream, Ngap_NGAP_PDU_t *downlink_nas_transport_pdu)
 {
@@ -449,7 +447,146 @@ int ng_setup_request_to_send_downlink_nas_transport(const sctp_assoc_id_t assoc_
 
 	return 0;
 }
+int ngap_amf_handle_ng_setup_failure(const sctp_assoc_id_t assoc_id, const sctp_stream_id_t stream,
+		Ngap_NGAP_PDU_t *pdu)
+{
+   int rc = RETURNok;
+   OAILOG_FUNC_IN (LOG_NGAP);
 
+   OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
+}
+
+int ngap_amf_generate_ng_setup_failure(
+	const sctp_assoc_id_t assoc_id,
+    const sctp_stream_id_t stream_id,
+    const Ngap_Cause_PR cause_type,
+    const long cause_value,
+    const long time_to_wait)
+{
+    OAILOG_FUNC_IN (LOG_NGAP);
+	
+	int assoc[1];
+	sctp_data_t * sctp_data_p = NULL;
+	Ngap_NGAP_PDU_t 			*pdu = NULL;
+	uint8_t * buffer_p = NULL;
+	uint32_t length = 0;
+	int rc = RETURNok;
+	int ret;
+    char errbuf[512] = {0};
+    pdu = make_NGAP_SetupFailure(cause_type, cause_value, time_to_wait);
+   
+    size_t errlen = sizeof(errbuf);
+    ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+    if(ret != 0) 
+	{
+		OAILOG_ERROR(LOG_NGAP,"Constraint  validation  failed :%s\n", errbuf);
+		rc = RETURNerror;
+		goto ERROR;
+    }
+	
+	size_t buffer_size = 1000;
+    void *buffer = calloc(1,buffer_size);
+	asn_enc_rval_t er;
+			
+	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
+	if(er.encoded < 0)
+	{
+		OAILOG_ERROR(LOG_NGAP,"ng_setup_failure encode failed\n");
+		rc = RETURNerror;
+		goto ERROR;
+	}
+			  
+	bstring b = blk2bstr(buffer, er.encoded);
+
+	//ngsetup request  stream_no: must be 0;
+	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream_id, 0);	
+	if(rc != RETURNok)
+	{
+		OAILOG_ERROR(LOG_NGAP,"ngap_setup_failure, ngap send sctp failed");
+		rc = RETURNerror;
+		goto ERROR;
+		
+	}
+
+ERROR:
+	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
+	free(buffer);
+    buffer = NULL;
+
+    OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
+}
+
+
+int
+ngap_generate_ng_setup_response(
+	const sctp_assoc_id_t assoc,
+    const sctp_stream_id_t stream,
+  gnb_description_t * gnb_association)
+{
+	OAILOG_FUNC_IN (LOG_NGAP); 
+	
+	//int assoc[1];
+	sctp_data_t * sctp_data_p = NULL;
+	Ngap_NGAP_PDU_t		   *pdu = NULL; 
+	uint8_t * buffer_p = NULL;
+	uint32_t length = 0;
+	int rc = RETURNok;
+	int ret;
+	char errbuf[512] = {0};
+
+    //sctp_assoc_id_t assoc_id = gnb_association->sctp_assoc_id;
+	//sctp_stream_id_t stream  = gnb_association->instreams;
+
+    OAILOG_DEBUG(LOG_NGAP, "assoc:%u,sctp_assoc_id:%u,stream:%u,instreams:%u,outstreams:%u\n",
+    assoc,gnb_association->sctp_assoc_id ,stream, gnb_association->instreams, gnb_association->outstreams);
+
+	sctp_assoc_id_t    assoc_id = assoc;
+	sctp_stream_id_t  stream_id = stream;
+	
+	pdu = make_NGAP_SetupResponse(amf_config.relative_capacity);
+	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
+	//asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
+	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
+	size_t errlen = sizeof(errbuf);
+	ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+	if(ret != 0) 
+	{
+		OAILOG_ERROR(LOG_NGAP, "ng setup response Constraint validation  failed:%s\n", errbuf);
+		rc = RETURNerror;
+		goto ERROR; 
+	}
+		   
+	size_t buffer_size = 1000;
+	void *buffer = calloc(1,buffer_size);
+	asn_enc_rval_t er;
+				   
+	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
+	if(er.encoded < 0)
+	{
+		OAILOG_ERROR(LOG_NGAP, "ng setup response encode failed\n");
+		rc = RETURNerror;
+		goto ERROR; 
+	}
+					 
+	bstring b = blk2bstr(buffer, er.encoded);
+						  
+	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream_id, 0);			   
+	if(rc != RETURNok)
+	{
+		OAILOG_ERROR(LOG_NGAP,"ngap_setup_response assoc_id:%u, stream:%u,len:%d\n",assoc_id, stream, er.encoded); 
+		rc = RETURNerror;
+		goto ERROR;
+	}
+
+	 
+ERROR:
+	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
+	free(buffer);
+    buffer = NULL;
+
+
+    OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
+}
 
 
 int
@@ -492,7 +629,7 @@ ngap_amf_handle_ng_setup_request(
 	//ng setup request: stream_id must be 0;
     if( stream != 0 )  
     {   
-        OAILOG_WARNING(LOG_NGAP, "ngap_setup_request,stream_id:%u====== \n", stream);
+        OAILOG_WARNING(LOG_NGAP, "ngap_setup_request,no equal 0,stream_id:%u======================\n", stream);
 		//@7
         rc = ngap_amf_generate_ng_setup_failure(assoc_id, 
                                                 stream, 
@@ -538,6 +675,7 @@ ngap_amf_handle_ng_setup_request(
 	{
 	   // free ?
        rc = RETURNerror;
+	   OAILOG_ERROR(LOG_NGAP, "ng_setup_request have not RANNodeName IE\n");
        OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 	}
 
@@ -578,8 +716,7 @@ ngap_amf_handle_ng_setup_request(
                DevAssert (plmn != NULL);
                TBCD_TO_MCC_MNC (plmn, mcc, mnc, mnc_len);
 			   
-               OAILOG_DEBUG(LOG_NGAP," pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x\n", 
-			   pLMNIdentity_size, mcc, mnc, mnc_len);
+               OAILOG_DEBUG(LOG_NGAP,"pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x\n",  mcc, mnc, mnc_len);
 			   
     		}
 		    break;
@@ -600,6 +737,7 @@ ngap_amf_handle_ng_setup_request(
 	else
 	{
 	   //free  ?
+	   OAILOG_ERROR(LOG_NGAP, "ng_setup_request have not GlobalRANNodeID IE\n");
        rc = RETURNerror;
        OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 	}
@@ -626,13 +764,14 @@ ngap_amf_handle_ng_setup_request(
 
 	
     //@4
+    #if 0
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container, Ngap_ProtocolIE_ID_id_SupportedTAList, false);
 	if (ie)
 	{
 		ta_ret	= ngap_amf_compare_ta_lists(&ie->value.choice.SupportedTAList);
 		if (ta_ret != TA_LIST_RET_OK)
 		{
-			OAILOG_ERROR (LOG_NGAP, "No Common PLMN with gNB, generate_ng_setup_failure\n");
+			OAILOG_ERROR (LOG_NGAP, "No Common PLMN with gNB, generate_ng_setup_failure--------------------\n");
 			//@10
 			rc = ngap_amf_generate_ng_setup_failure(assoc_id,
 			  	                                    stream,
@@ -642,7 +781,7 @@ ngap_amf_handle_ng_setup_request(
 			OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 		}
 	}
-	
+	#endif
 
 	
     //@5
@@ -664,7 +803,7 @@ ngap_amf_handle_ng_setup_request(
 	OAILOG_DEBUG(LOG_NGAP, "gnb_id:%d, gnb_name:%s,default_paging_drx:%d\n", 
 	gnb_association->gnb_id, gnb_association->gnb_name, gnb_association->default_paging_drx);
 
-    rc = ngap_generate_ng_setup_response(gnb_association);
+    rc = ngap_generate_ng_setup_response(assoc_id, stream, gnb_association);
     if (rc == RETURNok) 
 	{
         update_amf_app_stats_connected_gnb_add();
@@ -914,132 +1053,6 @@ ngap_amf_handle_ng_setup_request(
 }
 
 //------------------------------------------------------------------------------------------------------------
-
-int
-ngap_amf_handle_ng_setup_failure(
-    const sctp_assoc_id_t assoc_id,
-    const sctp_stream_id_t stream,
-	Ngap_NGAP_PDU_t *pdu)
-
-{
-    //OAILOG_FUNC_IN (LOG_NGAP);
-    int rc = RETURNok;
-    Ngap_NGSetupFailureIEs_t * ngSetupFailure_p = NULL;
-	Ngap_NGSetupFailureIEs_t * ngSetupFailureIEs_p = NULL;
-    gnb_description_t   * gnb_association = NULL;
-    uint32_t              gnb_id = 0;
-    char                 *gnb_name = NULL;
-    int				      gnb_name_size = 0;
-    int                   ta_ret = 0;
-    uint32_t              max_gnb_connected = 0;
-    int i = 0;
-    Ngap_NGSetupFailure_t                  *container = NULL;
-    Ngap_NGSetupFailureIEs_t               *ie = NULL;
-    Ngap_NGSetupFailureIEs_t               *ie_gnb_name = NULL;
-
-    //printf("ngap_amf_handle_ng_setup_Failure\n");
-    DevAssert (pdu != NULL);
-	
-    container = &pdu->choice.initiatingMessage->value.choice.NGSetupFailure;
-	
-	for (i = 0; i < container->protocolIEs.list.count; i++)
-	{
-        Ngap_NGSetupFailureIEs_t *setupFailureIes_p = NULL;
-        setupFailureIes_p = container->protocolIEs.list.array[i];
-		if(!setupFailureIes_p)
-			continue;
-		switch(setupFailureIes_p->id)
-	    {
-	        case Ngap_ProtocolIE_ID_id_Cause:
-			{
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_TimeToWait:
-			{
-				
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_CriticalityDiagnostics:
-			{
-				
-            }		
-            break;
-            default:
-			{
-		   	    //printf("Unknown protocol IE id (%d) for message ngsetup_failure_ies\n", (int)setupFailureIes_p->id);
-            }
-		    break;
-		}
-	 }
-	 return 0;
-}
-
-
-int
-ngap_generate_ng_setup_response(
-  gnb_description_t * gnb_association)
-{
-	OAILOG_FUNC_IN (LOG_NGAP); 
-	
-	int assoc[1];
-	sctp_data_t * sctp_data_p = NULL;
-	Ngap_NGAP_PDU_t		   *pdu = NULL; 
-	uint8_t * buffer_p = NULL;
-	uint32_t length = 0;
-	int rc = RETURNok;
-	int ret;
-	char errbuf[512] = {0};
-
-    sctp_assoc_id_t assoc_id = gnb_association->sctp_assoc_id;
-	sctp_stream_id_t stream  = gnb_association->instreams;
-	
-	pdu = make_NGAP_SetupResponse(amf_config.relative_capacity);
-	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
-	//asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
-	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
-	size_t errlen = sizeof(errbuf);
-	ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
-	if(ret != 0) 
-	{
-		OAILOG_ERROR(LOG_NGAP, "Constraintvalidationfailed:%s\n", errbuf);
-		rc = RETURNerror;
-		//goto ERROR; 
-		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
-	}
-		   
-	size_t buffer_size = 1000;
-	void *buffer = calloc(1,buffer_size);
-	asn_enc_rval_t er;
-				   
-	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
-	if(er.encoded < 0)
-	{
-		OAILOG_ERROR(LOG_NGAP, "setup response encode failed:%s\n", errbuf);
-		rc = RETURNerror;
-		//goto ERROR; 
-		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
-	}
-					 
-	bstring b = blk2bstr(buffer, er.encoded);
-						  
-	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream, 0);			   
-	if(rc != RETURNok)
-	{
-		OAILOG_ERROR(LOG_NGAP,"ngap_setup_response assoc_id:%u, stream:%u,len:%d\n",assoc_id, stream, er.encoded); 
-		rc = RETURNerror;
-		//goto ERROR;
-		OAILOG_FUNC_RETURN (LOG_NGAP, rc);
-	}
-
-#if 0	 
-ERROR:
-	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
-	free(buffer);
-    buffer = NULL;
-#endif
-
-    OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
-}
 
 int
 ngap_amf_handle_ng_initial_ue_message(

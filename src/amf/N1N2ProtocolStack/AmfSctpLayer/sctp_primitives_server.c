@@ -295,7 +295,7 @@ static int sctp_send_msg (
   if (sctp_sendmsg (assoc_desc->sd, (const void *)bdata(*payload), (size_t) blength(*payload), NULL, 0, htonl
       (assoc_desc->ppid), 0, stream, 0, 0) < 0) { 
      *payload = NULL;
-    OAILOG_ERROR (LOG_SCTP, "send: %s:%d\n", strerror (errno), errno);
+    OAILOG_ERROR (LOG_SCTP, "send, sd:%u,stream:%u,ppid:%u, len:%u, failed: %s,%d\n",assoc_desc->sd,stream, htonl(assoc_desc->ppid), blength(*payload), strerror (errno), errno);
     return -1;
   }
   OAILOG_DEBUG (LOG_SCTP, "Successfully sent %d bytes on stream %d\n", blength(*payload), stream);

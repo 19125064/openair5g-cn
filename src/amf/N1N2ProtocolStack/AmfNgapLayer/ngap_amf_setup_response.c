@@ -146,7 +146,8 @@ void add_NGSetupResponse_ie(Ngap_NGSetupResponse_t *ngapSetupResponse, Ngap_NGSe
 Ngap_NGAP_PDU_t *make_NGAP_SetupResponse(Ngap_RelativeAMFCapacity_t  RelativeAMFCapacity)
 {
     //OAILOG_DEBUG(LOG_NGAP,"encode ng setup response dump-----");
-    OAILOG_FUNC_IN (LOG_NGAP);	
+    //OAILOG_FUNC_IN (LOG_NGAP);	
+    
 	Ngap_NGAP_PDU_t *pdu;
 	pdu = calloc(1, sizeof(Ngap_NGAP_PDU_t));
 	
@@ -197,7 +198,9 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupResponse(Ngap_RelativeAMFCapacity_t  RelativeAMF
 	ie = make_supportedTAList();
 	add_NGSetupRequest_ie(ngapSetupRequest, ie);
 	#endif
-        OAILOG_FUNC_RETURN (LOG_NGAP,pdu);
-	//return pdu;
+    //OAILOG_FUNC_RETURN (LOG_NGAP,0);
+
+	
+	return pdu;
 }
 
