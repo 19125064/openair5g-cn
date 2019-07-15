@@ -22,6 +22,10 @@
 #include  "Ngap_CriticalityDiagnostics-IE-Item.h"
 #include  "Ngap_PLMNSupportItem.h"
 #include  "log.h"
+#include  "amf_config.h"
+#include  "Ngap_GUAMI.h"
+#include  "Ngap_ServedGUAMIItem.h"
+#include  "conversions.h"
 
 
 //AMFName
@@ -69,6 +73,26 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
    ie->id = Ngap_ProtocolIE_ID_id_RelativeAMFCapacity;
    ie->criticality = Ngap_Criticality_reject;
    ie->value.present = Ngap_NGSetupResponseIEs__value_PR_ServedGUAMIList;
+   
+   uint8_t nb_gummi = amf_config.gummei.nb_gummi;
+   Ngap_ServedGUAMIItem_t   *guimi = NULL;
+   guimi  =  calloc(nb_gummi, sizeof(Ngap_ServedGUAMIItem_t));
+   
+   uint8_t  i  = 0;
+   for(;i <nb_gummi;  i++)
+   {
+       amf_config.gummei.plmn_mcc;
+	   amf_config.gummei.plmn_mnc;
+       amf_config.gummei.plmn_mnc_len;
+	   
+       MCC_MNC_TO_PLMNID(*amf_config.gummei.plmn_mcc, *amf_config.gummei.plmn_mnc, sizeof(*amf_config.gummei.plmn_mnc_len), &guimi[i].gUAMI.pLMNIdentity);
+	
+	   //guimi[i].gUAMI.aMFRegionID;
+	   //guimi[i].gUAMI.aMFSetID;
+	   //guimi[i].gUAMI.aMFPointer;
+	  
+	   ASN_SEQUENCE_ADD(&ie->value.choice.ServedGUAMIList.list, guimi);
+   }
    
    
    return ie;
@@ -196,8 +220,8 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupResponse(Ngap_RelativeAMFCapacity_t  RelativeAMF
 	add_NGSetupResponse_ie(ngapSetupResponse, ie);
 
     //ServedGUAMIList
-    //ie  = make_ServedGUAMIList_ie();
-	//add_NGSetupResponse_ie(ngapSetupResponse, ie);
+    ie  = make_ServedGUAMIList_ie();
+	add_NGSetupResponse_ie(ngapSetupResponse, ie);
 	
     //PLMNSupportList
 	//Ngap_PLMNSupportList_t	 PLMNSupportList;

@@ -265,7 +265,7 @@ static int amf_config_parse_file (amf_config_t * config_pP)
     setting = config_setting_get_member (setting_amf, AMF_CONFIG_STRING_GUAMFI_LIST);
     if (setting != NULL) {
       num = config_setting_length (setting);
-      if (config_pP->gummei.nb_gummei != num) {
+      if (config_pP->gummei.nb_gummi != num) {
         if (config_pP->gummei.plmn_mcc != NULL)
           free_wrapper ((void**) &config_pP->served_tai.plmn_mcc);
         if (config_pP->gummei.plmn_mnc != NULL)
@@ -289,7 +289,7 @@ static int amf_config_parse_file (amf_config_t * config_pP)
 		config_pP->gummei.amf_set_id = calloc (num, sizeof (*config_pP->gummei.amf_set_id));
 		config_pP->gummei.amf_pointer = calloc (num, sizeof (*config_pP->gummei.amf_pointer));
       }
-      config_pP->gummei.nb_gummei = num;
+      config_pP->gummei.nb_gummi = num;
       AssertFatal(16 >= num , "Too many gummai configured %d", num);
       for (i = 0; i < num; i++) {
         sub2setting = config_setting_get_elem (setting, i);

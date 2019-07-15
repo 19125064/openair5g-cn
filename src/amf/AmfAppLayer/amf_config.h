@@ -93,7 +93,7 @@ typedef struct amf_config_s {
   } _5gs_network_feature_support;
 
   struct {
-    uint8_t   nb_gummei;
+    uint8_t   nb_gummi;
 	uint16_t *plmn_mcc;
     uint16_t *plmn_mnc;
     uint16_t *plmn_mnc_len;
