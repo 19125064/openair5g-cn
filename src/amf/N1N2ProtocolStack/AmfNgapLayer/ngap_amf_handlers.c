@@ -564,7 +564,7 @@ ngap_generate_ng_setup_response(
 	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream_id, 0);			   
 	if(rc != RETURNok)
 	{
-		OAILOG_ERROR(LOG_NGAP,"ngap_setup_response assoc_id:%u, stream:%u,len:%d\n",assoc_id, stream, er.encoded); 
+		OAILOG_ERROR(LOG_NGAP,"ngap_setup_response assoc_id:%u, stream:%u,len:%d\n",assoc_id, stream_id, er.encoded); 
 		rc = RETURNerror;
 		goto ERROR;
 	}

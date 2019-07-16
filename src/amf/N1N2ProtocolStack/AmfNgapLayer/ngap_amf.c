@@ -214,7 +214,9 @@ ngap_new_gnb (
    */
   DevAssert (gnb_ref != NULL);
   // Update number of eNB associated
-  nb_gnb_associated++;
+  //nb_gnb_associated++;
+  __sync_fetch_and_add(&nb_gnb_associated, 1);
+  
   bstring bs = bfromcstr("ngap_ue_coll");
   hashtable_ts_init(&gnb_ref->ue_coll,16, NULL, free_wrapper, bs);
   bdestroy(bs);

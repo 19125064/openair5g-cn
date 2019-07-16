@@ -46,18 +46,31 @@ int amf_app_statistics_display (
 // Number of Connected gNBs 
 void update_amf_app_stats_connected_gnb_add(void)
 {
+  #if 0
   amf_stats_write_lock (&amf_app_desc);
   (amf_app_desc.nb_gnb_connected)++;
   (amf_app_desc.nb_gnb_connected_since_last_stat)++;
   amf_stats_unlock(&amf_app_desc);
+
+  #endif
+
+   __sync_fetch_and_add(&amf_app_desc.nb_gnb_connected, 1);
+   __sync_fetch_and_add(&amf_app_desc.nb_gnb_connected_since_last_stat, 1);
+  
   return;
 }
 void update_amf_app_stats_connected_gnb_sub(void)
 {
+  #if 0
   amf_stats_write_lock (&amf_app_desc);
   if (amf_app_desc.nb_gnb_connected !=0)
     (amf_app_desc.nb_gnb_connected)--;
   (amf_app_desc.nb_gnb_released_since_last_stat)--;
   amf_stats_unlock(&amf_app_desc);
+  #endif
+
+  __sync_fetch_and_sub(&amf_app_desc.nb_gnb_connected, 1);
+  __sync_fetch_and_sub(&amf_app_desc.nb_gnb_connected_since_last_stat, 1);
+ 
   return;
 } 
