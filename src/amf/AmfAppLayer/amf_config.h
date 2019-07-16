@@ -40,12 +40,16 @@
 #define AMF_CONFIG_STRING_NGAP_PORT                      "NGAP_PORT"
 
 #define AMF_CONFIG_STRING_GUAMFI_LIST                    "GUAMFI_LIST"
+#define AMF_SUPPORT_PLMN_IDENTITY_LIST                   "AMF_SUPPORT_PLMN_IDENTITY_LIST"
+#define AMF_SUPPORT_SLICE_LIST                           "AMF_SUPPORT_SLICE_LIST"
 #define AMF_CONFIG_STRING_AMF_CODE                       "AMF_CODE"
 #define AMF_CONFIG_STRING_AMF_GID                        "AMF_GID"
 #define AMF_CONFIG_STRING_TAI_LIST                       "TAI_LIST"
 #define AMF_CONFIG_STRING_MCC                            "MCC"
 #define AMF_CONFIG_STRING_MNC                            "MNC"
 #define AMF_CONFIG_STRING_TAC                            "TAC"
+#define AMF_CONFIG_STRING_SST                            "SST"
+#define AMF_CONFIG_STRING_SD                             "SD"
 #define AMF_CONFIG_AMF_REGION_ID                         "AMF_REGION_ID"
 #define AMF_CONFIG_AMF_SET_ID 	                         "AMF_SET_ID"
 #define AMF_CONFIG_AMF_POINTER                        	 "AMF_POINTER" 
@@ -106,6 +110,22 @@ typedef struct amf_config_s {
 	uint16_t *amf_pointer;
     //gummei_t gummei[MAX_GUAMFI];
   } gummei;
+
+  struct 
+  {
+    uint8_t   nb_plmn_identity;
+	uint16_t *plmn_mcc;
+    uint16_t *plmn_mnc;
+    uint16_t *plmn_mnc_len;
+    uint16_t *tac;
+  }plmn_identity;
+
+  struct 
+  {
+    uint8_t   nb_slice_list;
+	uint16_t *SST;
+    uint16_t *SD;
+  }slice_list;
 
 #define TRACKING_AREA_IDENTITY_LIST_TYPE_ONE_PLMN_NON_CONSECUTIVE_TACS 0x00
 #define TRACKING_AREA_IDENTITY_LIST_TYPE_ONE_PLMN_CONSECUTIVE_TACS     0x01

@@ -115,6 +115,8 @@ static int amf_config_parse_file (amf_config_t * config_pP)
   const char                             *tac = NULL;
   const char                             *mcc = NULL;
   const char                             *mnc = NULL;
+  const char                             *sst = NULL;
+  const char                             *sd = NULL;
   const char                             *amf_region_id= NULL;
   const char                             *amf_set_id= NULL;
   const char                             *amf_pointer = NULL;
@@ -293,7 +295,7 @@ static int amf_config_parse_file (amf_config_t * config_pP)
 		config_pP->gummei.amf_pointer = calloc (num, sizeof (*config_pP->gummei.amf_pointer));
       }
       config_pP->gummei.nb_gummi = num;
-      AssertFatal(16 >= num , "Too many gummai configured %d", num);
+      //AssertFatal(16 >= num , "Too many gummai configured %d", num);
       for (i = 0; i < num; i++) {
         sub2setting = config_setting_get_elem (setting, i);
 
@@ -324,6 +326,91 @@ static int amf_config_parse_file (amf_config_t * config_pP)
         }
       }
     }
+
+    //AMF_SUPPORT_PLMN_IDENTITY_LIST setting
+    setting = config_setting_get_member (setting_amf, AMF_SUPPORT_PLMN_IDENTITY_LIST);
+    if (setting != NULL) 
+	{
+       num = config_setting_length (setting);
+       if (config_pP->plmn_identity.nb_plmn_identity != num) 
+	   {
+          if (config_pP->plmn_identity.plmn_mcc != NULL)
+              free_wrapper ((void**) &config_pP->plmn_identity.plmn_mcc);
+		  if (config_pP->plmn_identity.plmn_mnc != NULL)
+             free_wrapper ((void**) &config_pP->plmn_identity.plmn_mnc);
+          if (config_pP->plmn_identity.plmn_mnc_len != NULL)
+              free_wrapper ((void**) &config_pP->plmn_identity.plmn_mnc_len);
+          if (config_pP->plmn_identity.tac != NULL)
+              free_wrapper ((void**) &config_pP->plmn_identity.tac);
+
+		  config_pP->plmn_identity.plmn_mcc = calloc (num, sizeof (*config_pP->plmn_identity.plmn_mcc));
+          config_pP->plmn_identity.plmn_mnc = calloc (num, sizeof (*config_pP->plmn_identity.plmn_mnc));
+          config_pP->plmn_identity.plmn_mnc_len = calloc (num, sizeof (*config_pP->plmn_identity.plmn_mnc_len));
+		  config_pP->plmn_identity.tac      = calloc (num, sizeof (*config_pP->plmn_identity.tac));
+       }
+
+	   config_pP->plmn_identity.nb_plmn_identity = num;
+       //AssertFatal(16 >= num , "Too many gummai configured %d", num);
+       for (i = 0; i < num; i++) 
+	   {
+           sub2setting = config_setting_get_elem (setting, i);
+
+           if (sub2setting != NULL) {
+           if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MCC, &mcc))) 
+		   {
+               config_pP->plmn_identity.plmn_mcc[i] = (uint16_t) atoi (mcc);
+           }
+           if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MNC, &mnc)))
+		   {
+               config_pP->plmn_identity.plmn_mnc[i] = (uint16_t) atoi (mnc);
+               config_pP->plmn_identity.plmn_mnc_len[i] = strlen (mnc);
+               AssertFatal ((config_pP->plmn_identity.plmn_mnc_len[i] == 2) || (config_pP->plmn_identity.plmn_mnc_len[i] == 3),
+                "Bad MNC length %u, must be 2 or 3", config_pP->plmn_identity.plmn_mnc_len[i]);
+           }
+		   if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_TAC, &tac))) 
+		   {
+              config_pP->plmn_identity.tac[i] = (uint16_t) atoi (tac);
+           }
+        }
+       }
+    }
+	
+	//AMF_SUPPORT_SLICE_LIST setting
+    setting = config_setting_get_member (setting_amf, AMF_SUPPORT_SLICE_LIST);
+    if (setting != NULL)
+	{
+       num = config_setting_length (setting);
+       if (config_pP->slice_list.nb_slice_list != num) 
+	   {
+          if (config_pP->slice_list.SST != NULL)
+             free_wrapper ((void**) &config_pP->slice_list.SST);
+		  
+		  if (config_pP->slice_list.SD != NULL)
+             free_wrapper ((void**) &config_pP->slice_list.SD);
+
+		  config_pP->slice_list.SST = calloc (num, sizeof (*config_pP->slice_list.SST));
+		  config_pP->slice_list.SD  = calloc (num, sizeof (*config_pP->slice_list.SD));
+       }
+
+	   config_pP->slice_list.nb_slice_list = num;
+	   for (i = 0; i < num; i++) 
+	   {
+           sub2setting = config_setting_get_elem (setting, i);
+           if (sub2setting != NULL) 
+		   {
+              if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_SST, &sst))) 
+		      {
+                 config_pP->slice_list.SST[i] = (uint16_t) atoi (sst);
+              }
+			  if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_SD, &sd))) 
+		      {
+                 config_pP->slice_list.SD[i] = (uint16_t) atoi (sd);
+              }
+           }
+	   }
+    }
+	
+
 	
     // TAI list setting
     setting = config_setting_get_member (setting_amf, AMF_CONFIG_STRING_TAI_LIST);
