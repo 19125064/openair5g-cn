@@ -519,9 +519,8 @@ ERROR:
 
 int
 ngap_generate_ng_setup_response(
-  const sctp_assoc_id_t assoc,
-  const sctp_stream_id_t stream,
-  gnb_description_t * gnb_association)
+  const sctp_assoc_id_t assoc_id,
+  const sctp_stream_id_t stream_id)
 {
 	OAILOG_FUNC_IN (LOG_NGAP); 
 	
@@ -534,15 +533,7 @@ ngap_generate_ng_setup_response(
 	int ret;
 	char errbuf[512] = {0};
 
-    //sctp_assoc_id_t assoc_id = gnb_association->sctp_assoc_id;
-	//sctp_stream_id_t stream  = gnb_association->instreams;
-
-    OAILOG_DEBUG(LOG_NGAP, "assoc:%u,sctp_assoc_id:%u,stream:%u,instreams:%u,outstreams:%u\n",
-    assoc,gnb_association->sctp_assoc_id ,stream, gnb_association->instreams, gnb_association->outstreams);
-
-	sctp_assoc_id_t    assoc_id = assoc;
-	sctp_stream_id_t  stream_id = stream;
-	
+  
 	pdu = make_NGAP_SetupResponse(amf_config.relative_capacity);
 	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
 	//asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
@@ -704,15 +695,8 @@ ngap_amf_handle_ng_setup_request(
 					 break;
 				  }
 			   }
-			   
                //pLMNIdentity
-               uint32_t pLMNIdentity_size =  globalGNB_ID->pLMNIdentity.size;
-			   //char pLMNIdentity_buf[pLMNIdentity_size];
-			   //memcpy(pLMNIdentity_buf, globalGNB_ID->pLMNIdentity.buf, pLMNIdentity_size);
-               
-  
                const Ngap_PLMNIdentity_t * const plmn = &globalGNB_ID->pLMNIdentity;
-               
                DevAssert (plmn != NULL);
                TBCD_TO_MCC_MNC (plmn, mcc, mnc, mnc_len);
 			   
@@ -741,12 +725,9 @@ ngap_amf_handle_ng_setup_request(
        rc = RETURNerror;
        OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 	}
-
-	gnb_association->gnb_id = gnb_id;
 	
     //@3
 	max_gnb_connected = amf_config.max_gnbs;
-	//#nb_gnb_associated
 	if(nb_gnb_associated >= max_gnb_connected)
 	{
          OAILOG_ERROR (LOG_NGAP, "There is too much gNB connected to MME, rejecting the association\n");
@@ -760,9 +741,7 @@ ngap_amf_handle_ng_setup_request(
                                                  Ngap_TimeToWait_v20s);
          OAILOG_FUNC_RETURN (LOG_NGAP, rc);
     }
-
-
-	
+    
     //@4
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container, Ngap_ProtocolIE_ID_id_SupportedTAList, false);
 	if (ie)
@@ -770,7 +749,7 @@ ngap_amf_handle_ng_setup_request(
 		ta_ret	= ngap_amf_compare_ta_lists(&ie->value.choice.SupportedTAList);
 		if (ta_ret != TA_LIST_RET_OK)
 		{
-			OAILOG_ERROR (LOG_NGAP, "No Common PLMN with gNB, generate_ng_setup_failure--------------------\n");
+			OAILOG_ERROR (LOG_NGAP, "No Common PLMN with gNB, generate_ng_setup_failure \n");
 			//@10
 			rc = ngap_amf_generate_ng_setup_failure(assoc_id,
 			  	                                    stream,
@@ -780,9 +759,7 @@ ngap_amf_handle_ng_setup_request(
 			OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 		}
 	}
-
-
-	
+    
     //@5
     //gnb_id,gnb_name,default_paging_drx
     gnb_association->gnb_id = gnb_id;
@@ -796,33 +773,27 @@ ngap_amf_handle_ng_setup_request(
     {
        gnb_association->default_paging_drx = ie->value.choice.PagingDRX;
     }
-	
+	else
+	{
+	   //free  ?
+	   OAILOG_ERROR(LOG_NGAP, "ng_setup_request have not default_paging_drx IE\n");
+       rc = RETURNerror;
+       OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	}
   
 
 	OAILOG_DEBUG(LOG_NGAP, "gnb_id:%d, gnb_name:%s,default_paging_drx:%d\n", 
 	gnb_association->gnb_id, gnb_association->gnb_name, gnb_association->default_paging_drx);
 
-    rc = ngap_generate_ng_setup_response(assoc_id, stream, gnb_association);
+    //@6
+    rc = ngap_generate_ng_setup_response(assoc_id, stream);
     if (rc == RETURNok) 
 	{
+	    //@11
         update_amf_app_stats_connected_gnb_add();
     }
     OAILOG_FUNC_RETURN (LOG_NGAP, rc);
-	 //return 0;
-    #if 0
-	if(ngSetupRequest_p->globalRANNodeID.choice.globalGNB_ID.gNB_ID.present == GNB_ID_PR_gNB_ID){  //which gnb id ??
-      uint8_t * gnb_id_buf = ngSetupRequest_p->globalRANNodeID.choice.globalGNB_ID.gNB_ID.choice.gNB_ID.buf;
-      if(ngSetupRequest_p->globalRANNodeID.choice.globalGNB_ID.gNB_ID.choice.gNB_ID.size != 28){
-        //TODO: handle case that size !=28
-      }
-      gnb_id = (gnb_id_buf[0] << 20) + (gnb_id_buf[1] << 12) + (gnb_id_buf[2] << 4) + ((gnb_id_buf[3] & 0xf0) >> 4);
-      OAILOG_MESSAGE_ADD (context, "gNB id: %07x", gnb_id);
-    } else {
-    }
-	#endif
-	 
-
-
+    
     #if 0
     //OAILOG_FUNC_IN (LOG_NGAP);
     int rc = RETURNok;

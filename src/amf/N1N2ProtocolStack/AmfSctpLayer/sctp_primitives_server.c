@@ -733,13 +733,13 @@ sctp_association_t* add_new_association(int sd, uint32_t ppid, struct sctp_assoc
     OAILOG_ERROR (LOG_SCTP, "Failed to allocate new sctp peer \n");
     return NULL;
   }
-  //printf("After sctp_add_new_peer\n");
+ 
   new_association->sd = sd;
   new_association->ppid = ppid;
   new_association->instreams = sctp_assoc_changed->sac_inbound_streams;
   new_association->outstreams = sctp_assoc_changed->sac_outbound_streams;
   new_association->assoc_id = (sctp_assoc_id_t) sctp_assoc_changed->sac_assoc_id;
-  //printf("sctp_assoc_changed->sac_assoc_id(%d)\n",sctp_assoc_changed->sac_assoc_id);
+  
   sctp_get_localaddresses(sd, NULL, NULL);
   sctp_get_peeraddresses(sd, &new_association->peer_addresses, &new_association->nb_peer_addresses);
 
