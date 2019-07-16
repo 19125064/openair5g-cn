@@ -161,34 +161,43 @@ void fill_PLMNSupportItem_with_pLMNIdentity(Ngap_PLMNIdentity_t	 *pLMNIdentity)
 	//OAILOG_DEBUG(LOG_NGAP,"pLMNIdentity: 0x%x,0x%x,0x%x\n", pLMNIdentity->buf[0],pLMNIdentity->buf[1],pLMNIdentity->buf[2]);
 }
 
-void fill_s_NSSAI_sST(Ngap_SST_t *sST)
+void fill_s_NSSAI_sST(Ngap_SST_t *sST, const uint16_t *sst)
 { 
    //OAILOG_FUNC_IN (LOG_NGAP);
-    uint8_t plmn[3] = { 0x02};
-	OCTET_STRING_fromBuf(sST, (const char*)plmn, 1);
-   //OAILOG_FUNC_RETURN (LOG_NGAP,0);
-	//OAILOG_DEBUG(LOG_NGAP,"NSSAI_sST:0x%x\n",sST->buf[0]);
+    //uint8_t plmn[3] = { 0x02};
+	//OCTET_STRING_fromBuf(sST, (const char*)plmn, 1);
+
+	OCTET_STRING_fromBuf(sST, (const char*)sst, 1);
+ 
 }
-#if 0
-void fill_s_NSSAI_sD(Ngap_SD_t	*sD)
-{
-   
+
+Ngap_SD_t	* fill_s_NSSAI_sD( const uint16_t SD)
+{   
+    Ngap_SD_t *sD = NULL;
+    if (SD >= 0 )
+    {
+        uint32_t sd = ntohl(SD);
+        //int32_t sd = uint32_t(SD);
+        const char *sd_ptr = (const char *)&sd + 1;
+        sD = calloc(1, sizeof(Ngap_SD_t));
+        
+        OCTET_STRING_fromBuf(sD, sd_ptr, 3);
+		//OAILOG_DEBUG (LOG_NGAP,"s_NSSAI.sD:0x%x,0x%x,0x%x",item->s_NSSAI.sD->buf[0],item->s_NSSAI.sD->buf[1],item->s_NSSAI.sD->buf[2]);
+    }
+	return sD;
 }
-#endif
-void fill_sliceSupportItem_with_s_NSSAI(Ngap_S_NSSAI_t	 *s_NSSAI)
+
+void fill_sliceSupportItem_with_s_NSSAI(Ngap_S_NSSAI_t	 *s_NSSAI, const uint16_t *sst, const uint16_t sd)
 {
-    //OAILOG_FUNC_IN (LOG_NGAP);
-    fill_s_NSSAI_sST(&s_NSSAI->sST);
-    //OAILOG_FUNC_RETURN (LOG_NGAP,0);
+    fill_s_NSSAI_sST(&s_NSSAI->sST, sst);
+	s_NSSAI->sD = fill_s_NSSAI_sD(sd);
 }
 void fill_PLMNSupportItem_with_sliceSupportList(Ngap_SliceSupportList_t	 *sliceSupportList)
 {   
-    //OAILOG_FUNC_IN (LOG_NGAP);
     Ngap_SliceSupportItem_t *ss = NULL;
 	ss = calloc(1, sizeof(Ngap_SliceSupportItem_t));
-    fill_sliceSupportItem_with_s_NSSAI(&ss->s_NSSAI);
+    fill_sliceSupportItem_with_s_NSSAI(&ss->s_NSSAI, 0, 0);
 	ASN_SEQUENCE_ADD(&sliceSupportList->list, ss);
-    //OAILOG_FUNC_RETURN (LOG_NGAP,0);
 }
 
 Ngap_PLMNSupportItem_t  *make_PLMNSupportItem()
@@ -203,9 +212,21 @@ Ngap_PLMNSupportItem_t  *make_PLMNSupportItem()
 }
 
 
-void make_sliceSupportList()
+void make_sliceSupportList(Ngap_SliceSupportList_t	 *sliceSupportList)
 {
-   
+   uint16_t  nb_slice_list = amf_config.slice_list.nb_slice_list;
+
+   //Ngap_SliceSupportItem_t *ss = NULL;
+   //ss = calloc(nb_slice_list, sizeof(Ngap_SliceSupportItem_t));
+
+   Ngap_SliceSupportItem_t *ss = NULL;
+   int i  = 0;
+   for(; i < nb_slice_list; i++)
+   {
+       ss = calloc(1, sizeof(Ngap_SliceSupportItem_t));
+       fill_sliceSupportItem_with_s_NSSAI(&(ss->s_NSSAI), &amf_config.slice_list.SST[i], amf_config.slice_list.SD[i]);
+	   ASN_SEQUENCE_ADD(&sliceSupportList->list, ss);  
+   }
 }
 
 
@@ -222,21 +243,24 @@ Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
     //plmn= make_PLMNSupportItem();
     uint16_t  nb_plmn_identity = amf_config.plmn_identity.nb_plmn_identity;
 
-	Ngap_PLMNSupportItem_t  *plmn = NULL;
-    plmn = calloc(nb_plmn_identity, sizeof(Ngap_PLMNSupportItem_t));
-	   
+
+   
+	Ngap_PLMNSupportItem_t	*plmn = NULL;
 	int i  = 0;
 	for(; i< nb_plmn_identity; i++)
 	{
+	   plmn = calloc(1, sizeof(Ngap_PLMNSupportItem_t));
 	   //pLMNIdentity: sliceSupportList = 1-to-many relationship
 	   
 	   //1: pLMNIdentity
-	   MCC_MNC_TO_PLMNID(amf_config.plmn_identity.plmn_mcc[i], amf_config.plmn_identity.plmn_mnc[i], amf_config.plmn_identity.plmn_mnc_len[i], &(plmn[i].pLMNIdentity));
+	   MCC_MNC_TO_PLMNID(amf_config.plmn_identity.plmn_mcc[i], amf_config.plmn_identity.plmn_mnc[i], amf_config.plmn_identity.plmn_mnc_len[i], &(plmn->pLMNIdentity));
 
 	   //many: sliceSupportList
-       fill_PLMNSupportItem_with_sliceSupportList(&(plmn[i].sliceSupportList));
+       //fill_PLMNSupportItem_with_sliceSupportList(&(plmn[i].sliceSupportList));
+	   make_sliceSupportList(&(plmn[i].sliceSupportList));
+	   //plmn[i].sliceSupportList =  *sliceSupportList;
 	   
-       ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, &plmn[i]);
+       ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, plmn);
 	}
 	
     return ie;

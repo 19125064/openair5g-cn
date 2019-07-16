@@ -358,11 +358,11 @@ static int amf_config_parse_file (amf_config_t * config_pP)
            if (sub2setting != NULL) {
            if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MCC, &mcc))) 
 		   {
-               config_pP->plmn_identity.plmn_mcc[i] = (uint16_t) atoi (mcc);
+               config_pP->plmn_identity.plmn_mcc[i] = (uint16_t) atoi (mcc);  
            }
            if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MNC, &mnc)))
 		   {
-               config_pP->plmn_identity.plmn_mnc[i] = (uint16_t) atoi (mnc);
+			   config_pP->plmn_identity.plmn_mnc[i] = (uint16_t) atoi (mnc);
                config_pP->plmn_identity.plmn_mnc_len[i] = strlen (mnc);
                AssertFatal ((config_pP->plmn_identity.plmn_mnc_len[i] == 2) || (config_pP->plmn_identity.plmn_mnc_len[i] == 3),
                 "Bad MNC length %u, must be 2 or 3", config_pP->plmn_identity.plmn_mnc_len[i]);
