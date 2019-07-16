@@ -29,9 +29,9 @@
 
 
 //AMFName
-Ngap_NGSetupResponseIEs_t *make_AMFName_ie(const char *name)
+Ngap_NGSetupResponseIEs_t *make_AMFName_ie()
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
     
 	Ngap_NGSetupResponseIEs_t *ie;
 	ie = calloc(1, sizeof(Ngap_NGSetupResponseIEs_t));
@@ -39,32 +39,60 @@ Ngap_NGSetupResponseIEs_t *make_AMFName_ie(const char *name)
    	ie->id = Ngap_ProtocolIE_ID_id_AMFName;
 	ie->criticality = Ngap_Criticality_reject;
 	ie->value.present = Ngap_NGSetupResponseIEs__value_PR_AMFName;
-	OCTET_STRING_fromBuf (&ie->value.choice.AMFName, name, strlen (name));
+	OCTET_STRING_fromBuf (&ie->value.choice.AMFName, bdata(amf_config.amf_name), blength (amf_config.amf_name));
 	
-	//OAILOG_DEBUG(LOG_NGAP,"AMFName:%s\n", ie->value.choice.AMFName.buf);
+	OAILOG_DEBUG(LOG_NGAP,"response  backup AMFName:%s\n", ie->value.choice.AMFName.buf);
     //OAILOG_FUNC_RETURN (LOG_NGAP,ie);
     return ie;
 }
 
 
 //RelativeAMFCapacity
-Ngap_NGSetupResponseIEs_t * make_RelativeAMFCapacity_ie(Ngap_RelativeAMFCapacity_t  RelativeAMFCapacity)
+Ngap_NGSetupResponseIEs_t * make_RelativeAMFCapacity_ie()
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
 	Ngap_NGSetupResponseIEs_t *ie = NULL;
 	ie = calloc(1, sizeof(Ngap_NGSetupResponseIEs_t));
 	
 	ie->id = Ngap_ProtocolIE_ID_id_RelativeAMFCapacity;
 	ie->criticality = Ngap_Criticality_reject;
 	ie->value.present = Ngap_NGSetupResponseIEs__value_PR_RelativeAMFCapacity;
-    ie->value.choice.RelativeAMFCapacity  =   RelativeAMFCapacity;
+    ie->value.choice.RelativeAMFCapacity  =   amf_config.relative_capacity;
 	
-	//OAILOG_DEBUG(LOG_NGAP,"RelativeAMFCapacity:%d\n", ie->value.choice.RelativeAMFCapacity);
+	OAILOG_DEBUG(LOG_NGAP,"response  backup RelativeAMFCapacity:%d\n", ie->value.choice.RelativeAMFCapacity);
     //OAILOG_FUNC_RETURN (LOG_NGAP,ie);	
 	return ie;
 }
 
 //ServedGUAMIList
+void fill_aMFSetID(Ngap_AMFSetID_t *aMFSetID, uint16_t setid, uint16_t len)
+{
+    aMFSetID->buf = calloc(len, sizeof(uint8_t));
+	memset(aMFSetID->buf, 0, len );
+	memcpy(aMFSetID->buf, &setid, len);
+	aMFSetID->size =  len;
+	aMFSetID->bits_unused = 0;
+
+	OAILOG_DEBUG(LOG_NGAP,"aMFSetID, size:%u\n", aMFSetID->size);
+}
+
+void fill_aMFRegionID(Ngap_AMFRegionID_t *aMFRegionID, uint16_t setid, uint16_t len)
+{
+    aMFRegionID->buf = calloc(len, sizeof(uint8_t));
+    memset(aMFRegionID->buf, 0, len );
+    memcpy(aMFRegionID->buf, &setid, len);
+    aMFRegionID->size =  len;
+    aMFRegionID->bits_unused = 0; 
+	//INT16_TO_BUFFER(setid, aMFRegionID->buf);
+}
+void  fill_aMFPointer(Ngap_AMFPointer_t *aMFPointer, uint16_t setid, uint16_t len)
+{
+    aMFPointer->buf = calloc(len, sizeof(uint8_t));
+    memset(aMFPointer->buf, 0, len );
+    memcpy(aMFPointer->buf, &setid, len);
+    aMFPointer->size =  len;
+    aMFPointer->bits_unused = 01; 
+}
 Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
 {
    Ngap_NGSetupResponseIEs_t *ie = NULL;
@@ -73,10 +101,11 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
    ie->id = Ngap_ProtocolIE_ID_id_RelativeAMFCapacity;
    ie->criticality = Ngap_Criticality_reject;
    ie->value.present = Ngap_NGSetupResponseIEs__value_PR_ServedGUAMIList;
+
    
    uint8_t nb_gummi = amf_config.gummei.nb_gummi;
-   Ngap_ServedGUAMIItem_t   *guimi = NULL;
-   guimi  =  calloc(nb_gummi, sizeof(Ngap_ServedGUAMIItem_t));
+   //Ngap_ServedGUAMIItem_t   *pGuimi = NULL;
+   //pGuimi  =  (Ngap_ServedGUAMIItem_t   *)calloc(nb_gummi, sizeof(Ngap_ServedGUAMIItem_t));
    
    uint8_t  i  = 0;
    for(;i <nb_gummi;  i++)
@@ -84,14 +113,29 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
        amf_config.gummei.plmn_mcc;
 	   amf_config.gummei.plmn_mnc;
        amf_config.gummei.plmn_mnc_len;
-	   
-       MCC_MNC_TO_PLMNID(*amf_config.gummei.plmn_mcc, *amf_config.gummei.plmn_mnc, sizeof(*amf_config.gummei.plmn_mnc_len), &guimi[i].gUAMI.pLMNIdentity);
-	
+
+       Ngap_ServedGUAMIItem_t   *pGuimi = NULL;
+	   pGuimi  =  (Ngap_ServedGUAMIItem_t   *)calloc(1, sizeof(Ngap_ServedGUAMIItem_t));
+	   //pLMNIdentity
+	   OAILOG_DEBUG(LOG_NGAP, "mcc:%u, mnc:%u, mnc_len:%u\n", *amf_config.gummei.plmn_mcc, *amf_config.gummei.plmn_mnc, sizeof(*amf_config.gummei.plmn_mnc_len));
+       MCC_MNC_TO_PLMNID(*amf_config.gummei.plmn_mcc, *amf_config.gummei.plmn_mnc, sizeof(*amf_config.gummei.plmn_mnc_len), &(pGuimi->gUAMI.pLMNIdentity));
+
+
+       INT16_TO_BIT_STRING(*(amf_config.gummei.amf_region_id),&(pGuimi[i].gUAMI.aMFRegionID));
 	   //guimi[i].gUAMI.aMFRegionID;
+	   //fill_aMFRegionID(&(pGuimi[i].gUAMI.aMFRegionID), *(amf_config.gummei.amf_region_id), sizeof(*(amf_config.gummei.amf_region_id)));
+    
 	   //guimi[i].gUAMI.aMFSetID;
+	   INT16_TO_BIT_STRING(*(amf_config.gummei.amf_set_id),&(pGuimi[i].gUAMI.aMFSetID));
+	   //fill_aMFSetID(&(pGuimi[i].gUAMI.aMFSetID), *(amf_config.gummei.amf_set_id), sizeof(*(amf_config.gummei.amf_set_id)));
+    
 	   //guimi[i].gUAMI.aMFPointer;
+	   //pGuimi[i].gUAMI.aMFPointer =  
+	   INT16_TO_BIT_STRING(*(amf_config.gummei.amf_pointer), &(pGuimi[i].gUAMI.aMFPointer));
+	   //fill_aMFPointer(&(pGuimi[i].gUAMI.aMFPointer), *(amf_config.gummei.amf_pointer), sizeof(*(amf_config.gummei.amf_pointer)));
+    
 	  
-	   ASN_SEQUENCE_ADD(&ie->value.choice.ServedGUAMIList.list, guimi);
+	   ASN_SEQUENCE_ADD(&ie->value.choice.ServedGUAMIList.list, pGuimi);
    }
    
    
@@ -105,7 +149,7 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
 //pLMNIdentity
 void fill_PLMNSupportItem_with_pLMNIdentity(Ngap_PLMNIdentity_t	 *pLMNIdentity)
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
     uint8_t plmn[3] = { 0x02, 0xF8, 0x29 };
 	OCTET_STRING_fromBuf(pLMNIdentity, (const char*)plmn, 3);
     //OAILOG_FUNC_RETURN (LOG_NGAP,0);
@@ -114,7 +158,7 @@ void fill_PLMNSupportItem_with_pLMNIdentity(Ngap_PLMNIdentity_t	 *pLMNIdentity)
 
 void fill_s_NSSAI_sST(Ngap_SST_t *sST)
 { 
-   OAILOG_FUNC_IN (LOG_NGAP);
+   //OAILOG_FUNC_IN (LOG_NGAP);
     uint8_t plmn[3] = { 0x02};
 	OCTET_STRING_fromBuf(sST, (const char*)plmn, 1);
    //OAILOG_FUNC_RETURN (LOG_NGAP,0);
@@ -128,13 +172,13 @@ void fill_s_NSSAI_sD(Ngap_SD_t	*sD)
 #endif
 void fill_sliceSupportItem_with_s_NSSAI(Ngap_S_NSSAI_t	 *s_NSSAI)
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
     fill_s_NSSAI_sST(&s_NSSAI->sST);
     //OAILOG_FUNC_RETURN (LOG_NGAP,0);
 }
 void fill_PLMNSupportItem_with_sliceSupportList(Ngap_SliceSupportList_t	 *sliceSupportList)
 {   
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
     Ngap_SliceSupportItem_t *ss = NULL;
 	ss = calloc(1, sizeof(Ngap_SliceSupportItem_t));
     fill_sliceSupportItem_with_s_NSSAI(&ss->s_NSSAI);
@@ -144,7 +188,7 @@ void fill_PLMNSupportItem_with_sliceSupportList(Ngap_SliceSupportList_t	 *sliceS
 
 Ngap_PLMNSupportItem_t  *make_PLMNSupportItem()
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
     Ngap_PLMNSupportItem_t  *plmn = NULL;
     plmn = calloc(1, sizeof(Ngap_PLMNSupportItem_t));
 
@@ -156,7 +200,7 @@ Ngap_PLMNSupportItem_t  *make_PLMNSupportItem()
 
 Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
     Ngap_NGSetupResponseIEs_t *ie = NULL;
 	ie = calloc(1, sizeof(Ngap_NGSetupResponseIEs_t));
 	
@@ -173,7 +217,7 @@ Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
 }
 void add_NGSetupResponse_ie(Ngap_NGSetupResponse_t *ngapSetupResponse, Ngap_NGSetupResponseIEs_t *ie)
 {
-    OAILOG_FUNC_IN (LOG_NGAP);
+    //OAILOG_FUNC_IN (LOG_NGAP);
     int ret;
 	ret = ASN_SEQUENCE_ADD(&ngapSetupResponse->protocolIEs.list, ie);
     if ( ret != 0 ) {
@@ -182,7 +226,7 @@ void add_NGSetupResponse_ie(Ngap_NGSetupResponse_t *ngapSetupResponse, Ngap_NGSe
     //OAILOG_FUNC_RETURN (LOG_NGAP,0);
 }
 
-Ngap_NGAP_PDU_t *make_NGAP_SetupResponse(Ngap_RelativeAMFCapacity_t  RelativeAMFCapacity)
+Ngap_NGAP_PDU_t *make_NGAP_SetupResponse()
 {
     //OAILOG_DEBUG(LOG_NGAP,"encode ng setup response dump-----");
     //OAILOG_FUNC_IN (LOG_NGAP);	
@@ -211,12 +255,12 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupResponse(Ngap_RelativeAMFCapacity_t  RelativeAMF
     Ngap_NGSetupResponseIEs_t *ie = NULL;
 
 	//AMFName
-	ie  = make_AMFName_ie("test gNB");
+	ie  = make_AMFName_ie();
 	add_NGSetupResponse_ie(ngapSetupResponse, ie);
 
 
 	//RelativeAMFCapacity
-	ie  = make_RelativeAMFCapacity_ie(RelativeAMFCapacity);
+	ie  = make_RelativeAMFCapacity_ie();
 	add_NGSetupResponse_ie(ngapSetupResponse, ie);
 
     //ServedGUAMIList
@@ -225,8 +269,8 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupResponse(Ngap_RelativeAMFCapacity_t  RelativeAMF
 	
     //PLMNSupportList
 	//Ngap_PLMNSupportList_t	 PLMNSupportList;
-	ie  = make_PLMNSupportList();
-	add_NGSetupResponse_ie(ngapSetupResponse, ie);
+	//ie  = make_PLMNSupportList();
+	//add_NGSetupResponse_ie(ngapSetupResponse, ie);
 	
 	#if 0
 	ie = make_GlobalRANNodeID_ie();

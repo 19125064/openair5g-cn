@@ -136,6 +136,14 @@ do {                                            \
     INT8_TO_BUFFER(x, (aSN)->buf);              \
 } while(0)
 
+
+#define INT16_TO_BIT_STRING(x, aSN) \
+do {                                \
+    INT16_TO_OCTET_STRING(x, aSN);  \
+    (aSN)->bits_unused = 0;         \
+} while(0)
+
+
 #define MME_CODE_TO_OCTET_STRING INT8_TO_OCTET_STRING
 #define M_TMSI_TO_OCTET_STRING   INT32_TO_OCTET_STRING
 #define MME_GID_TO_OCTET_STRING  INT16_TO_OCTET_STRING

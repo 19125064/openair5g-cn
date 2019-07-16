@@ -188,6 +188,9 @@ static int amf_config_parse_file (amf_config_t * config_pP)
     if ((config_setting_lookup_string (setting_amf, AMF_CONFIG_STRING_REALM, (const char **)&astring))) {
       config_pP->realm = bfromcstr (astring);
     } 
+    if ((config_setting_lookup_string (setting_amf, AMF_CONFIG_STRING_LOCAL_AMF_NAME, (const char **)&astring))) {
+      config_pP->amf_name = bfromcstr (astring);
+    } 
     if ((config_setting_lookup_string (setting_amf,AMF_CONFIG_STRING_PID_DIRECTORY,(const char **)&astring))) {
       config_pP->pid_dir = bfromcstr (astring);
     }
@@ -455,6 +458,7 @@ static void amf_config_display (amf_config_t * config_pP)
   OAILOG_INFO (LOG_CONFIG, "Configuration:\n");
   OAILOG_INFO (LOG_CONFIG, "- File .................................: %s\n", bdata(config_pP->config_file));
   OAILOG_INFO (LOG_CONFIG, "- Realm ................................: %s\n", bdata(config_pP->realm));
+  OAILOG_INFO (LOG_CONFIG, "- Amf_Name .............................: %s\n", bdata(config_pP->amf_name));
   OAILOG_INFO (LOG_CONFIG, "- Run mode .............................: %s\n", (RUN_MODE_TEST == config_pP->run_mode) ? "TEST":"NORMAL");
   OAILOG_INFO (LOG_CONFIG, "- Max gNBs .............................: %u\n", config_pP->max_gnbs);
   OAILOG_INFO (LOG_CONFIG, "- Max UEs ..............................: %u\n", config_pP->max_ues);

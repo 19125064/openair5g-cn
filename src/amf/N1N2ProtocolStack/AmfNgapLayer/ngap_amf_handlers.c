@@ -162,6 +162,20 @@ void test_ngap_amf_itti_nas_uplink_data_ind(bstring *nas_msg)
 	ngap_amf_itti_nas_uplink_data_ind(60, nas_msg, &tai, &cgi);
 }
 
+int   check_NGAP_pdu_constraints(Ngap_NGAP_PDU_t *pdu) {
+    int ret;
+    char errbuf[512];
+    size_t errlen =sizeof(errbuf);
+    ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+    if(ret != 0) 
+	{
+        OAILOG_ERROR(LOG_NGAP,"Constraint validation  failed:%s\n", errbuf);
+    }
+	return ret;
+}
+
+
+
 int
 ngap_amf_handle_message(
     const sctp_assoc_id_t assoc_id,
@@ -475,14 +489,16 @@ int ngap_amf_generate_ng_setup_failure(
     char errbuf[512] = {0};
     pdu = make_NGAP_SetupFailure(cause_type, cause_value, time_to_wait);
    
-    size_t errlen = sizeof(errbuf);
-    ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
-    if(ret != 0) 
+    //size_t errlen = sizeof(errbuf);
+    //ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+    ret  = check_NGAP_pdu_constraints(pdu);
+    if(ret < 0) 
 	{
-		OAILOG_ERROR(LOG_NGAP,"Constraint  validation  failed :%s\n", errbuf);
+		OAILOG_ERROR(LOG_NGAP,"ng_setup_failure Constraint  validation  failed");
 		rc = RETURNerror;
 		goto ERROR;
     }
+
 	
 	size_t buffer_size = 1000;
     void *buffer = calloc(1,buffer_size);
@@ -531,22 +547,24 @@ ngap_generate_ng_setup_response(
 	uint32_t length = 0;
 	int rc = RETURNok;
 	int ret;
-	char errbuf[512] = {0};
+	//char errbuf[512] = {0};
 
   
-	pdu = make_NGAP_SetupResponse(amf_config.relative_capacity);
+	pdu = make_NGAP_SetupResponse();
 	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
 	//asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
 	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
-	size_t errlen = sizeof(errbuf);
-	ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
-	if(ret != 0) 
+	//size_t errlen = sizeof(errbuf);
+	//ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+	ret  = check_NGAP_pdu_constraints(pdu);
+	if(ret < 0) 
 	{
-		OAILOG_ERROR(LOG_NGAP, "ng setup response Constraint validation  failed:%s\n", errbuf);
+		OAILOG_ERROR(LOG_NGAP, "ng setup response Constraint validation  failed\n");
 		rc = RETURNerror;
 		goto ERROR; 
 	}
-		   
+   	OAILOG_DEBUG(LOG_NGAP,"ng setup response check_NGAP_pdu_constraints ret:%d\n", ret);   
+	
 	size_t buffer_size = 1000;
 	void *buffer = calloc(1,buffer_size);
 	asn_enc_rval_t er;
@@ -554,7 +572,7 @@ ngap_generate_ng_setup_response(
 	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
 	if(er.encoded < 0)
 	{
-		OAILOG_ERROR(LOG_NGAP, "ng setup response encode failed\n");
+		OAILOG_ERROR(LOG_NGAP, "ng setup response encode failed,er.encoded:%d\n",er.encoded);
 		rc = RETURNerror;
 		goto ERROR; 
 	}

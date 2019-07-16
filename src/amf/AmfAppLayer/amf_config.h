@@ -11,6 +11,8 @@
 #define AMF_CONFIG_STRING_RUN_MODE                       "RUN_MODE"
 #define AMF_CONFIG_STRING_RUN_MODE_TEST                  "TEST"
 #define AMF_CONFIG_STRING_REALM                          "REALM"
+#define AMF_CONFIG_STRING_LOCAL_AMF_NAME                 "LOCAL_AMF_NAME"
+
 //#define AMF_CONFIG_STRING_MAXENB                         "MAXENB"
 #define AMF_CONFIG_STRING_MAXGNB                         "MAXGNB"
 #define AMF_CONFIG_STRING_MAXUE                          "MAXUE"
@@ -73,6 +75,7 @@ typedef struct amf_config_s {
   bstring config_file;
   bstring pid_dir;
   bstring realm;
+  bstring amf_name;
 
   run_mode_t  run_mode;
 
