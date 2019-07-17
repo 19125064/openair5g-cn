@@ -32,6 +32,7 @@
 #include <ctype.h>
 
 #include "conversions.h"
+#include "log.h"
 
 static const char                       hex_to_ascii_table[16] = {
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
@@ -146,4 +147,22 @@ int BIT_STRING_fromBuf(BIT_STRING_t *st, const uint8_t *str, unsigned int bit_le
     
 	return 0;
 }
+
+#define ASN1C_ASSERT(exp)    \
+        if (!(exp)) { \
+                fprintf(stderr, "Assert failed %s %s:%d\n", #exp, __FILE__, __LINE__); \
+                abort(); \
+        }
+
+uint32_t asn1str_to_u24(const OCTET_STRING_t *in,uint32_t *tac_Value)
+{
+	ASN1C_ASSERT(in && in->size == sizeof(uint32_t) - 1);
+
+	*tac_Value =  in->buf[0]  << 16 |
+		          in->buf[1]  << 8  |
+		          in->buf[2];
+	
+	return 0;
+}
+
 

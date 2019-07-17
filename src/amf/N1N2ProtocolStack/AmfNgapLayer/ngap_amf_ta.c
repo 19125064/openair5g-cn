@@ -73,17 +73,16 @@ ngap_amf_compare_tac (
   const Ngap_TAC_t * const tac)
 {
   int                                     i = 0;
-  uint16_t                                tac_value = 0;
+  uint32_t                                tac_value = 0;
 
   DevAssert (tac != NULL);
   //OCTET_STRING_TO_TAC(tac, tac_value);
-  OCTET_STRING_TO_TAC_24 (tac, tac_value);
+  //OCTET_STRING_TO_TAC_24 (tac, tac_value);
+  asn1str_to_u24(tac, &tac_value);
 
   for(; i < amf_config.served_tai.nb_tai; i++)
   {
-      OAILOG_DEBUG(LOG_NGAP,  "ngap_amf_compare_tac, tac:%u, tac_value:%u \n" ,
-	  amf_config.served_tai.tac[i], tac_value);
-	  
+      OAILOG_DEBUG(LOG_NGAP,  "ngap_amf_compare_tac, tac:%u, tac_value:%u\n", amf_config.served_tai.tac[i], tac_value);
       if(amf_config.served_tai.tac[i] == tac_value)
       {
          return TA_LIST_AT_LEAST_ONE_MATCH;   
