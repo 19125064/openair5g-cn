@@ -25,13 +25,17 @@ ngap_amf_compare_plmn (
 
   for (i = 0; i < 1; i++) 
   {
-    //OAILOG_TRACE (LOG_NGAP, "Comparing plmn_mcc %d/%d, plmn_mnc %d/%d plmn_mnc_len %d/%d\n",
-    //    208, mcc, 93, mnc, mme_config.served_tai.plmn_mnc_len[i], mnc_len);
-    
+    OAILOG_TRACE (LOG_NGAP, "Comparing plmn_mcc:%d, ,mcc:%d, plmn_mnc:%d, mnc:%d, plmn_mnc_len:%d,len:%d\n",
+    amf_config.served_tai.plmn_mcc[i], mcc,
+    amf_config.served_tai.plmn_mnc[i], mnc,
+    amf_config.served_tai.plmn_mnc_len[i], mnc_len);
+	
     if ((amf_config.served_tai.plmn_mcc[i] == mcc) &&
         (amf_config.served_tai.plmn_mnc[i] == mnc) &&
         (amf_config.served_tai.plmn_mnc_len[i] == mnc_len))
-      return TA_LIST_AT_LEAST_ONE_MATCH;
+    {
+       return TA_LIST_AT_LEAST_ONE_MATCH;
+    }
   }
 
   return TA_LIST_NO_MATCH;
@@ -47,10 +51,12 @@ ngap_amf_compare_plmns (
 
   DevAssert (b_plmns != NULL);
 
-  for (i = 0; i < b_plmns->list.count; i++) {
-    if (ngap_amf_compare_plmn (b_plmns->list.array[i])
-        == TA_LIST_AT_LEAST_ONE_MATCH)
-      matching_occurence++;
+  for (i = 0; i < b_plmns->list.count; i++) 
+  {
+     if (ngap_amf_compare_plmn (b_plmns->list.array[i]) == TA_LIST_AT_LEAST_ONE_MATCH)
+     {
+        matching_occurence++;
+     }
   }
 
   if (matching_occurence == 0)
@@ -70,15 +76,28 @@ ngap_amf_compare_tac (
   uint16_t                                tac_value = 0;
 
   DevAssert (tac != NULL);
-  //OCTET_STRING_TO_TAC
+  //OCTET_STRING_TO_TAC(tac, tac_value);
   OCTET_STRING_TO_TAC_24 (tac, tac_value);
 
+  for(; i < amf_config.served_tai.nb_tai; i++)
+  {
+      OAILOG_DEBUG(LOG_NGAP,  "ngap_amf_compare_tac, tac:%u, tac_value:%u \n" ,
+	  amf_config.served_tai.tac[i], tac_value);
+	  
+      if(amf_config.served_tai.tac[i] == tac_value)
+      {
+         return TA_LIST_AT_LEAST_ONE_MATCH;   
+	  }
+  }
+
+  #if 0
   for (i = 0; i < 1; i++) {
     OAILOG_TRACE (LOG_NGAP, "Comparing config tac %d, received tac = %d\n", 1, tac_value);
 
     if (1 == tac_value)
       return TA_LIST_AT_LEAST_ONE_MATCH;
   }
+  #endif
 
   return TA_LIST_NO_MATCH;
 }
