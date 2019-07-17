@@ -547,15 +547,15 @@ ngap_generate_ng_setup_response(
 	uint32_t length = 0;
 	int rc = RETURNok;
 	int ret;
-	//char errbuf[512] = {0};
-
-  
+	
 	pdu = make_NGAP_SetupResponse();
-	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
-	//asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
-	//printf("----------------------- ENCODED NG SETUP RESPONSE NGAP MSG --------------------------\n");    
-	//size_t errlen = sizeof(errbuf);
-	//ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+	if(!pdu)
+	{
+        OAILOG_ERROR(LOG_NGAP, "ng setup make_NGAP_SetupResponse  failed\n");
+		rc = RETURNerror;
+		goto ERROR;  
+	}
+	
 	ret  = check_NGAP_pdu_constraints(pdu);
 	if(ret < 0) 
 	{
@@ -567,8 +567,7 @@ ngap_generate_ng_setup_response(
 	
 	size_t buffer_size = 1000;
 	void *buffer = calloc(1,buffer_size);
-	asn_enc_rval_t er;
-				   
+	asn_enc_rval_t er;	   
 	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
 	if(er.encoded < 0)
 	{
@@ -577,8 +576,7 @@ ngap_generate_ng_setup_response(
 		goto ERROR; 
 	}
 					 
-	bstring b = blk2bstr(buffer, er.encoded);
-						  
+	bstring b = blk2bstr(buffer, er.encoded);		  
 	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream_id, 0);			   
 	if(rc != RETURNok)
 	{
@@ -589,7 +587,8 @@ ngap_generate_ng_setup_response(
 
 	 
 ERROR:
-	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
+	if(pdu)
+	   ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
 	free(buffer);
     buffer = NULL;
 

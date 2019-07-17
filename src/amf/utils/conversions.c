@@ -110,3 +110,40 @@ ascii_to_hex (
     dst[i++] = (high << 4) | low;
   }
 }
+
+
+int BIT_STRING_fromBuf(BIT_STRING_t *st, const uint8_t *str, unsigned int bit_len)
+{
+	void *buf;
+	unsigned int len = bit_len / 8;
+	if (bit_len % 8)
+		len++;
+  
+	if (!st || (!str && len)) {
+		errno = EINVAL;
+		return -1;
+	}
+      
+	if (!str) {
+		free(st->buf);
+		st->buf = 0;
+		st->size = 0;
+		st->bits_unused = 0;
+		return 0;
+	}
+    
+	buf = malloc(len);
+	if (!buf) {
+		errno = ENOMEM;
+		return -1;
+	}
+    
+	memcpy(buf, str, len);
+	free(st->buf);
+	st->buf = buf;
+	st->size = len;
+	st->bits_unused = (len * 8) - bit_len;
+    
+	return 0;
+}
+

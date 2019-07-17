@@ -27,7 +27,6 @@
 #include  "Ngap_ServedGUAMIItem.h"
 #include  "conversions.h"
 
-
 //AMFName
 Ngap_NGSetupResponseIEs_t *make_AMFName_ie()
 {
@@ -39,7 +38,7 @@ Ngap_NGSetupResponseIEs_t *make_AMFName_ie()
 	ie->value.present = Ngap_NGSetupResponseIEs__value_PR_AMFName;
 	OCTET_STRING_fromBuf (&ie->value.choice.AMFName, bdata(amf_config.amf_name), blength (amf_config.amf_name));
 	
-	OAILOG_DEBUG(LOG_NGAP,"response  backup AMFName:%s\n", ie->value.choice.AMFName.buf);
+	//OAILOG_DEBUG(LOG_NGAP,"response  backup AMFName:%s\n", ie->value.choice.AMFName.buf);
     return ie;
 }
 
@@ -55,7 +54,7 @@ Ngap_NGSetupResponseIEs_t * make_RelativeAMFCapacity_ie()
 	ie->value.present = Ngap_NGSetupResponseIEs__value_PR_RelativeAMFCapacity;
     ie->value.choice.RelativeAMFCapacity  =   amf_config.relative_capacity;
 	
-	OAILOG_DEBUG(LOG_NGAP,"RelativeAMFCapacity:%d\n", ie->value.choice.RelativeAMFCapacity);
+	//OAILOG_DEBUG(LOG_NGAP,"RelativeAMFCapacity:%d\n", ie->value.choice.RelativeAMFCapacity);
   
 	return ie;
 }
@@ -63,36 +62,39 @@ Ngap_NGSetupResponseIEs_t * make_RelativeAMFCapacity_ie()
 //ServedGUAMIList
 void fill_aMFSetID(Ngap_AMFSetID_t *aMFSetID, uint16_t setid, uint16_t len)
 {
-    OAILOG_DEBUG(LOG_NGAP, "fill_aMFSetID, setid:%u, len:%u\n", setid, len);
+    //OAILOG_DEBUG(LOG_NGAP, "fill_aMFSetID, setid:%u, len:%u\n", setid, len);
     aMFSetID->buf = calloc(len, sizeof(uint8_t));
 	memset(aMFSetID->buf, 0, len );
 	memcpy(aMFSetID->buf, &setid, len);
 	aMFSetID->size =  len;
-	aMFSetID->bits_unused = 0;
+	//aMFSetID->bits_unused = 0;
 
-	OAILOG_DEBUG(LOG_NGAP,"aMFSetID, size:%u\n", aMFSetID->size);
+	aMFSetID->bits_unused = 0x06;
+
+	//OAILOG_DEBUG(LOG_NGAP,"aMFSetID, size:%u\n", aMFSetID->size);
 }
 
 void fill_aMFRegionID(Ngap_AMFRegionID_t *aMFRegionID, uint16_t setid, uint16_t len)
 {
     OAILOG_DEBUG(LOG_NGAP, "fill_aMFRegionID, setid:%u, len:%u\n", setid, len);
 	
-    aMFRegionID->buf = calloc(len, sizeof(uint8_t));
-    memset(aMFRegionID->buf, 0, len );
-    memcpy(aMFRegionID->buf, &setid, len);
+    aMFRegionID->buf = calloc(1, sizeof(uint8_t));
+    memset(aMFRegionID->buf, 0, 1 );
+    memcpy(aMFRegionID->buf, &setid, 1);
     aMFRegionID->size =  len;
-    aMFRegionID->bits_unused = 0; 
+    aMFRegionID->bits_unused = 0;
+	//aMFRegionID->bits_unused = 0x06; 
 	//INT16_TO_BUFFER(setid, aMFRegionID->buf);
 }
 void  fill_aMFPointer(Ngap_AMFPointer_t *aMFPointer, uint16_t setid, uint16_t len)
 {
     OAILOG_DEBUG(LOG_NGAP, "fill_aMFPointer, setid:%u, len:%u\n", setid, len);
 	
-    aMFPointer->buf = calloc(len, sizeof(uint8_t));
-    memset(aMFPointer->buf, 0, len );
-    memcpy(aMFPointer->buf, &setid, len);
+    aMFPointer->buf = calloc(1, sizeof(uint8_t));
+    memset(aMFPointer->buf, 0, 1 );
+    memcpy(aMFPointer->buf, &setid, 1);
     aMFPointer->size =  len;
-    aMFPointer->bits_unused = 01; 
+    aMFPointer->bits_unused = 02; 
 }
 Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
 {
@@ -105,42 +107,21 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
 
    
    uint8_t nb_gummi = amf_config.gummei.nb_gummi;
-   //Ngap_ServedGUAMIItem_t   *pGuimi = NULL;
-   //pGuimi  =  (Ngap_ServedGUAMIItem_t   *)calloc(nb_gummi, sizeof(Ngap_ServedGUAMIItem_t));
+   Ngap_ServedGUAMIItem_t   *pGuimi = NULL;
+   pGuimi  = calloc(nb_gummi, sizeof(Ngap_ServedGUAMIItem_t));
    
    uint8_t  i  = 0;
    for(;i <nb_gummi;  i++)
    {
-       amf_config.gummei.plmn_mcc;
-	   amf_config.gummei.plmn_mnc;
-       amf_config.gummei.plmn_mnc_len;
-
-       Ngap_ServedGUAMIItem_t   *pGuimi = NULL;
-	   pGuimi  =  (Ngap_ServedGUAMIItem_t   *)calloc(1, sizeof(Ngap_ServedGUAMIItem_t));
 	   //pLMNIdentity
-	   OAILOG_DEBUG(LOG_NGAP, "mcc:%u, mnc:%u, mnc_len:%u\n", *amf_config.gummei.plmn_mcc, *amf_config.gummei.plmn_mnc, sizeof(*amf_config.gummei.plmn_mnc_len));
-       MCC_MNC_TO_PLMNID(*amf_config.gummei.plmn_mcc, *amf_config.gummei.plmn_mnc, sizeof(*amf_config.gummei.plmn_mnc_len), &(pGuimi->gUAMI.pLMNIdentity));
+       MCC_MNC_TO_PLMNID(amf_config.gummei.plmn_mcc[i], amf_config.gummei.plmn_mnc[i], amf_config.gummei.plmn_mnc_len[i], &(pGuimi->gUAMI.pLMNIdentity));
+	   
+	   BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFRegionID), &amf_config.gummei.amf_region_id[i], 8);
+       BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFSetID), &amf_config.gummei.amf_set_id[i], 10);
+	   BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFPointer), &amf_config.gummei.amf_pointer[i], 6);
 
-
-       //INT16_TO_BIT_STRING(*(amf_config.gummei.amf_region_id),&(pGuimi[i].gUAMI.aMFRegionID));
-	   //guimi[i].gUAMI.aMFRegionID;
-	   fill_aMFRegionID(&(pGuimi[i].gUAMI.aMFRegionID), *(amf_config.gummei.amf_region_id), sizeof(*(amf_config.gummei.amf_region_id)));
-       
- 
-	   //guimi[i].gUAMI.aMFSetID;
-	   //INT16_TO_BIT_STRING(*(amf_config.gummei.amf_set_id),&(pGuimi[i].gUAMI.aMFSetID));
-	   fill_aMFSetID(&(pGuimi[i].gUAMI.aMFSetID), *(amf_config.gummei.amf_set_id), sizeof(*(amf_config.gummei.amf_set_id)));
-    
-	   //guimi[i].gUAMI.aMFPointer;
-	   //pGuimi[i].gUAMI.aMFPointer =  
-	   //INT16_TO_BIT_STRING(*(amf_config.gummei.amf_pointer), &(pGuimi[i].gUAMI.aMFPointer));
-	   fill_aMFPointer(&(pGuimi[i].gUAMI.aMFPointer), *(amf_config.gummei.amf_pointer), sizeof(*(amf_config.gummei.amf_pointer)));
-       
-	  
-	   ASN_SEQUENCE_ADD(&ie->value.choice.ServedGUAMIList.list, pGuimi);
+	   ASN_SEQUENCE_ADD(&ie->value.choice.ServedGUAMIList.list, &pGuimi[i]);
    }
-   
-   
    return ie;
 }
 
@@ -244,31 +225,22 @@ Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
     //plmn= make_PLMNSupportItem();
     //ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, plmn);
 
-	//plmn= make_PLMNSupportItem();
-    //ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, plmn);
-
-
     uint16_t  nb_plmn_identity = amf_config.plmn_identity.nb_plmn_identity;
-
-    OAILOG_DEBUG(LOG_NGAP, "nb_plmn_identity:%u\n", nb_plmn_identity);
-   
 	Ngap_PLMNSupportItem_t	*plmn = NULL;
+	//plmn = calloc(nb_plmn_identity, sizeof(Ngap_PLMNSupportItem_t));
+	
 	int i  = 0;
 	for(; i< nb_plmn_identity; i++)
 	{
-	   plmn = calloc(1, sizeof(Ngap_PLMNSupportItem_t));
+       plmn = calloc(1, sizeof(Ngap_PLMNSupportItem_t));
+
 	   //pLMNIdentity: sliceSupportList = 1-to-many relationship
 	   
 	   //1: pLMNIdentity
 	   MCC_MNC_TO_PLMNID(amf_config.plmn_identity.plmn_mcc[i], amf_config.plmn_identity.plmn_mnc[i], amf_config.plmn_identity.plmn_mnc_len[i], &(plmn->pLMNIdentity));
 
 	   //many: sliceSupportList
-	   
-       //fill_PLMNSupportItem_with_sliceSupportList(&(plmn[i].sliceSupportList));
-	   //make_sliceSupportList(&(plmn[i].sliceSupportList));
-	   //plmn[i].sliceSupportList =  *sliceSupportList;
-	   
-	   make_sliceSupportList(&plmn->sliceSupportList);
+	   make_sliceSupportList(&(plmn->sliceSupportList));
 	   
        ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, plmn);
 	}
@@ -289,7 +261,6 @@ void add_NGSetupResponse_ie(Ngap_NGSetupResponse_t *ngapSetupResponse, Ngap_NGSe
 
 Ngap_NGAP_PDU_t *make_NGAP_SetupResponse()
 {
-    //OAILOG_DEBUG(LOG_NGAP,"encode ng setup response dump-----");
     //OAILOG_FUNC_IN (LOG_NGAP);	
     
 	Ngap_NGAP_PDU_t *pdu;
@@ -317,27 +288,13 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupResponse()
 	add_NGSetupResponse_ie(ngapSetupResponse, ie);
 
     //ServedGUAMIList
-    //ie  = make_ServedGUAMIList_ie();
-	//add_NGSetupResponse_ie(ngapSetupResponse, ie);
+    ie  = make_ServedGUAMIList_ie();
+	add_NGSetupResponse_ie(ngapSetupResponse, ie);
 	
     //PLMNSupportList
 	//Ngap_PLMNSupportList_t	 PLMNSupportList;
 	ie  = make_PLMNSupportList();
 	add_NGSetupResponse_ie(ngapSetupResponse, ie);
-	
-	#if 0
-	ie = make_GlobalRANNodeID_ie();
-	add_NGSetupRequest_ie(ngapSetupRequest, ie);
-	
-	ie = make_RANNodeName_ie("test gNB");
-	add_NGSetupRequest_ie(ngapSetupRequest, ie);
-	
-	ie = make_DefaultPagingDRX_ie(Ngap_PagingDRX_v128);
-	add_NGSetupRequest_ie(ngapSetupRequest, ie);
-	
-	ie = make_supportedTAList();
-	add_NGSetupRequest_ie(ngapSetupRequest, ie);
-	#endif
     
 	return pdu;
 }

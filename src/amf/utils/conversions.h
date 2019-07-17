@@ -28,10 +28,20 @@
  */
 
 
+#include <errno.h>
+
 #include "assertions.h"
+#include "BIT_STRING.h"
+#include "asn1_conversions.h"
+
 
 #ifndef FILE_CONVERSIONS_SEEN
 #define FILE_CONVERSIONS_SEEN
+
+
+int BIT_STRING_fromBuf(BIT_STRING_t *st, const uint8_t *str, unsigned int bit_len);
+
+
 
 /* Endianness conversions for 16 and 32 bits integers from host to network order */
 #if (BYTE_ORDER == LITTLE_ENDIAN)
@@ -135,6 +145,7 @@ do {                                            \
     (aSN)->size = 1;                            \
     INT8_TO_BUFFER(x, (aSN)->buf);              \
 } while(0)
+
 
 
 #define INT16_TO_BIT_STRING(x, aSN) \
