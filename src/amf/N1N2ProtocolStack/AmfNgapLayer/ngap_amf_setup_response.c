@@ -153,6 +153,7 @@ void fill_PLMNSupportItem_with_pLMNIdentity(Ngap_PLMNIdentity_t	 *pLMNIdentity)
 {
     //OAILOG_FUNC_IN (LOG_NGAP);
     uint8_t plmn[3] = { 0x02, 0xF8, 0x29 };
+    //uint8_t plmn[3] = { 0x02, 208, 93 };
 	OCTET_STRING_fromBuf(pLMNIdentity, (const char*)plmn, 3);
     
 	//MCC_MNC_TO_PLMNID(*amf_config.gummei.plmn_mcc, *amf_config.gummei.plmn_mnc, sizeof(*amf_config.gummei.plmn_mnc_len), pLMNIdentity);
@@ -163,12 +164,10 @@ void fill_PLMNSupportItem_with_pLMNIdentity(Ngap_PLMNIdentity_t	 *pLMNIdentity)
 
 void fill_s_NSSAI_sST(Ngap_SST_t *sST, const uint16_t *sst)
 { 
-   //OAILOG_FUNC_IN (LOG_NGAP);
     //uint8_t plmn[3] = { 0x02};
 	//OCTET_STRING_fromBuf(sST, (const char*)plmn, 1);
 
 	OCTET_STRING_fromBuf(sST, (const char*)sst, 1);
- 
 }
 
 Ngap_SD_t	* fill_s_NSSAI_sD( const uint16_t SD)
@@ -196,7 +195,8 @@ void fill_PLMNSupportItem_with_sliceSupportList(Ngap_SliceSupportList_t	 *sliceS
 {   
     Ngap_SliceSupportItem_t *ss = NULL;
 	ss = calloc(1, sizeof(Ngap_SliceSupportItem_t));
-    fill_sliceSupportItem_with_s_NSSAI(&ss->s_NSSAI, 0, 0);
+	uint16_t  t  =  0x02;
+    fill_sliceSupportItem_with_s_NSSAI(&ss->s_NSSAI, &t, 0x01);
 	ASN_SEQUENCE_ADD(&sliceSupportList->list, ss);
 }
 
@@ -207,6 +207,7 @@ Ngap_PLMNSupportItem_t  *make_PLMNSupportItem()
 
 	fill_PLMNSupportItem_with_pLMNIdentity(&plmn->pLMNIdentity);
 	fill_PLMNSupportItem_with_sliceSupportList(&plmn->sliceSupportList);
+	fill_PLMNSupportItem_with_sliceSupportList(&plmn->sliceSupportList);
  
 	return plmn;
 }
@@ -214,21 +215,21 @@ Ngap_PLMNSupportItem_t  *make_PLMNSupportItem()
 
 void make_sliceSupportList(Ngap_SliceSupportList_t	 *sliceSupportList)
 {
-   uint16_t  nb_slice_list = amf_config.slice_list.nb_slice_list;
+   uint16_t  nb_slice = amf_config.slice_list.nb_slice;
 
    //Ngap_SliceSupportItem_t *ss = NULL;
    //ss = calloc(nb_slice_list, sizeof(Ngap_SliceSupportItem_t));
 
    Ngap_SliceSupportItem_t *ss = NULL;
    int i  = 0;
-   for(; i < nb_slice_list; i++)
+   for(; i < nb_slice; i++)
    {
        ss = calloc(1, sizeof(Ngap_SliceSupportItem_t));
        fill_sliceSupportItem_with_s_NSSAI(&(ss->s_NSSAI), &amf_config.slice_list.SST[i], amf_config.slice_list.SD[i]);
+
 	   ASN_SEQUENCE_ADD(&sliceSupportList->list, ss);  
    }
 }
-
 
 Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
 {
@@ -241,9 +242,15 @@ Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
 
     //Ngap_PLMNSupportItem_t  *plmn = NULL;
     //plmn= make_PLMNSupportItem();
+    //ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, plmn);
+
+	//plmn= make_PLMNSupportItem();
+    //ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, plmn);
+
+
     uint16_t  nb_plmn_identity = amf_config.plmn_identity.nb_plmn_identity;
 
-
+    OAILOG_DEBUG(LOG_NGAP, "nb_plmn_identity:%u\n", nb_plmn_identity);
    
 	Ngap_PLMNSupportItem_t	*plmn = NULL;
 	int i  = 0;
@@ -256,9 +263,12 @@ Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
 	   MCC_MNC_TO_PLMNID(amf_config.plmn_identity.plmn_mcc[i], amf_config.plmn_identity.plmn_mnc[i], amf_config.plmn_identity.plmn_mnc_len[i], &(plmn->pLMNIdentity));
 
 	   //many: sliceSupportList
+	   
        //fill_PLMNSupportItem_with_sliceSupportList(&(plmn[i].sliceSupportList));
-	   make_sliceSupportList(&(plmn[i].sliceSupportList));
+	   //make_sliceSupportList(&(plmn[i].sliceSupportList));
 	   //plmn[i].sliceSupportList =  *sliceSupportList;
+	   
+	   make_sliceSupportList(&plmn->sliceSupportList);
 	   
        ASN_SEQUENCE_ADD(&ie->value.choice.PLMNSupportList.list, plmn);
 	}
@@ -295,14 +305,6 @@ Ngap_NGAP_PDU_t *make_NGAP_SetupResponse()
 	ngapSetupResponse = &pdu->choice.successfulOutcome->value.choice.NGSetupResponse;
 
 	//Make NGSetupResponse IEs and add it to message
-   
-	#if 0
-	Ngap_AMFName_t	 AMFName;  
-	Ngap_RelativeAMFCapacity_t	 RelativeAMFCapacity;
-	Ngap_PLMNSupportList_t	 PLMNSupportList;
-    #endif
-
-    
     Ngap_NGSetupResponseIEs_t *ie = NULL;
 
 	//AMFName

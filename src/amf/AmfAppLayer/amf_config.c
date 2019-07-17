@@ -380,7 +380,7 @@ static int amf_config_parse_file (amf_config_t * config_pP)
     if (setting != NULL)
 	{
        num = config_setting_length (setting);
-       if (config_pP->slice_list.nb_slice_list != num) 
+       if (config_pP->slice_list.nb_slice != num) 
 	   {
           if (config_pP->slice_list.SST != NULL)
              free_wrapper ((void**) &config_pP->slice_list.SST);
@@ -392,7 +392,7 @@ static int amf_config_parse_file (amf_config_t * config_pP)
 		  config_pP->slice_list.SD  = calloc (num, sizeof (*config_pP->slice_list.SD));
        }
 
-	   config_pP->slice_list.nb_slice_list = num;
+	   config_pP->slice_list.nb_slice = num;
 	   for (i = 0; i < num; i++) 
 	   {
            sub2setting = config_setting_get_elem (setting, i);

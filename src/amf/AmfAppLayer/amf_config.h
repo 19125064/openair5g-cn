@@ -122,7 +122,7 @@ typedef struct amf_config_s {
 
   struct 
   {
-    uint8_t   nb_slice_list;
+    uint8_t   nb_slice;
 	uint16_t *SST;
     uint16_t *SD;
   }slice_list;
