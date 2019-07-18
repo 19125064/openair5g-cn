@@ -77,7 +77,6 @@ ngap_amf_compare_tac (
 
   DevAssert (tac != NULL);
   //OCTET_STRING_TO_TAC(tac, tac_value);
-  //OCTET_STRING_TO_TAC_24 (tac, tac_value);
   asn1str_to_u24(tac, &tac_value);
 
   for(; i < amf_config.served_tai.nb_tai; i++)
@@ -88,16 +87,7 @@ ngap_amf_compare_tac (
          return TA_LIST_AT_LEAST_ONE_MATCH;   
 	  }
   }
-
-  #if 0
-  for (i = 0; i < 1; i++) {
-    OAILOG_TRACE (LOG_NGAP, "Comparing config tac %d, received tac = %d\n", 1, tac_value);
-
-    if (1 == tac_value)
-      return TA_LIST_AT_LEAST_ONE_MATCH;
-  }
-  #endif
-
+  
   return TA_LIST_NO_MATCH;
 }
 

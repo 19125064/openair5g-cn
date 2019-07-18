@@ -105,7 +105,6 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
    ie->criticality = Ngap_Criticality_reject;
    ie->value.present = Ngap_NGSetupResponseIEs__value_PR_ServedGUAMIList;
 
-   
    uint8_t nb_gummi = amf_config.gummei.nb_gummi;
    Ngap_ServedGUAMIItem_t   *pGuimi = NULL;
    pGuimi  = calloc(nb_gummi, sizeof(Ngap_ServedGUAMIItem_t));
@@ -157,7 +156,6 @@ Ngap_SD_t	* fill_s_NSSAI_sD( const uint16_t SD)
     if (SD >= 0 )
     {
         uint32_t sd = ntohl(SD);
-        //int32_t sd = uint32_t(SD);
         const char *sd_ptr = (const char *)&sd + 1;
         sD = calloc(1, sizeof(Ngap_SD_t));
         
@@ -227,7 +225,7 @@ Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
 
     uint16_t  nb_plmn_identity = amf_config.plmn_identity.nb_plmn_identity;
 	Ngap_PLMNSupportItem_t	*plmn = NULL;
-	//plmn = calloc(nb_plmn_identity, sizeof(Ngap_PLMNSupportItem_t));
+	//plmn = calloc(nb_plmn_identity, sizeof(Ngap_PLMNSupportItem_t));  //? ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);  result in core  ?
 	
 	int i  = 0;
 	for(; i< nb_plmn_identity; i++)
@@ -249,20 +247,16 @@ Ngap_NGSetupResponseIEs_t * make_PLMNSupportList()
 }
 void add_NGSetupResponse_ie(Ngap_NGSetupResponse_t *ngapSetupResponse, Ngap_NGSetupResponseIEs_t *ie)
 {
-    //OAILOG_FUNC_IN (LOG_NGAP);
     int ret;
 	ret = ASN_SEQUENCE_ADD(&ngapSetupResponse->protocolIEs.list, ie);
     if ( ret != 0 ) 
 	{
-        fprintf(stderr, "Failed to add ie\n");
+        OAILOG_DEBUG(LOG_NGAP, "ng setup response Failed to add ie\n");
     }
-    //OAILOG_FUNC_RETURN (LOG_NGAP,0);
 }
 
 Ngap_NGAP_PDU_t *make_NGAP_SetupResponse()
 {
-    //OAILOG_FUNC_IN (LOG_NGAP);	
-    
 	Ngap_NGAP_PDU_t *pdu;
 	pdu = calloc(1, sizeof(Ngap_NGAP_PDU_t));
 	

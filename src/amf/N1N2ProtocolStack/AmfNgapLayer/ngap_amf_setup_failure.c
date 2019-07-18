@@ -16,15 +16,13 @@
 #include "Ngap_SupportedTAItem.h"
 #include "Ngap_UnsuccessfulOutcome.h"
 #include "Ngap_GlobalRANNodeID.h"
-
 #include "sctp_gNB_defs.h"
+#include "bstrlib.h"
+#include "intertask_interface_types.h"
+#include "Ngap_CriticalityDiagnostics-IE-Item.h"
 
-#include  "bstrlib.h"
-#include  "intertask_interface_types.h"
-
-#include  "Ngap_CriticalityDiagnostics-IE-Item.h"
-
-void add_NGSetupFailure_ie(Ngap_NGSetupFailure_t *ngapSetupFailure, Ngap_NGSetupFailureIEs_t *ie) {
+void add_NGSetupFailure_ie(Ngap_NGSetupFailure_t *ngapSetupFailure, Ngap_NGSetupFailureIEs_t *ie)
+{
     int ret;
 	ret = ASN_SEQUENCE_ADD(&ngapSetupFailure->protocolIEs.list, ie);
     if ( ret != 0 )
@@ -109,7 +107,6 @@ Ngap_NGSetupFailureIEs_t *make_TimeToWait_ie(const long  TimeToWait)
     ie->value.present = Ngap_NGSetupFailureIEs__value_PR_TimeToWait;
     ie->value.choice.TimeToWait = TimeToWait;
 
-	OAILOG_DEBUG(LOG_NGAP,"TimeToWait:%d\n", ie->value.choice.TimeToWait);
 	return ie;
 }
 
@@ -150,9 +147,7 @@ Ngap_NGSetupFailureIEs_t *make_Cause_ie(const Ngap_Cause_PR ngap_cause, const lo
 	   break;
          
 	}
-	
-	OAILOG_DEBUG(LOG_NGAP,"radioNetwork:0x%x\n", ie->value.choice.Cause.choice.radioNetwork);
-    return ie;
+	return ie;
 }
 
 Ngap_NGAP_PDU_t *make_NGAP_SetupFailure(

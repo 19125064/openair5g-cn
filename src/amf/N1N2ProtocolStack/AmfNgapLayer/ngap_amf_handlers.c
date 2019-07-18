@@ -479,18 +479,20 @@ int ngap_amf_generate_ng_setup_failure(
 {
     OAILOG_FUNC_IN (LOG_NGAP);
 	
-	int assoc[1];
 	sctp_data_t * sctp_data_p = NULL;
 	Ngap_NGAP_PDU_t 			*pdu = NULL;
 	uint8_t * buffer_p = NULL;
 	uint32_t length = 0;
 	int rc = RETURNok;
 	int ret;
-    char errbuf[512] = {0};
+    
     pdu = make_NGAP_SetupFailure(cause_type, cause_value, time_to_wait);
-   
-    //size_t errlen = sizeof(errbuf);
-    //ret = asn_check_constraints(&asn_DEF_Ngap_NGAP_PDU, pdu, errbuf, &errlen);
+    if(!pdu)
+	{
+        OAILOG_ERROR(LOG_NGAP, "ng setup make_NGAP_SetupFailure  failed\n");
+		rc = RETURNerror;
+		goto ERROR;  
+	}
     ret  = check_NGAP_pdu_constraints(pdu);
     if(ret < 0) 
 	{
@@ -499,11 +501,11 @@ int ngap_amf_generate_ng_setup_failure(
 		goto ERROR;
     }
 
+    // why :1024  ?
+	size_t buffer_size = 1024;   
+    void *buffer = calloc(1, buffer_size);
 	
-	size_t buffer_size = 1000;
-    void *buffer = calloc(1,buffer_size);
 	asn_enc_rval_t er;
-			
 	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
 	if(er.encoded < 0)
 	{
@@ -551,7 +553,7 @@ ngap_generate_ng_setup_response(
 	pdu = make_NGAP_SetupResponse();
 	if(!pdu)
 	{
-        OAILOG_ERROR(LOG_NGAP, "ng setup make_NGAP_SetupResponse  failed\n");
+        OAILOG_ERROR(LOG_NGAP, "ng setup response make_NGAP_SetupResponse  failed\n");
 		rc = RETURNerror;
 		goto ERROR;  
 	}
@@ -564,8 +566,9 @@ ngap_generate_ng_setup_response(
 		goto ERROR; 
 	}
    	OAILOG_DEBUG(LOG_NGAP,"ng setup response check_NGAP_pdu_constraints ret:%d\n", ret);   
-	
-	size_t buffer_size = 1000;
+
+	//wys:  1024 ?
+	size_t buffer_size = 1024;  
 	void *buffer = calloc(1,buffer_size);
 	asn_enc_rval_t er;	   
 	er = aper_encode_to_buffer(&asn_DEF_Ngap_NGAP_PDU, NULL, pdu, buffer, buffer_size);
@@ -587,11 +590,9 @@ ngap_generate_ng_setup_response(
 
 	 
 ERROR:
-	if(pdu)
-	   ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
+	ASN_STRUCT_FREE(asn_DEF_Ngap_NGAP_PDU, pdu);
 	free(buffer);
     buffer = NULL;
-
 
     OAILOG_FUNC_RETURN (LOG_NGAP, rc); 
 }
@@ -637,7 +638,7 @@ ngap_amf_handle_ng_setup_request(
 	//ng setup request: stream_id must be 0;
     if( stream != 0 )  
     {   
-        OAILOG_WARNING(LOG_NGAP, "ngap_setup_request,no equal 0,stream_id:%u======================\n", stream);
+        OAILOG_WARNING(LOG_NGAP, "ngap_setup_request,stream_id:%u\n", stream);
 		//@7
         rc = ngap_amf_generate_ng_setup_failure(assoc_id, 
                                                 stream, 
@@ -747,7 +748,7 @@ ngap_amf_handle_ng_setup_request(
 	max_gnb_connected = amf_config.max_gnbs;
 	if(nb_gnb_associated >= max_gnb_connected)
 	{
-         OAILOG_ERROR (LOG_NGAP, "There is too much gNB connected to MME, rejecting the association\n");
+         OAILOG_ERROR (LOG_NGAP, "There is too much gNB connected to AMF, rejecting the association\n");
          OAILOG_DEBUG (LOG_NGAP, "Connected = %d, maximum allowed = %d\n", nb_gnb_associated, max_gnb_connected);
 
 		 //@9
