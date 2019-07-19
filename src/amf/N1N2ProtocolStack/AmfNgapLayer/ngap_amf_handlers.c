@@ -472,7 +472,6 @@ int ngap_amf_handle_ng_setup_failure(const sctp_assoc_id_t assoc_id, const sctp_
 
 int ngap_amf_generate_ng_setup_failure(
 	const sctp_assoc_id_t assoc_id,
-    const sctp_stream_id_t stream_id,
     const Ngap_Cause_PR cause_type,
     const long cause_value,
     const long time_to_wait)
@@ -517,10 +516,10 @@ int ngap_amf_generate_ng_setup_failure(
 	bstring b = blk2bstr(buffer, er.encoded);
 
 	//ngsetup request  stream_no: must be 0;
-	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream_id, 0);	
+	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, 0, 0);	
 	if(rc != RETURNok)
 	{
-		OAILOG_ERROR(LOG_NGAP,"ngap_setup_failure, ngap send sctp failed");
+		OAILOG_ERROR(LOG_NGAP,"ngap_setup_failure, ngap send sctp failed, assoc_id:%u, stread_id:0, len:%d\n", assoc_id, er.encoded);
 		rc = RETURNerror;
 		goto ERROR;
 		
@@ -537,8 +536,7 @@ ERROR:
 
 int
 ngap_generate_ng_setup_response(
-  const sctp_assoc_id_t assoc_id,
-  const sctp_stream_id_t stream_id)
+  const sctp_assoc_id_t assoc_id)
 {
 	OAILOG_FUNC_IN (LOG_NGAP); 
 	
@@ -578,12 +576,13 @@ ngap_generate_ng_setup_response(
 		rc = RETURNerror;
 		goto ERROR; 
 	}
-					 
+
+    //ngsetup request  stream_no: must be 0;			 
 	bstring b = blk2bstr(buffer, er.encoded);		  
-	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, stream_id, 0);			   
+	rc =  ngap_amf_itti_send_sctp_request (&b, assoc_id, 0, 0);			   
 	if(rc != RETURNok)
 	{
-		OAILOG_ERROR(LOG_NGAP,"ngap_setup_response assoc_id:%u, stream:%u,len:%d\n",assoc_id, stream_id, er.encoded); 
+		OAILOG_ERROR(LOG_NGAP,"ngap_setup_response assoc_id:%u, stream:0,len:%d\n",assoc_id, er.encoded); 
 		rc = RETURNerror;
 		goto ERROR;
 	}
@@ -641,7 +640,6 @@ ngap_amf_handle_ng_setup_request(
         OAILOG_WARNING(LOG_NGAP, "ngap_setup_request,stream_id:%u\n", stream);
 		//@7
         rc = ngap_amf_generate_ng_setup_failure(assoc_id, 
-                                                stream, 
                                                 Ngap_Cause_PR_protocol, 
                                                 Ngap_CauseProtocol_unspecified, 
                                                 Ngap_TimeToWait_v10s);
@@ -661,7 +659,6 @@ ngap_amf_handle_ng_setup_request(
 	{   
 	    //@8
         rc  = ngap_amf_generate_ng_setup_failure(assoc_id,
-                                                 stream,
                                                  Ngap_Cause_PR_transport, 
                                                  Ngap_CauseTransport_transport_resource_unavailable, 
                                                  Ngap_TimeToWait_v20s);
@@ -680,13 +677,16 @@ ngap_amf_handle_ng_setup_request(
 	  
 	   OAILOG_DEBUG(LOG_NGAP,"RANNodeName, gnb_name_size:%d,gnb_name:%s,\n", gnb_name_size, gnb_name);
     }
+	#if 0
 	else
 	{
 	   // free ?
        rc = RETURNerror;
-	   OAILOG_ERROR(LOG_NGAP, "ng_setup_request have not RANNodeName IE\n");
-       OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+	   //OAILOG_ERROR(LOG_NGAP, "ng_setup_request have not RANNodeName IE\n");
+       //OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 	}
+	#endif
+	
 
 	//GlobalRANNodeID
     NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container, Ngap_ProtocolIE_ID_id_GlobalRANNodeID, false);
@@ -736,14 +736,16 @@ ngap_amf_handle_ng_setup_request(
     	    break;
     	}
     }
+
+	#if 0
 	else
 	{
 	   //free  ?
 	   OAILOG_ERROR(LOG_NGAP, "ng_setup_request have not GlobalRANNodeID IE\n");
-       rc = RETURNerror;
-       OAILOG_FUNC_RETURN (LOG_NGAP, rc);
+       //rc = RETURNerror;
+       //OAILOG_FUNC_RETURN (LOG_NGAP, rc);
 	}
-	
+	#endif
     //@3
 	max_gnb_connected = amf_config.max_gnbs;
 	if(nb_gnb_associated >= max_gnb_connected)
@@ -753,7 +755,6 @@ ngap_amf_handle_ng_setup_request(
 
 		 //@9
          rc = ngap_amf_generate_ng_setup_failure(assoc_id,
-		  	                                     stream,
                                                  Ngap_Cause_PR_misc,
                                                  Ngap_CauseMisc_control_processing_overload,
                                                  Ngap_TimeToWait_v20s);
@@ -770,7 +771,6 @@ ngap_amf_handle_ng_setup_request(
 			OAILOG_ERROR (LOG_NGAP, "No Common PLMN with gNB, generate_ng_setup_failure \n");
 			//@10
 			rc = ngap_amf_generate_ng_setup_failure(assoc_id,
-			  	                                    stream,
 													Ngap_Cause_PR_misc,
 													Ngap_CauseMisc_unknown_PLMN,
 													Ngap_TimeToWait_v20s);
@@ -783,7 +783,7 @@ ngap_amf_handle_ng_setup_request(
     gnb_association->gnb_id = gnb_id;
 	if (gnb_name != NULL) 
 	{
-        memcpy(gnb_association->gnb_name, gnb_name,gnb_name_size);
+        memcpy(gnb_association->gnb_name, gnb_name, gnb_name_size);
         gnb_association->gnb_name[gnb_name_size] = '\0';
     }
     NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_NGSetupRequestIEs_t, ie, container,Ngap_ProtocolIE_ID_id_DefaultPagingDRX, false);
@@ -804,7 +804,7 @@ ngap_amf_handle_ng_setup_request(
 	gnb_association->gnb_id, gnb_association->gnb_name, gnb_association->default_paging_drx);
 
     //@6
-    rc = ngap_generate_ng_setup_response(assoc_id, stream);
+    rc = ngap_generate_ng_setup_response(assoc_id);
     if (rc == RETURNok) 
 	{
 	    //@11
