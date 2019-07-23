@@ -224,6 +224,17 @@ ngap_new_gnb (
   return gnb_ref;
 }
 
+void ngap_remove_gnb(gnb_description_t *gnb_ref)
+{
+   if (gnb_ref == NULL)
+     return;
+   hashtable_ts_destroy(&gnb_ref->ue_coll);
+   hashtable_ts_free (&g_ngap_gnb_coll, gnb_ref->sctp_assoc_id);
+   //nb_enb_associated--;
+   __sync_fetch_and_sub(&nb_gnb_associated, 1);
+}
+
+
 ue_description_t                       *
 ngap_is_ue_gnb_id_in_list (
   gnb_description_t * gnb_ref,              

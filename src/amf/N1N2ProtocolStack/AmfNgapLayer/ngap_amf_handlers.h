@@ -5,6 +5,8 @@
 
 int ngap_handle_new_association(sctp_new_peer_t *sctp_new_peer_p);
 
+int ngap_handle_sctp_disconnection(const sctp_assoc_id_t assoc_id);
+
 
 int ngap_amf_handle_ng_setup_request(const sctp_assoc_id_t assoc_id, const sctp_stream_id_t stream,
 		Ngap_NGAP_PDU_t *pdu);
