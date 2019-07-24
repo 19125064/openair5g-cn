@@ -267,7 +267,7 @@ static int amf_config_parse_file (amf_config_t * config_pP)
       }
     }
     //GUAMFI_LIST
-    setting = config_setting_get_member (setting_amf, AMF_CONFIG_STRING_GUAMFI_LIST);
+    setting = config_setting_get_member (setting_amf, AMF_CONFIG_STRING_GUAMI_LIST);
     if (setting != NULL) {
       num = config_setting_length (setting);
       if (config_pP->guami.nb_gummi != num) {

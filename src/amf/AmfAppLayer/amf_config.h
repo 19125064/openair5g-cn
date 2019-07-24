@@ -39,7 +39,7 @@
 #define AMF_CONFIG_STRING_NGAP_OUTCOME_TIMER             "NGAP_OUTCOME_TIMER"
 #define AMF_CONFIG_STRING_NGAP_PORT                      "NGAP_PORT"
 
-#define AMF_CONFIG_STRING_GUAMFI_LIST                    "GUAMFI_LIST"
+#define AMF_CONFIG_STRING_GUAMI_LIST                    "GUAMI_LIST"
 #define AMF_SUPPORT_PLMN_IDENTITY_LIST                   "AMF_SUPPORT_PLMN_IDENTITY_LIST"
 #define AMF_SUPPORT_SLICE_LIST                           "AMF_SUPPORT_SLICE_LIST"
 #define AMF_CONFIG_STRING_AMF_CODE                       "AMF_CODE"
