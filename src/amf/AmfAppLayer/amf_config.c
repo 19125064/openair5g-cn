@@ -270,58 +270,58 @@ static int amf_config_parse_file (amf_config_t * config_pP)
     setting = config_setting_get_member (setting_amf, AMF_CONFIG_STRING_GUAMFI_LIST);
     if (setting != NULL) {
       num = config_setting_length (setting);
-      if (config_pP->gummei.nb_gummi != num) {
-        if (config_pP->gummei.plmn_mcc != NULL)
+      if (config_pP->guami.nb_gummi != num) {
+        if (config_pP->guami.plmn_mcc != NULL)
           free_wrapper ((void**) &config_pP->served_tai.plmn_mcc);
-        if (config_pP->gummei.plmn_mnc != NULL)
-          free_wrapper ((void**) &config_pP->gummei.plmn_mnc);
-        if (config_pP->gummei.plmn_mnc_len != NULL)
-          free_wrapper ((void**) &config_pP->gummei.plmn_mnc_len);
+        if (config_pP->guami.plmn_mnc != NULL)
+          free_wrapper ((void**) &config_pP->guami.plmn_mnc);
+        if (config_pP->guami.plmn_mnc_len != NULL)
+          free_wrapper ((void**) &config_pP->guami.plmn_mnc_len);
 		
-        if (config_pP->gummei.amf_region_id != NULL)
-          free_wrapper ((void**) &config_pP->gummei.amf_region_id);
+        if (config_pP->guami.amf_region_id != NULL)
+          free_wrapper ((void**) &config_pP->guami.amf_region_id);
 		
-		if (config_pP->gummei.amf_set_id != NULL)
-          free_wrapper ((void**) &config_pP->gummei.amf_set_id);
+		if (config_pP->guami.amf_set_id != NULL)
+          free_wrapper ((void**) &config_pP->guami.amf_set_id);
 		
-		if (config_pP->gummei.amf_pointer != NULL)
-          free_wrapper ((void**) &config_pP->gummei.amf_pointer);
+		if (config_pP->guami.amf_pointer != NULL)
+          free_wrapper ((void**) &config_pP->guami.amf_pointer);
 		
-        config_pP->gummei.plmn_mcc = calloc (num, sizeof (*config_pP->gummei.plmn_mcc));
-        config_pP->gummei.plmn_mnc = calloc (num, sizeof (*config_pP->gummei.plmn_mnc));
-        config_pP->gummei.plmn_mnc_len = calloc (num, sizeof (*config_pP->gummei.plmn_mnc_len));
-        config_pP->gummei.amf_region_id = calloc (num, sizeof (*config_pP->gummei.amf_region_id));
-		config_pP->gummei.amf_set_id = calloc (num, sizeof (*config_pP->gummei.amf_set_id));
-		config_pP->gummei.amf_pointer = calloc (num, sizeof (*config_pP->gummei.amf_pointer));
+        config_pP->guami.plmn_mcc = calloc (num, sizeof (*config_pP->guami.plmn_mcc));
+        config_pP->guami.plmn_mnc = calloc (num, sizeof (*config_pP->guami.plmn_mnc));
+        config_pP->guami.plmn_mnc_len = calloc (num, sizeof (*config_pP->guami.plmn_mnc_len));
+        config_pP->guami.amf_region_id = calloc (num, sizeof (*config_pP->guami.amf_region_id));
+		config_pP->guami.amf_set_id = calloc (num, sizeof (*config_pP->guami.amf_set_id));
+		config_pP->guami.amf_pointer = calloc (num, sizeof (*config_pP->guami.amf_pointer));
       }
-      config_pP->gummei.nb_gummi = num;
+      config_pP->guami.nb_gummi = num;
       //AssertFatal(16 >= num , "Too many gummai configured %d", num);
       for (i = 0; i < num; i++) {
         sub2setting = config_setting_get_elem (setting, i);
 
         if (sub2setting != NULL) {
           if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MCC, &mcc))) {
-            config_pP->gummei.plmn_mcc[i] = (uint16_t) atoi (mcc);
+            config_pP->guami.plmn_mcc[i] = (uint16_t) atoi (mcc);
           }
           if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_STRING_MNC, &mnc))) {
-            config_pP->gummei.plmn_mnc[i] = (uint16_t) atoi (mnc);
-            config_pP->gummei.plmn_mnc_len[i] = strlen (mnc);
-            AssertFatal ((config_pP->gummei.plmn_mnc_len[i] == 2) || (config_pP->gummei.plmn_mnc_len[i] == 3),
-                "Bad MNC length %u, must be 2 or 3", config_pP->gummei.plmn_mnc_len[i]);
+            config_pP->guami.plmn_mnc[i] = (uint16_t) atoi (mnc);
+            config_pP->guami.plmn_mnc_len[i] = strlen (mnc);
+            AssertFatal ((config_pP->guami.plmn_mnc_len[i] == 2) || (config_pP->guami.plmn_mnc_len[i] == 3),
+                "Bad MNC length %u, must be 2 or 3", config_pP->guami.plmn_mnc_len[i]);
           }
           if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_AMF_REGION_ID, &amf_region_id))) 
 		  {
-             config_pP->gummei.amf_region_id[i] = (uint16_t) atoi (amf_region_id);
+             config_pP->guami.amf_region_id[i] = (uint16_t) atoi (amf_region_id);
           }
 
 		  if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_AMF_SET_ID, &amf_set_id)))
 		  {
-             config_pP->gummei.amf_set_id[i] = (uint16_t) atoi (amf_set_id);
+             config_pP->guami.amf_set_id[i] = (uint16_t) atoi (amf_set_id);
 		  }
 
 		  if ((config_setting_lookup_string (sub2setting, AMF_CONFIG_AMF_POINTER, &amf_pointer))) 
 		  {
-            config_pP->gummei.amf_pointer[i] = (uint16_t) atoi (amf_pointer);
+            config_pP->guami.amf_pointer[i] = (uint16_t) atoi (amf_pointer);
           }
         }
       }

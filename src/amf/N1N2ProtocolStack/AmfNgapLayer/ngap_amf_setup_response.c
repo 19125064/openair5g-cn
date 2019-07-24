@@ -105,7 +105,7 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
    ie->criticality = Ngap_Criticality_reject;
    ie->value.present = Ngap_NGSetupResponseIEs__value_PR_ServedGUAMIList;
 
-   uint8_t nb_gummi = amf_config.gummei.nb_gummi;
+   uint8_t nb_gummi = amf_config.guami.nb_gummi;
    Ngap_ServedGUAMIItem_t   *pGuimi = NULL;
    pGuimi  = calloc(nb_gummi, sizeof(Ngap_ServedGUAMIItem_t));
    
@@ -113,11 +113,11 @@ Ngap_NGSetupResponseIEs_t * make_ServedGUAMIList_ie()
    for(;i <nb_gummi;  i++)
    {
 	   //pLMNIdentity
-       MCC_MNC_TO_PLMNID(amf_config.gummei.plmn_mcc[i], amf_config.gummei.plmn_mnc[i], amf_config.gummei.plmn_mnc_len[i], &(pGuimi->gUAMI.pLMNIdentity));
+       MCC_MNC_TO_PLMNID(amf_config.guami.plmn_mcc[i], amf_config.guami.plmn_mnc[i], amf_config.guami.plmn_mnc_len[i], &(pGuimi->gUAMI.pLMNIdentity));
 	   
-	   BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFRegionID), &amf_config.gummei.amf_region_id[i], 8);
-       BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFSetID), &amf_config.gummei.amf_set_id[i], 10);
-	   BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFPointer), &amf_config.gummei.amf_pointer[i], 6);
+	   BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFRegionID), &amf_config.guami.amf_region_id[i], 8);
+       BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFSetID), &amf_config.guami.amf_set_id[i], 10);
+	   BIT_STRING_fromBuf(&(pGuimi[i].gUAMI.aMFPointer), &amf_config.guami.amf_pointer[i], 6);
 
 	   ASN_SEQUENCE_ADD(&ie->value.choice.ServedGUAMIList.list, &pGuimi[i]);
    }

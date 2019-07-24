@@ -104,12 +104,10 @@ typedef struct amf_config_s {
 	uint16_t *plmn_mcc;
     uint16_t *plmn_mnc;
     uint16_t *plmn_mnc_len;
-    //uint16_t *tac;
     uint16_t *amf_region_id;
 	uint16_t *amf_set_id;
 	uint16_t *amf_pointer;
-    //gummei_t gummei[MAX_GUAMFI];
-  } gummei;
+  } guami;
 
   struct 
   {
