@@ -36,6 +36,10 @@
 #include  "Ngap_TimeStamp.h"
 #include  "Ngap_EUTRA-CGI.h"
 #include  "Ngap_UserLocationInformationEUTRA.h"
+#include  "Ngap_UserLocationInformationNR.h"
+#include  "Ngap_UserLocationInformationN3IWF.h"
+#include  "Ngap_UEContextRequest.h"
+
 #include  "Ngap_AllowedNSSAI-Item.h"
 
 #include  "asn1_conversions.h"
@@ -450,9 +454,8 @@ ngap_generate_ng_setup_response(
 {
 	OAILOG_FUNC_IN (LOG_NGAP); 
 	
-	//int assoc[1];
 	sctp_data_t * sctp_data_p = NULL;
-	Ngap_NGAP_PDU_t		   *pdu = NULL; 
+	Ngap_NGAP_PDU_t	 *pdu = NULL; 
 	uint8_t * buffer_p = NULL;
 	uint32_t length = 0;
 	int rc = RETURNok;
@@ -516,8 +519,6 @@ ngap_amf_handle_ng_setup_request(
     OAILOG_FUNC_IN (LOG_NGAP);
 	
     int rc = RETURNok;
-    Ngap_NGSetupRequestIEs_t * ngSetupRequest_p = NULL;
-	Ngap_NGSetupRequestIEs_t * ngSetupRequestIEs_p = NULL;
     gnb_description_t   * gnb_association = NULL; 
 	//gnb_description_t   * gnb_ref = NULL;
     uint32_t              gnb_id = 0;
@@ -721,117 +722,7 @@ ngap_amf_handle_ng_setup_request(
         update_amf_app_stats_connected_gnb_add();
     }
     OAILOG_FUNC_RETURN (LOG_NGAP, rc);
-    
-    #if 0
-    //OAILOG_FUNC_IN (LOG_NGAP);
-    int rc = RETURNok;
-    Ngap_NGSetupRequestIEs_t * ngSetupRequest_p = NULL;
-	Ngap_NGSetupRequestIEs_t * ngSetupRequestIEs_p = NULL;
-    gnb_description_t   * gnb_association = NULL;
-    uint32_t              gnb_id = 0;
-    char                 *gnb_name = NULL;
-    int				      gnb_name_size = 0;
-    int                   ta_ret = 0;
-    uint32_t              max_gnb_connected = 0;
-    int i = 0;
-    Ngap_NGSetupRequest_t                  *container = NULL;
-    Ngap_NGSetupRequestIEs_t               *ie = NULL;
-    Ngap_NGSetupRequestIEs_t               *ie_gnb_name = NULL;
 
-    printf("ngap_amf_handle_ng_setup_request\n");
-    DevAssert (pdu != NULL);
-	
-    container = &pdu->choice.initiatingMessage->value.choice.NGSetupRequest;
-	
-	//ngSetupRequestIEs_p = pdu->choice.initiatingMessage->value.choice.NGSetupRequest.protocolIEs;
-	
-	 for (i = 0; i < container->protocolIEs.list.count; i++)
-	 {
-        Ngap_NGSetupRequestIEs_t *setupRequestIes_p = NULL;
-        setupRequestIes_p = container->protocolIEs.list.array[i];
-		if(!setupRequestIes_p)
-			continue;
-		switch(setupRequestIes_p->id)
-	    {
-            case Ngap_ProtocolIE_ID_id_GlobalRANNodeID:
-			{
-				Ngap_GlobalRANNodeID_t *ngap_GlobalRANNodeID = NULL;
-	            ngap_GlobalRANNodeID = &setupRequestIes_p->value.choice.GlobalRANNodeID;
-				if(!ngap_GlobalRANNodeID)
-				    break;
-				switch(ngap_GlobalRANNodeID->present)
-				{
-				    case Ngap_GlobalRANNodeID_PR_NOTHING:
-					{
-						 printf("Ngap_ProtocolIE_ID_id_GlobalRANNodeID nothing------------\n");
-				    }
-					break;
-				    case Ngap_GlobalRANNodeID_PR_globalGNB_ID:
-
-						 switch(ngap_GlobalRANNodeID->choice.globalGNB_ID->gNB_ID.present)
-						 {
-                            case Ngap_GNB_ID_PR_NOTHING:	// No components present 
-							break;
-	                        case Ngap_GNB_ID_PR_gNB_ID:
-							{
-	                            unsigned long  size = ngap_GlobalRANNodeID->choice.globalGNB_ID->gNB_ID.choice.gNB_ID.size;
-						        uint8_t gNB_ID[size];
-								memcpy(gNB_ID, ngap_GlobalRANNodeID->choice.globalGNB_ID->gNB_ID.choice.gNB_ID.buf, size);
-								printf("gNB_ID: 0x%x,0x%x,0x%x,0x%x\n",gNB_ID[0],gNB_ID[1],gNB_ID[2],gNB_ID[3]);
-	                        }
-
-							break;
-							
-	                        case Ngap_GNB_ID_PR_choice_Extensions:
-							break;
-						 } 
-					break;
-	                case Ngap_GlobalRANNodeID_PR_globalNgENB_ID:
-						
-					break;
-	                case Ngap_GlobalRANNodeID_PR_globalN3IWF_ID:
-						
-					break;
-	                case Ngap_GlobalRANNodeID_PR_choice_Extensions:
-						
-					break;
-					default:
-					{
-						printf("Ngap_ProtocolIE_ID_id_GlobalRANNodeID,unknown protocol IE id(%d)\n",ngap_GlobalRANNodeID->present);
-					}		
-                    break;
-				}
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_RANNodeName:
-			{
-				printf("len:%d,RANNodeName:%s\n",setupRequestIes_p->value.choice.RANNodeName.size, setupRequestIes_p->value.choice.RANNodeName.buf);
-            }		
-            break;
-            case Ngap_ProtocolIE_ID_id_SupportedTAList:
-            {
-				printf("Ngap_ProtocolIE_ID_id_SupportedTAList\n");
-            }
-			break;
-            case Ngap_ProtocolIE_ID_id_DefaultPagingDRX:
-			{
-		        printf("PagingDRX:%ld\n",setupRequestIes_p->value.choice.PagingDRX);
-            }
-			break;
-            default:
-			{
-		   	    printf("Unknown protocol IE id (%d) for message ngsetup_request_ies\n", (int)setupRequestIes_p->id);
-            }
-		    break;
-		}
-	 }
-     unsigned char b[100]="112sd";
-     bstring bb =  blk2bstr(b, 100);
-     printf("before ngap_generate_downlink_nas_transport(assoc_id(%d))",assoc_id);
-     ngap_generate_downlink_nas_transport(assoc_id,assoc_id,&bb);
-
-	 return 0;
-	 #endif
 	//printf("id:%d\n",ngSetupRequestIEs_p->id);
 	//printf("criticality:%d\n",ngSetupRequestIEs_p->criticality);
 	//printf("value.present:%d\n",ngSetupRequestIEs_p->value.present);
@@ -958,29 +849,34 @@ ngap_amf_handle_ng_initial_ue_message(
     const sctp_stream_id_t stream,
 	Ngap_NGAP_PDU_t *pdu)
 {
-
     OAILOG_FUNC_IN (LOG_NGAP);
-    //OAILOG_DEBUG(LOG_NGAP,"decode initial ue message dump-------");
+	
     int rc = RETURNok;
-
-    Ngap_NGSetupFailureIEs_t * ngInitialUeMsg = NULL;
-    Ngap_NGSetupFailureIEs_t * ngInitialUeMsgIEs_p = NULL;
-
+   
     int                   ta_ret = 0;
     uint32_t              max_gnb_connected = 0;
     int i = 0;
 
-    Ngap_InitialUEMessage_t                  *container = NULL;
-    Ngap_InitialUEMessage_IEs_t               *ie = NULL;
-    Ngap_InitialUEMessage_IEs_t               *ie_gnb_name = NULL;
+    Ngap_InitialUEMessage_t     *container = NULL;
+    Ngap_InitialUEMessage_IEs_t  *ie = NULL;
+    Ngap_InitialUEMessage_IEs_t  *ie_gnb_name = NULL;
 
     bstring nas_msg;
-    ran_ue_ngap_id_t                          ran_ue_ngap_id;
+    ran_ue_ngap_id_t         ran_ue_ngap_id;
+    gnb_ue_ngap_id_t    gnb_ue_ngap_id = 0;
+	
     gnb_description_t   * gnb_ref = NULL;
     uint32_t              gnb_id = 0;
     char                 *gnb_name = NULL;
     int				      gnb_name_size = 0;
     ue_description_t     *ue_ref = NULL;
+
+	
+    Ngap_UserLocationInformationEUTRA_t  *pUserLocationInformationEUTRA = NULL;
+    Ngap_UserLocationInformationNR_t     *pUserLocationInformationNR    = NULL;
+    Ngap_UserLocationInformationN3IWF_t  *pUserLocationInformationN3IWF = NULL;
+	Ngap_RRCEstablishmentCause_t	      RRCEstablishmentCause = 0;
+	Ngap_UEContextRequest_t	              UEContextRequest  = 0;
 
   
     DevAssert (pdu != NULL); 
@@ -988,241 +884,175 @@ ngap_amf_handle_ng_initial_ue_message(
     asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
     printf("-------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------\n");
     container = &pdu->choice.initiatingMessage->value.choice.InitialUEMessage;
-
+    
 /********************** is gnb in list ************************************************/
 
-    if ((gnb_ref = ngap_is_gnb_assoc_id_in_list (assoc_id)) == NULL) {
-      OAILOG_ERROR (LOG_NGAP, "Unknown gNB on assoc_id %d\n", assoc_id);
-      OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
+    //@1
+    if ((gnb_ref = ngap_is_gnb_assoc_id_in_list (assoc_id)) == NULL)
+	{
+    	OAILOG_ERROR (LOG_NGAP, "Unknown gNB on assoc_id %d\n", assoc_id);
+    	OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
     }  
 
 /**************************************************************************************/
 
 /********************** prase available parameters ************************************/
-	
-	for (i = 0; i < container->protocolIEs.list.count; i++)
-	{
-        Ngap_InitialUEMessage_IEs_t *initialUeMsgIEs_p = NULL;
-        initialUeMsgIEs_p = container->protocolIEs.list.array[i];
-		if(!initialUeMsgIEs_p)
-			continue;
-		switch(initialUeMsgIEs_p->id)
-	    {
-	        case Ngap_ProtocolIE_ID_id_RAN_UE_NGAP_ID:
-			{
-               ran_ue_ngap_id = initialUeMsgIEs_p->value.choice.RAN_UE_NGAP_ID;
-			   //OAILOG_DEBUG(LOG_NGAP,"RAN_UE_NGAP_ID:0x%x",initialUeMsgIEs_p->value.choice.RAN_UE_NGAP_ID); 
-			}
-			break;
-			
-            case Ngap_ProtocolIE_ID_id_NAS_PDU:
-			{
-               nas_msg =  blk2bstr(initialUeMsgIEs_p->value.choice.NAS_PDU.buf,initialUeMsgIEs_p->value.choice.NAS_PDU.size);              
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_UserLocationInformation:
-			{
-				Ngap_UserLocationInformation_t	 UserLocationInformation =  initialUeMsgIEs_p->value.choice.UserLocationInformation;
-				switch(UserLocationInformation.present)
-				{
-				  case Ngap_UserLocationInformation_PR_userLocationInformationEUTRA:
-				  {
-				  	Ngap_UserLocationInformationEUTRA_t	*userLocationInformationEUTRA = UserLocationInformation.choice.userLocationInformationEUTRA;
-					if(!userLocationInformationEUTRA)
-						break;
-
-				    //CGI
-				    Ngap_EUTRA_CGI_t eUTRA_CGI = userLocationInformationEUTRA->eUTRA_CGI;
-					
-				    //CGI,pLMNIdentity
-				    Ngap_PLMNIdentity_t	 cgi_pLMNIdentity  = eUTRA_CGI.pLMNIdentity;
-	               
-				    //OAILOG_DEBUG(LOG_NGAP,"CGI,pLMNIdentity:");
-					size_t i = 0;
-					for(; i<cgi_pLMNIdentity.size;i++)
-					{
-					   //OAILOG_DEBUG(LOG_NGAP,"0x%x",cgi_pLMNIdentity.buf[i]); 
-					}
-				    //CGI,eUTRACellIdentity
-				    //OAILOG_DEBUG(LOG_NGAP,"CGI,eUTRACellIdentity:");
-				    Ngap_EUTRACellIdentity_t	 eUTRACellIdentity = eUTRA_CGI.eUTRACellIdentity;
-				    i  = 0;
-				    for(; i<eUTRACellIdentity.size;i++)
-					{
-					   //OAILOG_DEBUG(LOG_NGAP,"0x%x",eUTRACellIdentity.buf[i]); 
-					}
-
-                    //TAI
-                    //OAILOG_DEBUG(LOG_NGAP,"TAI");
-                    Ngap_TAI_t tAI  =  userLocationInformationEUTRA->tAI;
-                    //TAI,pLMNIdentity
-                    //OAILOG_DEBUG(LOG_NGAP,"TAI.pLMNIdentity");
-                    Ngap_PLMNIdentity_t	 pLMNIdentity  = tAI.pLMNIdentity;
-					i  = 0;
-					for(; i<pLMNIdentity.size;i++)
-					{
-                        //OAILOG_DEBUG(LOG_NGAP,"0x%x",pLMNIdentity.buf[i]);
-					}
-                    
-                    //TAI,tAC
-                    //OAILOG_DEBUG(LOG_NGAP,"TAI.tAC");
-	                Ngap_TAC_t	 tAC = tAI.tAC;
-					i  = 0;
-					for(; i<tAC.size;i++)
-					{
-                        //OAILOG_DEBUG(LOG_NGAP,"0x%x",tAC.buf[i]);
-					}
-                    
-					//timeStamp
-					//OAILOG_DEBUG(LOG_NGAP,"timeStamp");
-					Ngap_TimeStamp_t	*timeStamp = userLocationInformationEUTRA->timeStamp;
-					i  = 0;
-					if(!timeStamp)
-						break;
-					for(; i<timeStamp->size;i++)
-					{
-                        //OAILOG_DEBUG(LOG_NGAP,"0x%x",timeStamp->buf[i]);
-					}
-				  }
-				  break;
-				  case Ngap_UserLocationInformation_PR_userLocationInformationNR:
-				  {
-				  }
-				  break;
-	              case Ngap_UserLocationInformation_PR_userLocationInformationN3IWF:
-		          {
-				  }
-				  break;
+    //RAN_UE_NGAP_ID
+    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_RAN_UE_NGAP_ID, false);
+    if (ie) 
+	{  
+		gnb_ue_ngap_id  = ie->value.choice.RAN_UE_NGAP_ID;
+	    OAILOG_INFO(LOG_NGAP,"ng initial ue message,ran_ue_ngap_id:%u\n", gnb_ue_ngap_id);
 		
-				  default:
-				  	break;
-				}
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_RRCEstablishmentCause:
-			{
-				
-				Ngap_RRCEstablishmentCause_t	 RRCEstablishmentCause = initialUeMsgIEs_p->value.choice.RRCEstablishmentCause;
-				//OAILOG_DEBUG(LOG_NGAP,"RRCEstablishmentCause:0x%x", RRCEstablishmentCause);
-			}
-			break;
-			case Ngap_ProtocolIE_ID_id_FiveG_S_TMSI:
-			{
-				Ngap_FiveG_S_TMSI_t	 FiveG_S_TMSI = initialUeMsgIEs_p->value.choice.FiveG_S_TMSI;
+    }
+	
+	
+	//NAS_PDU
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_NAS_PDU, false);
+    if (ie) 
+	{  
+		nas_msg =  blk2bstr(ie->value.choice.NAS_PDU.buf,ie->value.choice.NAS_PDU.size);              
+	    OAILOG_INFO(LOG_NGAP, "ng initial ue message,nas_pdu_size:%u\n", ie->value.choice.NAS_PDU.size);
+    }
+	
 
-                //OAILOG_DEBUG(LOG_NGAP,"FiveG_S_TMSI.aMFSetID");
-				Ngap_AMFSetID_t	 aMFSetID = FiveG_S_TMSI.aMFSetID;
-				size_t i  = 0;
-				for(i;i<aMFSetID.size;i++)
-				{
-                    //OAILOG_DEBUG(LOG_NGAP,"0x%x", aMFSetID.buf[i]);  
-				}
-				
-				//OAILOG_DEBUG(LOG_NGAP,"FiveG_S_TMSI.aMFPointer");
-	            Ngap_AMFPointer_t	 aMFPointer = FiveG_S_TMSI.aMFPointer;
-				i  = 0;
-				for(i;i<aMFPointer.size;i++)
-				{
-                   //OAILOG_DEBUG(LOG_NGAP,"0x%x", aMFPointer.buf[i]);  
-				}
-				//OAILOG_DEBUG(LOG_NGAP,"fiveG_S_TMSI.fiveG_TMSI");
-                Ngap_FiveG_TMSI_t	 fiveG_TMSI = FiveG_S_TMSI.fiveG_TMSI;
-				i  = 0;
-				for(i;i<fiveG_TMSI.size;i++)
-				{
-                   //OAILOG_DEBUG(LOG_NGAP,"0x%x", fiveG_TMSI.buf[i]);  
-				}
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_AMFSetID:
-			{
-				//OAILOG_DEBUG(LOG_NGAP,"AMFSetID");
-				Ngap_AMFSetID_t	 aMFSetID = initialUeMsgIEs_p->value.choice.AMFSetID;
-				size_t i  = 0;
-				for(i;i<aMFSetID.size;i++)
-				{
-                    //OAILOG_DEBUG(LOG_NGAP,"0x%x", aMFSetID.buf[i]);  
-				}
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_UEContextRequest:
-			{
-	            //OAILOG_DEBUG(LOG_NGAP,"UEContextRequest:0x%x",initialUeMsgIEs_p->value.choice.UEContextRequest);
-			}
-			break;
-            case Ngap_ProtocolIE_ID_id_AllowedNSSAI:
-			{
-				//Ngap_AllowedNSSAI_t	 AllowedNSSAI = initialUeMsgIEs_p->value.choice.AllowedNSSAI.list; 
-				size_t i  =0;
-				for(; i < initialUeMsgIEs_p->value.choice.AllowedNSSAI.list.count; i++)
-				{
-				   Ngap_AllowedNSSAI_Item_t *item = initialUeMsgIEs_p->value.choice.AllowedNSSAI.list.array[i];
-				  
+	//UserLocationInformation
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_UserLocationInformation, false);
+    if (ie) 
+	{               
+	    OAILOG_INFO(LOG_NGAP, "ng initial ue message,UserLocationInformation----------------\n");
 
-				   //OAILOG_DEBUG (LOG_NGAP,"s_NSSAI:");
-				   Ngap_S_NSSAI_t	 s_NSSAI = item->s_NSSAI;
-                             
-							 
-				   Ngap_SST_t	 sST = s_NSSAI.sST;
-				   //OAILOG_DEBUG (LOG_NGAP,"sST:");
-				   size_t i  = 0;
-				   for(; i< sST.size; i++)
-				   {
-                      //OAILOG_DEBUG (LOG_NGAP,"0x%x",sST.buf[i]);
-				   }
-				   //OAILOG_DEBUG (LOG_NGAP,"sD:");
-	               Ngap_SD_t	*sD = s_NSSAI.sD;
-				   if(!sD)
-				     continue;
-				   i = 0;
-				   for(; i< sD->size; i++)
-				   {
-                      //OAILOG_DEBUG (LOG_NGAP,"0x%x",sD->buf[i]);
-				   }
+		//userLocationInformationEUTRA
+		//Ngap_UserLocationInformation_PR_userLocationInformationEUTRA
+		switch(ie->value.choice.UserLocationInformation.present)
+		{
+            case Ngap_UserLocationInformation_PR_userLocationInformationEUTRA:
+			{
+				pUserLocationInformationEUTRA = ie->value.choice.UserLocationInformation.choice.userLocationInformationEUTRA;
+				if(pUserLocationInformationEUTRA)
+				{
+                   
 				}
 			}
 			break;
-            default:
+			case Ngap_UserLocationInformation_PR_userLocationInformationNR:
 			{
-		   	    //printf("Unknown protocol IE id (%d) for message ngsetup_failure_ies\n", (int)initialUeMsgIEs_p->id);
-            }
-		    break;
+				pUserLocationInformationNR = ie->value.choice.UserLocationInformation.choice.userLocationInformationNR;
+				
+			}
+			break;
+			case Ngap_UserLocationInformation_PR_userLocationInformationN3IWF:
+			{
+			    //pUserLocationInformationN3IWF = ie->value.choice.UserLocationInformation.choice.userLocationInformationN3IWF;
+			}
+			break;
+			default:
+				OAILOG_WARNING(LOG_NGAP, "ng initial ue message,UserLocationInformation, don't known :%u\n",
+				ie->value.choice.UserLocationInformation.present);
+			break; 
 		}
-	 }
+		
+    }
+	
 
-/******************************************************************/
-/*******************  context handle ******************************/
-    #if 1
-      ran_ue_ngap_id  = 0x90;
-    #endif
-    OAILOG_INFO (LOG_NGAP, "Received NGAP INITIAL_UE_MESSAGE RAN_UE_NGAP_ID " RAN_UE_NGAP_ID_FMT "\n", ran_ue_ngap_id);
-    ue_ref = ngap_is_ue_gnb_id_in_list(gnb_ref,ran_ue_ngap_id);
-    if(ue_ref == NULL){
-      if ((ue_ref = ngap_new_ue (assoc_id, ran_ue_ngap_id)) == NULL) {
-        OAILOG_ERROR (LOG_NGAP, "NGAP:Initial UE Message- Failed to allocate NGAP UE Context, gNBUeNGAPId:" RAN_UE_NGAP_ID_FMT "\n", ran_ue_ngap_id);
-        OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
-      }
+    //RRCEstablishmentCause
+    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_RRCEstablishmentCause, false);
+    if (ie) 
+	{
+		RRCEstablishmentCause = ie->value.choice.RRCEstablishmentCause;
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, RRCEstablishmentCause:0x%x\n", RRCEstablishmentCause);
+    }
+	
 
-      ue_ref->ran_ue_ngap_id = ran_ue_ngap_id;
-      ue_ref->amf_ue_ngap_id = INVALID_AMF_UE_NGAP_ID;
- 
-      ue_ref->sctp_stream_recv = stream;     
-      ue_ref->sctp_stream_send = ue_ref->gnb->next_sctp_stream;
-      ue_ref->gnb->next_sctp_stream += 1;
-      if (ue_ref->gnb->next_sctp_stream >= ue_ref->gnb->instreams) {
-        ue_ref->gnb->next_sctp_stream = 1;
-      }
+	//FiveG_S_TMSI
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_FiveG_S_TMSI, false);
+    if (ie) 
+	{
+		//RRCEstablishmentCause = ie->value.choice.RRCEstablishmentCause;
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI\n");
+    }
+	
 
+	//AMFSetID
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_AMFSetID, false);
+    if (ie) 
+	{
+		//RRCEstablishmentCause = ie->value.choice.RRCEstablishmentCause;
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID\n");
+    }
+	
+
+	//UEContextRequest
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_UEContextRequest, false);
+    if (ie) 
+	{
+	    UEContextRequest  =  ie->value.choice.UEContextRequest;
+	    OAILOG_INFO(LOG_NGAP, "ng initial ue message, UEContextRequest:0x%x\n", UEContextRequest);
     }
 
+	
+    // test
+    //OAILOG_FUNC_RETURN (LOG_NGAP,0);  
+	
+/******************************************************************/
+/*******************  context handle ******************************/
+    //#if 1
+       //ran_ue_ngap_id  = 0x90;
+    //#endif
+
+    OAILOG_INFO (LOG_NGAP, "Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID " GNB_UE_NGAP_ID_FMT "\n", gnb_ue_ngap_id);
+
+	//@2
+	ue_ref = ngap_is_ue_gnb_id_in_list(gnb_ref,gnb_ue_ngap_id);
+    if(ue_ref == NULL)
+	{
+	    //@3
+        if ((ue_ref = ngap_new_ue (assoc_id, gnb_ue_ngap_id)) == NULL) 
+		{
+            OAILOG_ERROR (LOG_NGAP, "NGAP:Initial UE Message- Failed to allocate NGAP UE Context, gNBUeNGAPId:" GNB_UE_NGAP_ID_FMT "\n", gnb_ue_ngap_id);
+            OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
+        }
+  
+        ue_ref->gnb_ue_ngap_id = gnb_ue_ngap_id;
+        ue_ref->amf_ue_ngap_id = INVALID_AMF_UE_NGAP_ID;
+   
+        ue_ref->sctp_stream_recv = stream;     
+        ue_ref->sctp_stream_send = ue_ref->gnb->next_sctp_stream;
+        ue_ref->gnb->next_sctp_stream += 1;
+        if (ue_ref->gnb->next_sctp_stream >= ue_ref->gnb->instreams) 
+		{
+            ue_ref->gnb->next_sctp_stream = 1;
+        }
+
+    }
+	else
+	{
+    	OAILOG_FUNC_RETURN (LOG_NGAP, RETURNok);
+	}
+
 
 
 /******************************************************************/
-   
+
     //ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10,initialUeMsgIEs_p->value.choice.RAN_UE_NGAP_ID,100,initialUeMsgIEs_p->value.choice.NAS_PDU.buf,initialUeMsgIEs_p->value.choice.NAS_PDU.size,NULL,NULL,0,NULL,NULL,NULL,NULL);
+
+    //@4
     ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10,100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
-    OAILOG_FUNC_RETURN (LOG_NGAP,0);
-    //return 0;
+
+	//@5
+	#if 0
+    if(is exist(ie->present & Ngap_ProtocolIE_ID_id_UEContextRequest))
+    {
+        amf_ngap_handle_initial_context_setup();
+    }
+	else
+	{
+       
+	}
+	#endif
+	
+
+	OAILOG_FUNC_RETURN (LOG_NGAP, RETURNok);
 }
 
 

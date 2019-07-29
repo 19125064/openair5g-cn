@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 typedef uint32_t ran_ue_ngap_id_t;
-
+typedef uint32_t gnb_ue_ngap_id_t;
 typedef uint32_t amf_ue_ngap_id_t;
 
 #endif
