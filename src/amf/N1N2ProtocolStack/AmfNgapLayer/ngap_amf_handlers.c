@@ -876,6 +876,14 @@ ngap_amf_handle_ng_initial_ue_message(
     Ngap_UserLocationInformationNR_t     *pUserLocationInformationNR    = NULL;
     Ngap_UserLocationInformationN3IWF_t  *pUserLocationInformationN3IWF = NULL;
 	Ngap_RRCEstablishmentCause_t	      RRCEstablishmentCause = 0;
+
+
+    //Ngap_FiveG_S_TMSI_t
+	uint16_t	 aMFSetID    = 0;  //:10;
+	uint8_t  	 aMFPointer  = 0;  //:6;
+	char         *fiveG_TMSI = NULL;
+	uint32_t     fiveG_TMSI_size  = 0;
+	
 	Ngap_UEContextRequest_t	              UEContextRequest  = 0;
 
   
@@ -906,16 +914,14 @@ ngap_amf_handle_ng_initial_ue_message(
 		
     }
 	
-	
 	//NAS_PDU
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_NAS_PDU, false);
     if (ie) 
 	{  
-		nas_msg =  blk2bstr(ie->value.choice.NAS_PDU.buf,ie->value.choice.NAS_PDU.size);              
+		nas_msg =  blk2bstr(ie->value.choice.NAS_PDU.buf, ie->value.choice.NAS_PDU.size);              
 	    OAILOG_INFO(LOG_NGAP, "ng initial ue message,nas_pdu_size:%u\n", ie->value.choice.NAS_PDU.size);
     }
 	
-
 	//UserLocationInformation
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_UserLocationInformation, false);
     if (ie) 
@@ -938,7 +944,10 @@ ngap_amf_handle_ng_initial_ue_message(
 			case Ngap_UserLocationInformation_PR_userLocationInformationNR:
 			{
 				pUserLocationInformationNR = ie->value.choice.UserLocationInformation.choice.userLocationInformationNR;
-				
+				if(pUserLocationInformationNR)
+				{
+                
+				}
 			}
 			break;
 			case Ngap_UserLocationInformation_PR_userLocationInformationN3IWF:
@@ -954,7 +963,6 @@ ngap_amf_handle_ng_initial_ue_message(
 		
     }
 	
-
     //RRCEstablishmentCause
     NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_RRCEstablishmentCause, false);
     if (ie) 
@@ -968,11 +976,18 @@ ngap_amf_handle_ng_initial_ue_message(
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_FiveG_S_TMSI, false);
     if (ie) 
 	{
-		//RRCEstablishmentCause = ie->value.choice.RRCEstablishmentCause;
-		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI\n");
+
+		aMFSetID   = (uint16_t)(BIT_STRING_to_uint16(&ie->value.choice.FiveG_S_TMSI.aMFSetID) & 0x3FF);
+	    aMFPointer = (uint8_t) (BIT_STRING_to_uint16(&ie->value.choice.FiveG_S_TMSI.aMFPointer) & 0x3F);
+      
+	
+		fiveG_TMSI       = (char *)ie->value.choice.FiveG_S_TMSI.fiveG_TMSI.buf;
+	    fiveG_TMSI_size  = (uint32_t)ie->value.choice.FiveG_S_TMSI.fiveG_TMSI.size;
+		
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI, aMFSetID:%u,aMFPointer:%u, size:%u, buf:%s\n", 
+		aMFSetID, aMFPointer,fiveG_TMSI_size, fiveG_TMSI);
     }
 	
-
 	//AMFSetID
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_AMFSetID, false);
     if (ie) 
@@ -981,7 +996,6 @@ ngap_amf_handle_ng_initial_ue_message(
 		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID\n");
     }
 	
-
 	//UEContextRequest
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_UEContextRequest, false);
     if (ie) 
@@ -992,7 +1006,7 @@ ngap_amf_handle_ng_initial_ue_message(
 
 	
     // test
-    //OAILOG_FUNC_RETURN (LOG_NGAP,0);  
+    OAILOG_FUNC_RETURN (LOG_NGAP,0);  
 	
 /******************************************************************/
 /*******************  context handle ******************************/
