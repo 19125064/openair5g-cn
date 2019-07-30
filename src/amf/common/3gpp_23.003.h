@@ -15,6 +15,10 @@ typedef struct plmn_s {
 #define INVALID_TAC_0000                  (uint16_t)0x0000
 #define INVALID_TAC_FFFE                  (uint16_t)0xFFFE
 
+
+#define INVALID_TMSI                   UINT32_MAX        /*!< \brief  The network shall not allocate a TMSI with all 32 bits equal to 1
+                                                                        (this is because the TMSI must be stored in the SIM, and the SIM uses 4 octets with all bits
+                                                                        equal to 1 to indicate that no valid TMSI is available).  */
 typedef uint16_t    tac_t;
 
 typedef struct tai_s {

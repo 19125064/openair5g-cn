@@ -47,6 +47,7 @@
 #include  "amf_config.h"
 #include  "Ngap_AMFSetID.h"
 #include  "Ngap_Cause.h"
+#include  "Ngap_NRCellIdentity.h"
 
 extern hash_table_ts_t g_ngap_gnb_coll;
 extern uint32_t nb_gnb_associated;
@@ -863,7 +864,7 @@ ngap_amf_handle_ng_initial_ue_message(
 
     bstring nas_msg;
     ran_ue_ngap_id_t         ran_ue_ngap_id;
-    gnb_ue_ngap_id_t    gnb_ue_ngap_id = 0;
+    //gnb_ue_ngap_id_t         gnb_ue_ngap_id = 0;
 	
     gnb_description_t   * gnb_ref = NULL;
     uint32_t              gnb_id = 0;
@@ -880,11 +881,27 @@ ngap_amf_handle_ng_initial_ue_message(
 
     //Ngap_FiveG_S_TMSI_t
 	uint16_t	 aMFSetID    = 0;  //:10;
+	uint16_t     _AMFSetID    = 0;  //10
 	uint8_t  	 aMFPointer  = 0;  //:6;
 	char         *fiveG_TMSI = NULL;
 	uint32_t     fiveG_TMSI_size  = 0;
+	uint16_t     nR_CGI_mcc = 0;
+    uint16_t     nR_CGI_mnc = 0;
+    uint16_t     nR_CGI_mnc_len = 0;
 	
-	Ngap_UEContextRequest_t	              UEContextRequest  = 0;
+	uint16_t	 tai_mcc = 0;
+	uint16_t	 tai_mnc = 0;
+	uint16_t	 tai_mnc_len = 0;
+    uint32_t     tai_tac  = 0;
+
+	uint32_t     timeStamp  = 0;
+
+	uint32_t     eUTRA_CGI_nRCellIdentity = 0;
+	uint64_t     nR_CGI_nRCellIdentity = 0;
+	
+	Ngap_UEContextRequest_t	  UEContextRequest  = 0;
+	Ngap_AllowedNSSAI_t	      *pAllowedNSSAI    = NULL; 
+	uint8_t  exist_UEContextRequest = 0;
 
   
     DevAssert (pdu != NULL); 
@@ -899,6 +916,8 @@ ngap_amf_handle_ng_initial_ue_message(
     if ((gnb_ref = ngap_is_gnb_assoc_id_in_list (assoc_id)) == NULL)
 	{
     	OAILOG_ERROR (LOG_NGAP, "Unknown gNB on assoc_id %d\n", assoc_id);
+
+		//@7
     	OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
     }  
 
@@ -909,8 +928,8 @@ ngap_amf_handle_ng_initial_ue_message(
     NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_RAN_UE_NGAP_ID, false);
     if (ie) 
 	{  
-		gnb_ue_ngap_id  = ie->value.choice.RAN_UE_NGAP_ID;
-	    OAILOG_INFO(LOG_NGAP,"ng initial ue message,ran_ue_ngap_id:%u\n", gnb_ue_ngap_id);
+		ran_ue_ngap_id  = ie->value.choice.RAN_UE_NGAP_ID;
+	    OAILOG_INFO(LOG_NGAP,"ng initial ue message,ran_ue_ngap_id:%u\n", ran_ue_ngap_id);
 		
     }
 	
@@ -937,6 +956,34 @@ ngap_amf_handle_ng_initial_ue_message(
 				pUserLocationInformationEUTRA = ie->value.choice.UserLocationInformation.choice.userLocationInformationEUTRA;
 				if(pUserLocationInformationEUTRA)
 				{
+				   
+					//nR_CGI
+					
+					//pLMNIdentity
+					const Ngap_PLMNIdentity_t * const plmn = &pUserLocationInformationEUTRA->eUTRA_CGI.pLMNIdentity;
+					DevAssert (plmn != NULL);
+					TBCD_TO_MCC_MNC (plmn, nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len);
+								  
+					//nRCellIdentity:28B
+					eUTRA_CGI_nRCellIdentity  = (uint32_t)((*(uint32_t *)pUserLocationInformationEUTRA->eUTRA_CGI.eUTRACellIdentity.buf) & 0xFFFFFFF);
+					
+					//tAI;
+					
+					//Ngap_PLMNIdentity_t pLMNIdentity;
+					const Ngap_PLMNIdentity_t * const tai_plmn = &pUserLocationInformationEUTRA->tAI.pLMNIdentity;
+					DevAssert (tai_plmn != NULL);
+					TBCD_TO_MCC_MNC (tai_plmn, tai_mcc, tai_mnc, tai_mnc_len);
+					
+					//Ngap_TAC_t	 tAC;		 
+					const Ngap_TAC_t * const tAC = &pUserLocationInformationEUTRA->tAI.tAC;
+					DevAssert (tAC != NULL);
+					asn1str_to_u24(tAC, &tai_tac);
+														
+					//timeStamp;
+					timeStamp = (uint32_t)((*(uint32_t *)pUserLocationInformationEUTRA->timeStamp->buf));
+
+					OAILOG_DEBUG(LOG_NGAP,"pUserLocationInformationEUTRA->eUTRA_CGI.pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x,tai_mcc:%u,tai_mnc:%u,tai_mnc_len:%u,tai_tac:%u,timeStamp:%u\n",  
+					nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, tai_mcc, tai_mnc,tai_mnc_len, tai_tac, timeStamp);
                    
 				}
 			}
@@ -946,6 +993,33 @@ ngap_amf_handle_ng_initial_ue_message(
 				pUserLocationInformationNR = ie->value.choice.UserLocationInformation.choice.userLocationInformationNR;
 				if(pUserLocationInformationNR)
 				{
+				    //nR_CGI
+
+					//pLMNIdentity
+                    const Ngap_PLMNIdentity_t * const plmn = &pUserLocationInformationNR->nR_CGI.pLMNIdentity;
+                    DevAssert (plmn != NULL);
+                    TBCD_TO_MCC_MNC (plmn, nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len);
+			   
+                    //nRCellIdentity, 36B
+					nR_CGI_nRCellIdentity  = (uint64_t)((*(uint64_t *)pUserLocationInformationNR->nR_CGI.nRCellIdentity.buf) & 0xFFFFFFFFF);
+
+	                //tAI;
+                    //Ngap_PLMNIdentity_t	 pLMNIdentity;
+                    const Ngap_PLMNIdentity_t * const tai_plmn = &pUserLocationInformationNR->tAI.pLMNIdentity;
+                    DevAssert (tai_plmn != NULL);
+                    TBCD_TO_MCC_MNC (tai_plmn, tai_mcc, tai_mnc, tai_mnc_len);
+
+	                //Ngap_TAC_t	 tAC;
+                     
+                    const Ngap_TAC_t * const tAC = &pUserLocationInformationNR->tAI.tAC;
+                    DevAssert (tAC != NULL);
+                    asn1str_to_u24(tAC, &tai_tac);
+					
+	                //timeStamp;
+                    timeStamp = (uint32_t)((*(uint32_t *)pUserLocationInformationNR->timeStamp->buf));
+
+					OAILOG_DEBUG(LOG_NGAP,"pUserLocationInformationNR->nR_CGI.pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x,tai_mcc:%u,tai_mnc:%u,tai_mnc_len:%u,tai_tac:%u,timeStamp:%u\n",  
+					nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, tai_mcc, tai_mnc,tai_mnc_len, tai_tac, timeStamp);
                 
 				}
 			}
@@ -971,21 +1045,18 @@ ngap_amf_handle_ng_initial_ue_message(
 		OAILOG_INFO(LOG_NGAP, "ng initial ue message, RRCEstablishmentCause:0x%x\n", RRCEstablishmentCause);
     }
 	
-
 	//FiveG_S_TMSI
 	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_FiveG_S_TMSI, false);
     if (ie) 
 	{
-
-		aMFSetID   = (uint16_t)(BIT_STRING_to_uint16(&ie->value.choice.FiveG_S_TMSI.aMFSetID) & 0x3FF);
-	    aMFPointer = (uint8_t) (BIT_STRING_to_uint16(&ie->value.choice.FiveG_S_TMSI.aMFPointer) & 0x3F);
+		aMFSetID   = (uint16_t)((*(uint16_t *)ie->value.choice.FiveG_S_TMSI.aMFSetID.buf)  & 0x3FF);  //10 BITS
+		aMFPointer =  (uint8_t) ((*(uint8_t *)ie->value.choice.FiveG_S_TMSI.aMFPointer.buf) & 0x3F);  //6  BITS
       
-	
 		fiveG_TMSI       = (char *)ie->value.choice.FiveG_S_TMSI.fiveG_TMSI.buf;
 	    fiveG_TMSI_size  = (uint32_t)ie->value.choice.FiveG_S_TMSI.fiveG_TMSI.size;
 		
 		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI, aMFSetID:%u,aMFPointer:%u, size:%u, buf:%s\n", 
-		aMFSetID, aMFPointer,fiveG_TMSI_size, fiveG_TMSI);
+		aMFSetID, aMFPointer, fiveG_TMSI_size, fiveG_TMSI);
     }
 	
 	//AMFSetID
@@ -993,7 +1064,8 @@ ngap_amf_handle_ng_initial_ue_message(
     if (ie) 
 	{
 		//RRCEstablishmentCause = ie->value.choice.RRCEstablishmentCause;
-		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID\n");
+		_AMFSetID   = (uint16_t)((*(uint16_t *)ie->value.choice.AMFSetID.buf)  & 0x3FF);  //10 BITS
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID:%u\n",_AMFSetID);
     }
 	
 	//UEContextRequest
@@ -1002,11 +1074,19 @@ ngap_amf_handle_ng_initial_ue_message(
 	{
 	    UEContextRequest  =  ie->value.choice.UEContextRequest;
 	    OAILOG_INFO(LOG_NGAP, "ng initial ue message, UEContextRequest:0x%x\n", UEContextRequest);
+
+		exist_UEContextRequest = 1;
     }
 
+	//AllowedNSSAI
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_AllowedNSSAI, false);
+	if (ie) 
+	{
+		pAllowedNSSAI  =  &ie->value.choice.AllowedNSSAI;
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AllowedNSSAI\n");
+	}
 	
-    // test
-    OAILOG_FUNC_RETURN (LOG_NGAP,0);  
+  
 	
 /******************************************************************/
 /*******************  context handle ******************************/
@@ -1014,22 +1094,43 @@ ngap_amf_handle_ng_initial_ue_message(
        //ran_ue_ngap_id  = 0x90;
     //#endif
 
-    OAILOG_INFO (LOG_NGAP, "Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID " GNB_UE_NGAP_ID_FMT "\n", gnb_ue_ngap_id);
+    OAILOG_INFO (LOG_NGAP, "Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID " RAN_UE_NGAP_ID_FMT "\n", ran_ue_ngap_id);
 
 	//@2
-	ue_ref = ngap_is_ue_gnb_id_in_list(gnb_ref,gnb_ue_ngap_id);
+	ue_ref = ngap_is_ue_gnb_id_in_list(gnb_ref,ran_ue_ngap_id);
     if(ue_ref == NULL)
-	{
+    {
+        #if 0
+        Ngap_InitialUEMessage_IEs_t  initialUe = {
+
+          .value.choice = { .AMFSetID = 0 }
+		};
+		#endif
+        
+	
+	    //NR	 nR_CGI;tAI;
+        Ngap_UserLocationInformationNR_t nr  = { 
+                                                  .tAI    = {.pLMNIdentity = {0}, .tAC = INVALID_TAC_0000},
+		                                          .nR_CGI = {.pLMNIdentity = {0}, .nRCellIdentity = {0}}
+	                                           }; 
+		
+		Ngap_FiveG_S_TMSI_t	                   fiveG_s_tmsi = {.aMFSetID = 0, .aMFPointer= 0, .fiveG_TMSI = {0}};
+        Ngap_AMFSetID_t	                       AMFSetID =  {.buf = 0, .size = 0, .bits_unused = 0};
+		Ngap_AllowedNSSAI_t	 *pAllowedNSSAI_Value = NULL;
+
 	    //@3
-        if ((ue_ref = ngap_new_ue (assoc_id, gnb_ue_ngap_id)) == NULL) 
+        if ((ue_ref = ngap_new_ue (assoc_id, ran_ue_ngap_id)) == NULL) 
 		{
-            OAILOG_ERROR (LOG_NGAP, "NGAP:Initial UE Message- Failed to allocate NGAP UE Context, gNBUeNGAPId:" GNB_UE_NGAP_ID_FMT "\n", gnb_ue_ngap_id);
+            OAILOG_ERROR (LOG_NGAP, "NGAP:Initial UE Message- Failed to allocate NGAP UE Context, gNBUeNGAPId:" GNB_UE_NGAP_ID_FMT "\n", ran_ue_ngap_id);
             OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
         }
-  
-        ue_ref->gnb_ue_ngap_id = gnb_ue_ngap_id;
+        
+		ue_ref->ng_ue_state = NGAP_UE_WAITING_CRR;
+        ue_ref->ran_ue_ngap_id = ran_ue_ngap_id;
         ue_ref->amf_ue_ngap_id = INVALID_AMF_UE_NGAP_ID;
-   
+		ue_ref->ngap_ue_context_rel_timer.id = NGAP_TIMER_INACTIVE_ID;
+        ue_ref->ngap_ue_context_rel_timer.sec=  NGAP_UE_CONTEXT_REL_COMP_TIMER;
+		
         ue_ref->sctp_stream_recv = stream;     
         ue_ref->sctp_stream_send = ue_ref->gnb->next_sctp_stream;
         ue_ref->gnb->next_sctp_stream += 1;
@@ -1037,6 +1138,42 @@ ngap_amf_handle_ng_initial_ue_message(
 		{
             ue_ref->gnb->next_sctp_stream = 1;
         }
+        
+		#if 0
+		//NR, TAI mandatory IE
+		//TAC
+		const char *ptr = (void *)&tai_tac;
+	    //24B
+		OCTET_STRING_fromBuf(&nr.tAI.tAC, ptr + 1 , 3);
+	    DevAssert (nr.tAI.tAC.size == 3);
+
+
+		tai_t nr_tai = {.plmn = {0},.tac = INVALID_TAC_0000};
+		
+		
+	    //pLMNIdentity
+		MCC_MNC_TO_PLMNID(tai_mcc, tai_mnc, tai_mnc_len, &(nr.tAI.pLMNIdentity));
+		
+		//NR,cgi
+		//pLMNIdentity
+		MCC_MNC_TO_PLMNID(nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, &(nr.nR_CGI.pLMNIdentity));
+
+		//nRCellIdentity 36B
+		BIT_STRING_fromBuf(&(nr.nR_CGI.nRCellIdentity), &nR_CGI_nRCellIdentity, 36);
+
+	    //aMFSetID: 10
+	    BIT_STRING_fromBuf(&fiveG_s_tmsi.aMFSetID, &aMFSetID, 10);
+	    //aMFPointer: 6
+	    BIT_STRING_fromBuf(&fiveG_s_tmsi.aMFPointer, &aMFPointer, 6);
+	    //fiveG_TMSI: 4
+		OCTET_STRING_fromBuf (&fiveG_s_tmsi.fiveG_TMSI, fiveG_TMSI, 4);
+		
+		//AMFSetID: 10
+	    BIT_STRING_fromBuf(&AMFSetID, &_AMFSetID, 10);
+
+		pAllowedNSSAI_Value  = pAllowedNSSAI;
+
+		#endif
 
     }
 	else
@@ -1045,7 +1182,8 @@ ngap_amf_handle_ng_initial_ue_message(
 	}
 
 
-
+    // test
+    OAILOG_FUNC_RETURN (LOG_NGAP,0);
 /******************************************************************/
 
     //ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10,initialUeMsgIEs_p->value.choice.RAN_UE_NGAP_ID,100,initialUeMsgIEs_p->value.choice.NAS_PDU.buf,initialUeMsgIEs_p->value.choice.NAS_PDU.size,NULL,NULL,0,NULL,NULL,NULL,NULL);
@@ -1055,7 +1193,7 @@ ngap_amf_handle_ng_initial_ue_message(
 
 	//@5
 	#if 0
-    if(is exist(ie->present & Ngap_ProtocolIE_ID_id_UEContextRequest))
+    if(exist_UEContextRequest)
     {
         amf_ngap_handle_initial_context_setup();
     }

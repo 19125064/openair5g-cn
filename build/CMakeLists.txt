@@ -360,6 +360,4 @@ target_link_libraries(${PROJECT_NAME} pistache pthread rt ${LFDS} sctp ${NETTLE_
 
 
 #add_executable(fake_gNB ${OPENAIR5GCN_DIR}/src/amf/test/NGSetupRequest.c ${OPENAIR5GCN_DIR}/src/amf/N1N2ProtocolStack/AmfSctpLayer/sctp_primitives_client.c ${SRCS} ${ITTICFiles} ${ASN1_C_FILES} ${NGAP_LAYER_SOURCE_CODE} ${NGAP_LIB_SOURCE_CODE} )
-#target_link_libraries(fake_gNB
-#pistache pthread rt ${LFDS} sctp ${NETTLE_LIBRARIES}  ${CRYPTO_LIBRARIES} m ${CONFIG_LIBRARIES}
-#  )
+#target_link_libraries(fake_gNB pistache pthread rt ${LFDS} sctp ${NETTLE_LIBRARIES}  ${CRYPTO_LIBRARIES} m ${CONFIG_LIBRARIES})
