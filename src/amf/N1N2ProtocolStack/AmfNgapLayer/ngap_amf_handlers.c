@@ -1107,15 +1107,14 @@ ngap_amf_handle_ng_initial_ue_message(
 		};
 		#endif
         
-	
+	  
 	    //NR	 nR_CGI;tAI;
-        Ngap_UserLocationInformationNR_t nr  = { 
-                                                  .tAI    = {.pLMNIdentity = {0}, .tAC = INVALID_TAC_0000},
-		                                          .nR_CGI = {.pLMNIdentity = {0}, .nRCellIdentity = {0}}
-	                                           }; 
-		
-		Ngap_FiveG_S_TMSI_t	                   fiveG_s_tmsi = {.aMFSetID = 0, .aMFPointer= 0, .fiveG_TMSI = {0}};
-        Ngap_AMFSetID_t	                       AMFSetID =  {.buf = 0, .size = 0, .bits_unused = 0};
+        
+        Ngap_TAI_t	     nR_tAI = {.pLMNIdentity = {0}, .tAC = INVALID_TAC_0000};
+		Ngap_NR_CGI_t	 nR_CGI = {.pLMNIdentity = {0}, .nRCellIdentity = {0}};
+	                                         
+		Ngap_FiveG_S_TMSI_t	 fiveG_s_tmsi = {.aMFSetID = 0, .aMFPointer= 0, .fiveG_TMSI = {0}};
+        Ngap_AMFSetID_t	     AMFSetID =  {.buf = 0, .size = 0, .bits_unused = 0};
 		Ngap_AllowedNSSAI_t	 *pAllowedNSSAI_Value = NULL;
 
 	    //@3
@@ -1139,42 +1138,60 @@ ngap_amf_handle_ng_initial_ue_message(
             ue_ref->gnb->next_sctp_stream = 1;
         }
         
-		#if 0
 		//NR, TAI mandatory IE
 		//TAC
 		const char *ptr = (void *)&tai_tac;
 	    //24B
-		OCTET_STRING_fromBuf(&nr.tAI.tAC, ptr + 1 , 3);
-	    DevAssert (nr.tAI.tAC.size == 3);
-
+		OCTET_STRING_fromBuf(&nR_tAI.tAC, ptr + 1 , 3);
+	    DevAssert (nR_tAI.tAC.size == 3);
 
 		tai_t nr_tai = {.plmn = {0},.tac = INVALID_TAC_0000};
 		
 		
 	    //pLMNIdentity
-		MCC_MNC_TO_PLMNID(tai_mcc, tai_mnc, tai_mnc_len, &(nr.tAI.pLMNIdentity));
+		MCC_MNC_TO_PLMNID(tai_mcc, tai_mnc, tai_mnc_len, &(nR_tAI.pLMNIdentity));
 		
 		//NR,cgi
 		//pLMNIdentity
-		MCC_MNC_TO_PLMNID(nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, &(nr.nR_CGI.pLMNIdentity));
+		MCC_MNC_TO_PLMNID(nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, &(nR_CGI.pLMNIdentity));
 
 		//nRCellIdentity 36B
-		BIT_STRING_fromBuf(&(nr.nR_CGI.nRCellIdentity), &nR_CGI_nRCellIdentity, 36);
+		BIT_STRING_fromBuf(&(nR_CGI.nRCellIdentity), &nR_CGI_nRCellIdentity, 36);
 
 	    //aMFSetID: 10
 	    BIT_STRING_fromBuf(&fiveG_s_tmsi.aMFSetID, &aMFSetID, 10);
+		
 	    //aMFPointer: 6
 	    BIT_STRING_fromBuf(&fiveG_s_tmsi.aMFPointer, &aMFPointer, 6);
+		
 	    //fiveG_TMSI: 4
 		OCTET_STRING_fromBuf (&fiveG_s_tmsi.fiveG_TMSI, fiveG_TMSI, 4);
 		
 		//AMFSetID: 10
 	    BIT_STRING_fromBuf(&AMFSetID, &_AMFSetID, 10);
 
+        //AllowedNSSAI
 		pAllowedNSSAI_Value  = pAllowedNSSAI;
 
-		#endif
 
+		// test
+        //OAILOG_FUNC_RETURN (LOG_NGAP,RETURNok);
+		
+		ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10, 100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
+		//ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10,100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
+
+		//@5
+		#if 0
+	    if(exist_UEContextRequest)
+	    {
+	        amf_ngap_handle_initial_context_setup();
+	    }
+		else
+		{
+	       
+		}
+		#endif
+	
     }
 	else
 	{
@@ -1182,28 +1199,11 @@ ngap_amf_handle_ng_initial_ue_message(
 	}
 
 
-    // test
-    OAILOG_FUNC_RETURN (LOG_NGAP,0);
+    
 /******************************************************************/
 
     //ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10,initialUeMsgIEs_p->value.choice.RAN_UE_NGAP_ID,100,initialUeMsgIEs_p->value.choice.NAS_PDU.buf,initialUeMsgIEs_p->value.choice.NAS_PDU.size,NULL,NULL,0,NULL,NULL,NULL,NULL);
-
-    //@4
-    ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10,100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
-
-	//@5
-	#if 0
-    if(exist_UEContextRequest)
-    {
-        amf_ngap_handle_initial_context_setup();
-    }
-	else
-	{
-       
-	}
-	#endif
-	
-
+    
 	OAILOG_FUNC_RETURN (LOG_NGAP, RETURNok);
 }
 
