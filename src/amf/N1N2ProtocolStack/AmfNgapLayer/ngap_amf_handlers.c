@@ -1080,7 +1080,7 @@ ngap_amf_handle_ng_initial_ue_message(
 	    ie_NAS_PDU->value.choice.NAS_PDU.size,
 		&nr_tai,
 		&nr_cgi,
-		ie_UEContextRequest->value.choice.UEContextRequest,
+		ie_UEContextRequest->value.choice.RRCEstablishmentCause,
 		ie_FiveG_S_TMSI ?(&nr_fiveG_s_tmsi):NULL,
 		ie_AMFSetID ? (&nr_amf_set_id):NULL,
 		ie_AllowedNSSAI ? (&nr_allowed_nssai):NULL);

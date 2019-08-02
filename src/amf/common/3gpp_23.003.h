@@ -48,7 +48,7 @@ typedef struct  nr_tai_s  /*5G ADD it*/
 
 typedef struct nr_cell_identity_s /*5G ADD it */
 {
-    uint32_t gnb_id:32;
+    uint32_t gnb_id;
 	uint8_t  cell_id:4;  
 }nr_cell_identity_t;
 
