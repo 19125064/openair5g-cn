@@ -34,7 +34,7 @@ static inline void ngap_amf_itti_amf_app_initial_ue_message(
   const long              rrc_cause,
   const void      const*  fiveG_s_tmsi,
   const void      const*  amfSetID,
-  const void      const*  ueContextRequest,
+  //const void      const*  ueContextRequest,
   const void      const*  allowedNSSAI)
 {
   MessageDef  * message_p = NULL;

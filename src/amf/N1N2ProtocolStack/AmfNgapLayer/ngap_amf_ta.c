@@ -77,7 +77,7 @@ ngap_amf_compare_tac (
 
   DevAssert (tac != NULL);
   //OCTET_STRING_TO_TAC(tac, tac_value);
-  asn1str_to_u24(tac, &tac_value);
+  tac_value = asn1str_to_u24(tac);
 
   for(; i < amf_config.served_tai.nb_tai; i++)
   {

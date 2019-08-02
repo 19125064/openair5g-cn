@@ -853,57 +853,30 @@ ngap_amf_handle_ng_initial_ue_message(
     OAILOG_FUNC_IN (LOG_NGAP);
 	
     int rc = RETURNok;
-   
-    int                   ta_ret = 0;
     uint32_t              max_gnb_connected = 0;
-    int i = 0;
-
+ 
     Ngap_InitialUEMessage_t     *container = NULL;
-    Ngap_InitialUEMessage_IEs_t  *ie = NULL;
-    Ngap_InitialUEMessage_IEs_t  *ie_gnb_name = NULL;
-
-    bstring nas_msg;
-    ran_ue_ngap_id_t         ran_ue_ngap_id;
-    //gnb_ue_ngap_id_t         gnb_ue_ngap_id = 0;
+	Ngap_InitialUEMessage_IEs_t  *ie_RAN_UE_NGAP_ID = NULL;
+	Ngap_InitialUEMessage_IEs_t	 *ie_NAS_PDU = NULL;
+	Ngap_InitialUEMessage_IEs_t	 *ie_UserLocationInformation = NULL;
+	Ngap_InitialUEMessage_IEs_t	 *ie_RRCEstablishmentCause = NULL;
+	Ngap_InitialUEMessage_IEs_t	 *ie_FiveG_S_TMSI = NULL;
+	Ngap_InitialUEMessage_IEs_t	 *ie_AMFSetID = NULL;
+	Ngap_InitialUEMessage_IEs_t	 *ie_UEContextRequest = NULL;
+	Ngap_InitialUEMessage_IEs_t	 *ie_AllowedNSSAI = NULL;
 	
+    ran_ue_ngap_id_t      ran_ue_ngap_id; //gnb_ue_ngap_id = 0;
+   
     gnb_description_t   * gnb_ref = NULL;
     uint32_t              gnb_id = 0;
     char                 *gnb_name = NULL;
     int				      gnb_name_size = 0;
     ue_description_t     *ue_ref = NULL;
 
-	
-    Ngap_UserLocationInformationEUTRA_t  *pUserLocationInformationEUTRA = NULL;
+
     Ngap_UserLocationInformationNR_t     *pUserLocationInformationNR    = NULL;
-    Ngap_UserLocationInformationN3IWF_t  *pUserLocationInformationN3IWF = NULL;
-	Ngap_RRCEstablishmentCause_t	      RRCEstablishmentCause = 0;
-
-
-    //Ngap_FiveG_S_TMSI_t
-	uint16_t	 aMFSetID    = 0;  //:10;
-	uint16_t     _AMFSetID    = 0;  //10
-	uint8_t  	 aMFPointer  = 0;  //:6;
-	char         *fiveG_TMSI = NULL;
-	uint32_t     fiveG_TMSI_size  = 0;
-	uint16_t     nR_CGI_mcc = 0;
-    uint16_t     nR_CGI_mnc = 0;
-    uint16_t     nR_CGI_mnc_len = 0;
+   
 	
-	uint16_t	 tai_mcc = 0;
-	uint16_t	 tai_mnc = 0;
-	uint16_t	 tai_mnc_len = 0;
-    uint32_t     tai_tac  = 0;
-
-	uint32_t     timeStamp  = 0;
-
-	uint32_t     eUTRA_CGI_nRCellIdentity = 0;
-	uint64_t     nR_CGI_nRCellIdentity = 0;
-	
-	Ngap_UEContextRequest_t	  UEContextRequest  = 0;
-	Ngap_AllowedNSSAI_t	      *pAllowedNSSAI    = NULL; 
-	uint8_t  exist_UEContextRequest = 0;
-
-  
     DevAssert (pdu != NULL); 
     printf("-------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------\n");
     asn_fprint(stdout, &asn_DEF_Ngap_NGAP_PDU, pdu);
@@ -925,166 +898,53 @@ ngap_amf_handle_ng_initial_ue_message(
 
 /********************** prase available parameters ************************************/
     //RAN_UE_NGAP_ID
-    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_RAN_UE_NGAP_ID, false);
-    if (ie) 
+    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_RAN_UE_NGAP_ID, container, Ngap_ProtocolIE_ID_id_RAN_UE_NGAP_ID, false);
+    if (ie_RAN_UE_NGAP_ID) 
 	{  
-		ran_ue_ngap_id  = ie->value.choice.RAN_UE_NGAP_ID;
+		ran_ue_ngap_id  = ie_RAN_UE_NGAP_ID->value.choice.RAN_UE_NGAP_ID;
 	    OAILOG_INFO(LOG_NGAP,"ng initial ue message,ran_ue_ngap_id:%u\n", ran_ue_ngap_id);
 		
     }
 	
 	//NAS_PDU
-	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_NAS_PDU, false);
-    if (ie) 
-	{  
-		nas_msg =  blk2bstr(ie->value.choice.NAS_PDU.buf, ie->value.choice.NAS_PDU.size);              
-	    OAILOG_INFO(LOG_NGAP, "ng initial ue message,nas_pdu_size:%u\n", ie->value.choice.NAS_PDU.size);
-    }
-	
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_NAS_PDU, container, Ngap_ProtocolIE_ID_id_NAS_PDU, false);
+   
 	//UserLocationInformation
-	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_UserLocationInformation, false);
-    if (ie) 
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_UserLocationInformation, container, Ngap_ProtocolIE_ID_id_UserLocationInformation, false);
+    if (ie_UserLocationInformation) 
 	{               
-	    OAILOG_INFO(LOG_NGAP, "ng initial ue message,UserLocationInformation----------------\n");
-
-		//userLocationInformationEUTRA
-		//Ngap_UserLocationInformation_PR_userLocationInformationEUTRA
-		switch(ie->value.choice.UserLocationInformation.present)
+		switch(ie_UserLocationInformation->value.choice.UserLocationInformation.present)
 		{
             case Ngap_UserLocationInformation_PR_userLocationInformationEUTRA:
-			{
-				pUserLocationInformationEUTRA = ie->value.choice.UserLocationInformation.choice.userLocationInformationEUTRA;
-				if(pUserLocationInformationEUTRA)
-				{
-				   
-					//nR_CGI
-					
-					//pLMNIdentity
-					const Ngap_PLMNIdentity_t * const plmn = &pUserLocationInformationEUTRA->eUTRA_CGI.pLMNIdentity;
-					DevAssert (plmn != NULL);
-					TBCD_TO_MCC_MNC (plmn, nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len);
-								  
-					//nRCellIdentity:28B
-					eUTRA_CGI_nRCellIdentity  = (uint32_t)((*(uint32_t *)pUserLocationInformationEUTRA->eUTRA_CGI.eUTRACellIdentity.buf) & 0xFFFFFFF);
-					
-					//tAI;
-					
-					//Ngap_PLMNIdentity_t pLMNIdentity;
-					const Ngap_PLMNIdentity_t * const tai_plmn = &pUserLocationInformationEUTRA->tAI.pLMNIdentity;
-					DevAssert (tai_plmn != NULL);
-					TBCD_TO_MCC_MNC (tai_plmn, tai_mcc, tai_mnc, tai_mnc_len);
-					
-					//Ngap_TAC_t	 tAC;		 
-					const Ngap_TAC_t * const tAC = &pUserLocationInformationEUTRA->tAI.tAC;
-					DevAssert (tAC != NULL);
-					asn1str_to_u24(tAC, &tai_tac);
-														
-					//timeStamp;
-					timeStamp = (uint32_t)((*(uint32_t *)pUserLocationInformationEUTRA->timeStamp->buf));
-
-					OAILOG_DEBUG(LOG_NGAP,"pUserLocationInformationEUTRA->eUTRA_CGI.pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x,tai_mcc:%u,tai_mnc:%u,tai_mnc_len:%u,tai_tac:%u,timeStamp:%u\n",  
-					nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, tai_mcc, tai_mnc,tai_mnc_len, tai_tac, timeStamp);
-                   
-				}
-			}
 			break;
 			case Ngap_UserLocationInformation_PR_userLocationInformationNR:
 			{
-				pUserLocationInformationNR = ie->value.choice.UserLocationInformation.choice.userLocationInformationNR;
-				if(pUserLocationInformationNR)
-				{
-				    //nR_CGI
-
-					//pLMNIdentity
-                    const Ngap_PLMNIdentity_t * const plmn = &pUserLocationInformationNR->nR_CGI.pLMNIdentity;
-                    DevAssert (plmn != NULL);
-                    TBCD_TO_MCC_MNC (plmn, nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len);
-			   
-                    //nRCellIdentity, 36B
-					nR_CGI_nRCellIdentity  = (uint64_t)((*(uint64_t *)pUserLocationInformationNR->nR_CGI.nRCellIdentity.buf) & 0xFFFFFFFFF);
-
-	                //tAI;
-                    //Ngap_PLMNIdentity_t	 pLMNIdentity;
-                    const Ngap_PLMNIdentity_t * const tai_plmn = &pUserLocationInformationNR->tAI.pLMNIdentity;
-                    DevAssert (tai_plmn != NULL);
-                    TBCD_TO_MCC_MNC (tai_plmn, tai_mcc, tai_mnc, tai_mnc_len);
-
-	                //Ngap_TAC_t	 tAC;
-                     
-                    const Ngap_TAC_t * const tAC = &pUserLocationInformationNR->tAI.tAC;
-                    DevAssert (tAC != NULL);
-                    asn1str_to_u24(tAC, &tai_tac);
-					
-	                //timeStamp;
-                    timeStamp = (uint32_t)((*(uint32_t *)pUserLocationInformationNR->timeStamp->buf));
-
-					OAILOG_DEBUG(LOG_NGAP,"pUserLocationInformationNR->nR_CGI.pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x,tai_mcc:%u,tai_mnc:%u,tai_mnc_len:%u,tai_tac:%u,timeStamp:%u\n",  
-					nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, tai_mcc, tai_mnc,tai_mnc_len, tai_tac, timeStamp);
-                
-				}
+				pUserLocationInformationNR = ie_UserLocationInformation->value.choice.UserLocationInformation.choice.userLocationInformationNR;
 			}
 			break;
 			case Ngap_UserLocationInformation_PR_userLocationInformationN3IWF:
-			{
-			    //pUserLocationInformationN3IWF = ie->value.choice.UserLocationInformation.choice.userLocationInformationN3IWF;
-			}
 			break;
 			default:
 				OAILOG_WARNING(LOG_NGAP, "ng initial ue message,UserLocationInformation, don't known :%u\n",
-				ie->value.choice.UserLocationInformation.present);
+				ie_UserLocationInformation->value.choice.UserLocationInformation.present);
 			break; 
 		}
-		
     }
 	
     //RRCEstablishmentCause
-    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_RRCEstablishmentCause, false);
-    if (ie) 
-	{
-		RRCEstablishmentCause = ie->value.choice.RRCEstablishmentCause;
-		OAILOG_INFO(LOG_NGAP, "ng initial ue message, RRCEstablishmentCause:0x%x\n", RRCEstablishmentCause);
-    }
-	
+    NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_RRCEstablishmentCause, container, Ngap_ProtocolIE_ID_id_RRCEstablishmentCause, false);
+
 	//FiveG_S_TMSI
-	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_FiveG_S_TMSI, false);
-    if (ie) 
-	{
-		aMFSetID   = (uint16_t)((*(uint16_t *)ie->value.choice.FiveG_S_TMSI.aMFSetID.buf)  & 0x3FF);  //10 BITS
-		aMFPointer =  (uint8_t) ((*(uint8_t *)ie->value.choice.FiveG_S_TMSI.aMFPointer.buf) & 0x3F);  //6  BITS
-      
-		fiveG_TMSI       = (char *)ie->value.choice.FiveG_S_TMSI.fiveG_TMSI.buf;
-	    fiveG_TMSI_size  = (uint32_t)ie->value.choice.FiveG_S_TMSI.fiveG_TMSI.size;
-		
-		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI, aMFSetID:%u,aMFPointer:%u, size:%u, buf:%s\n", 
-		aMFSetID, aMFPointer, fiveG_TMSI_size, fiveG_TMSI);
-    }
-	
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_FiveG_S_TMSI, container, Ngap_ProtocolIE_ID_id_FiveG_S_TMSI, false);
+
 	//AMFSetID
-	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_AMFSetID, false);
-    if (ie) 
-	{
-		//RRCEstablishmentCause = ie->value.choice.RRCEstablishmentCause;
-		_AMFSetID   = (uint16_t)((*(uint16_t *)ie->value.choice.AMFSetID.buf)  & 0x3FF);  //10 BITS
-		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID:%u\n",_AMFSetID);
-    }
-	
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_AMFSetID, container, Ngap_ProtocolIE_ID_id_AMFSetID, false);
+   
 	//UEContextRequest
-	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_UEContextRequest, false);
-    if (ie) 
-	{
-	    UEContextRequest  =  ie->value.choice.UEContextRequest;
-	    OAILOG_INFO(LOG_NGAP, "ng initial ue message, UEContextRequest:0x%x\n", UEContextRequest);
-
-		exist_UEContextRequest = 1;
-    }
-
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_UEContextRequest, container, Ngap_ProtocolIE_ID_id_UEContextRequest, false);
+   
 	//AllowedNSSAI
-	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie, container, Ngap_ProtocolIE_ID_id_AllowedNSSAI, false);
-	if (ie) 
-	{
-		pAllowedNSSAI  =  &ie->value.choice.AllowedNSSAI;
-		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AllowedNSSAI\n");
-	}
+	NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_AllowedNSSAI, container, Ngap_ProtocolIE_ID_id_AllowedNSSAI, false);
 	
   
 	
@@ -1100,23 +960,6 @@ ngap_amf_handle_ng_initial_ue_message(
 	ue_ref = ngap_is_ue_gnb_id_in_list(gnb_ref,ran_ue_ngap_id);
     if(ue_ref == NULL)
     {
-        #if 0
-        Ngap_InitialUEMessage_IEs_t  initialUe = {
-
-          .value.choice = { .AMFSetID = 0 }
-		};
-		#endif
-        
-	  
-	    //NR	 nR_CGI;tAI;
-        
-        Ngap_TAI_t	     nR_tAI = {.pLMNIdentity = {0}, .tAC = INVALID_TAC_0000};
-		Ngap_NR_CGI_t	 nR_CGI = {.pLMNIdentity = {0}, .nRCellIdentity = {0}};
-	                                         
-		Ngap_FiveG_S_TMSI_t	 fiveG_s_tmsi = {.aMFSetID = 0, .aMFPointer= 0, .fiveG_TMSI = {0}};
-        Ngap_AMFSetID_t	     AMFSetID =  {.buf = 0, .size = 0, .bits_unused = 0};
-		Ngap_AllowedNSSAI_t	 *pAllowedNSSAI_Value = NULL;
-
 	    //@3
         if ((ue_ref = ngap_new_ue (assoc_id, ran_ue_ngap_id)) == NULL) 
 		{
@@ -1137,58 +980,120 @@ ngap_amf_handle_ng_initial_ue_message(
 		{
             ue_ref->gnb->next_sctp_stream = 1;
         }
-        
-		//NR, TAI mandatory IE
+
+
+         //NR	 nR_CGI;tAI;
+	    nr_tai_t         nr_tai = {.plmn = {0}, .tac = INVALID_TAC};
+	    nr_cgi_t         nr_cgi = {.plmn = {0}, .cell_identity = {0}};
+		fiveG_s_tmsi_t   nr_fiveG_s_tmsi = {.amf_set_id = 0, .amf_pointer = 0, .fiveG_s_tmsi = 0};
+	    amf_set_id_t     nr_amf_set_id  = {.amf_set_id = 0};
+		allowed_nssai_t  nr_allowed_nssai = {.s_nssai = NULL, .count = 0};
+
+
+        DevAssert(pUserLocationInformationNR != NULL);
+		const Ngap_TAI_t	  * const  tAI = &pUserLocationInformationNR->tAI;
+				  
 		//TAC
-		const char *ptr = (void *)&tai_tac;
-	    //24B
-		OCTET_STRING_fromBuf(&nR_tAI.tAC, ptr + 1 , 3);
-	    DevAssert (nR_tAI.tAC.size == 3);
-
-		tai_t nr_tai = {.plmn = {0},.tac = INVALID_TAC_0000};
-		
-		
-	    //pLMNIdentity
-		MCC_MNC_TO_PLMNID(tai_mcc, tai_mnc, tai_mnc_len, &(nR_tAI.pLMNIdentity));
-		
-		//NR,cgi
+		DevAssert(tAI != NULL);
+		DevAssert(tAI->tAC.size != 3);
+		nr_tai.tac = asn1str_to_u24(&tAI->tAC);
+				  
 		//pLMNIdentity
-		MCC_MNC_TO_PLMNID(nR_CGI_mcc, nR_CGI_mnc, nR_CGI_mnc_len, &(nR_CGI.pLMNIdentity));
+		DevAssert (tAI->pLMNIdentity.size != 3);
+		TBCD_TO_PLMN_T(&tAI->pLMNIdentity, &nr_tai.plmn);
+						
+		//CGI mandator
+		const Ngap_NR_CGI_t * const nR_CGI = &pUserLocationInformationNR->nR_CGI;
+						 
+		//pLMNIdentity
+		DevAssert(nR_CGI != NULL);
+		DevAssert(nR_CGI->pLMNIdentity.size != 3);
+		TBCD_TO_PLMN_T(&nR_CGI->pLMNIdentity, &nr_cgi.plmn);
+						 
+		//nRCellIdentity
+		DevAssert(nR_CGI->nRCellIdentity.size != 36);
+		BIT_STRING_TO_CELL_IDENTITY (&nR_CGI->nRCellIdentity, nr_cgi.cell_identity);
 
-		//nRCellIdentity 36B
-		BIT_STRING_fromBuf(&(nR_CGI.nRCellIdentity), &nR_CGI_nRCellIdentity, 36);
-
-	    //aMFSetID: 10
-	    BIT_STRING_fromBuf(&fiveG_s_tmsi.aMFSetID, &aMFSetID, 10);
 		
-	    //aMFPointer: 6
-	    BIT_STRING_fromBuf(&fiveG_s_tmsi.aMFPointer, &aMFPointer, 6);
+        //fiveG_s_tmsi_t
+		Ngap_FiveG_S_TMSI_t	*pFiveG_S_TMSI = &ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI;
+		DevAssert(pFiveG_S_TMSI != NULL);
+		   
+		//aMFSetID  10B
+		DevAssert(pFiveG_S_TMSI->aMFSetID.size != 10);
+		nr_fiveG_s_tmsi.amf_set_id  = (uint16_t)((*(uint16_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFSetID.buf)	& 0x3FF);  //10 BITS
+		   
+		//aMFPointer 6B;
+		DevAssert(pFiveG_S_TMSI->aMFPointer.size != 6);
+		nr_fiveG_s_tmsi.amf_pointer =  (uint8_t) ((*(uint8_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFPointer.buf) & 0x3F);  //6	BITS
+		   
+		//fiveG_TMSI 32B;
+		OCTET_STRING_TO_INT32(&pFiveG_S_TMSI->fiveG_TMSI, nr_fiveG_s_tmsi.fiveG_s_tmsi);
+	
 		
-	    //fiveG_TMSI: 4
-		OCTET_STRING_fromBuf (&fiveG_s_tmsi.fiveG_TMSI, fiveG_TMSI, 4);
-		
-		//AMFSetID: 10
-	    BIT_STRING_fromBuf(&AMFSetID, &_AMFSetID, 10);
-
-        //AllowedNSSAI
-		pAllowedNSSAI_Value  = pAllowedNSSAI;
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI, aMFSetID:%u,aMFPointer:%u, fiveG_s_tmsi:%\n", 
+		nr_fiveG_s_tmsi.amf_set_id, nr_fiveG_s_tmsi.amf_pointer,  nr_fiveG_s_tmsi.fiveG_s_tmsi);
 
 
-		// test
-        //OAILOG_FUNC_RETURN (LOG_NGAP,RETURNok);
-		
-		ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10, 100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
-		//ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10,100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
+        //nr_amf_set_id 10B
+        nr_amf_set_id.amf_set_id = (uint16_t)((*(uint16_t *)ie_AMFSetID->value.choice.AMFSetID.buf)  & 0x3FF); 
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID:%u\n",nr_amf_set_id.amf_set_id);
+
+
+        //nr_allowed_nssai
+        if(ie_AllowedNSSAI && ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count != 0)
+        {
+            nr_allowed_nssai.count = ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count;
+            nr_allowed_nssai.s_nssai = calloc(nr_allowed_nssai.count, sizeof(allowed_nssai));
+
+			//init  nr_allowed_nssai.s_nssai  ?
+			int i = 0;
+			for(; i < nr_allowed_nssai.count; i++)
+			{
+                memset(&nr_allowed_nssai.s_nssai[i], 0, sizeof(allowed_nssai));
+			}
+			
+	        for (i = 0; i < ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count; i++)
+		    {
+		        Ngap_AllowedNSSAI_Item_t *pNgap_AllowedNSSAI_p = NULL;
+		        pNgap_AllowedNSSAI_p = ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.array[i];
+				
+				if(pNgap_AllowedNSSAI_p)
+				{
+				    OCTET_STRING_TO_INT8(&pNgap_AllowedNSSAI_p->s_NSSAI.sST, nr_allowed_nssai.s_nssai[i].sST);
+					if(pNgap_AllowedNSSAI_p->s_NSSAI.sD)
+					{
+                    	nr_allowed_nssai.s_nssai[i].sD = asn1str_to_u24(pNgap_AllowedNSSAI_p->s_NSSAI.sD);  
+					}
+				}
+	        }
+		}
+
+	    
+		//ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10, 100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
+		ngap_amf_itti_amf_app_initial_ue_message(
+		assoc_id,
+		ue_ref->gnb->gnb_id,
+		ue_ref->ran_ue_ngap_id,
+		ue_ref->amf_ue_ngap_id,
+		ie_NAS_PDU->value.choice.NAS_PDU.buf,
+	    ie_NAS_PDU->value.choice.NAS_PDU.size,
+		&nr_tai,
+		&nr_cgi,
+		ie_UEContextRequest->value.choice.UEContextRequest,
+		ie_FiveG_S_TMSI ?(&nr_fiveG_s_tmsi):NULL,
+		ie_AMFSetID ? (&nr_amf_set_id):NULL,
+		ie_AllowedNSSAI ? (&nr_allowed_nssai):NULL);
 
 		//@5
 		#if 0
-	    if(exist_UEContextRequest)
+	    if(ie_UEContextRequest  && ie_UEContextRequest->value.choice.present == Ngap_ProtocolIE_ID_id_UEContextRequest)
 	    {
 	        amf_ngap_handle_initial_context_setup();
 	    }
 		else
 		{
-	       
+	    	OAILOG_FUNC_RETURN (LOG_NGAP, RETURNok); 
 		}
 		#endif
 	
