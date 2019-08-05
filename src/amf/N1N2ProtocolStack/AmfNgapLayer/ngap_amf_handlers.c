@@ -844,12 +844,8 @@ ngap_amf_handle_ng_initial_ue_message(
     OAILOG_FUNC_IN (LOG_NGAP);
 	
     int      rc                                              = RETURNok;
-    uint32_t max_gnb_connected                               = 0;
     ran_ue_ngap_id_t ran_ue_ngap_id                          = 0;  //gnb_ue_ngap_id = 0;
-    gnb_description_t  * gnb_ref                             = NULL;
-    uint32_t  gnb_id                                         = 0;
-    char *gnb_name                                           = NULL;
-    int gnb_name_size                                        = 0;
+    gnb_description_t  *gnb_ref                              = NULL;
     ue_description_t  *ue_ref                                = NULL;
 	Ngap_UserLocationInformationNR_t *pUserLocationInfoNR    = NULL;
 	
@@ -1031,7 +1027,7 @@ ngap_amf_handle_ng_initial_ue_message(
         //nr_allowed_nssai
         if(ie_AllowedNSSAI && ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count != 0)
         {
-            nr_allowed_nssai.count = ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count;
+            nr_allowed_nssai.count   = ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count;
             nr_allowed_nssai.s_nssai = calloc(nr_allowed_nssai.count, sizeof(allowed_nssai));
 
 			//init  nr_allowed_nssai.s_nssai  ?
