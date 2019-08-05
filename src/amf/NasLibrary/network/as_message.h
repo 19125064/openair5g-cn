@@ -25,7 +25,7 @@ Description Contains network's global definitions
  * --------------------------------------------------------------------------
  */
 
-/* Cause of RRC connection establishment */
+/* Cause of RRC connection establishment, origin from typedef enum Ngap_RRCEstablishmentCause*/
 typedef enum as_cause_s {
 	AS_CAUSE_EMERGENCY              = NGAP_RRC_ESTABLISHMENT_CAUSE_EMERGENCY, 
 	AS_CAUSE_HIGH_PRIORITY_ACCESS   = NGAP_RRC_ESTABLISHMENT_CAUSE_HIGH_PRIORITY_ACCESS, 
