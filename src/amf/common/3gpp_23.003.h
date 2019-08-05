@@ -20,7 +20,6 @@ typedef struct plmn_s {
                                                                         (this is because the TMSI must be stored in the SIM, and the SIM uses 4 octets with all bits
                                                                         equal to 1 to indicate that no valid TMSI is available).  */
 typedef uint16_t    tac_t;
-
 typedef struct tai_s {
   plmn_t plmn;                                             /*!< \brief  <MCC> + <MNC>        */
   tac_t  tac;                                              /*!< \brief  Tracking Area Code   */

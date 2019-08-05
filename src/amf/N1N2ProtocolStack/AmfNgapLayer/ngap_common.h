@@ -243,8 +243,9 @@
 #include "Ngap_TAC.h"
 #include "Ngap_ServedGUAMIItem.h"
 #include "Ngap_GNB-ID.h"
-
 #include "Ngap_NGAP-PDU.h"
+#include "as_message.h"
+
 #include "log.h"
 
 #define NGAP_FIND_PROTOCOLIE_BY_ID(IE_TYPE, ie, container, IE_ID, mandatory) \

@@ -9,5 +9,5 @@ typedef struct itti_ngap_dl_nas_data_req_s {
 typedef struct itti_ngap_initial_ue_message_s {
   amf_ue_ngap_id_t     amf_ue_ngap_id;
   ran_ue_ngap_id_t     ran_ue_ngap_id:24;
-  //ecgi_t                e_utran_cgi;
+  nr_cgi_t             nr_cgi;
 } itti_ngap_initial_ue_message_t;
