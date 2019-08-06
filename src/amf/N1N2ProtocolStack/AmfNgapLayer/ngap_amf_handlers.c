@@ -977,11 +977,11 @@ ngap_amf_handle_ng_initial_ue_message(
 				  
 		//TAC
 		DevAssert(tAI != NULL);
-		DevAssert(tAI->tAC.size != 3);
+		DevAssert(tAI->tAC.size == 3);
 		nr_tai.tac = asn1str_to_u24(&tAI->tAC);
 				  
 		//pLMNIdentity
-		DevAssert (tAI->pLMNIdentity.size != 3);
+		DevAssert (tAI->pLMNIdentity.size == 3);
 		TBCD_TO_PLMN_T(&tAI->pLMNIdentity, &nr_tai.plmn);
 						
 		//CGI mandator
@@ -989,11 +989,11 @@ ngap_amf_handle_ng_initial_ue_message(
 						 
 		//pLMNIdentity
 		DevAssert(nR_CGI != NULL);
-		DevAssert(nR_CGI->pLMNIdentity.size != 3);
+		DevAssert(nR_CGI->pLMNIdentity.size == 3);
 		TBCD_TO_PLMN_T(&nR_CGI->pLMNIdentity, &nr_cgi.plmn);
 						 
 		//nRCellIdentity
-		DevAssert(nR_CGI->nRCellIdentity.size != 36);
+		DevAssert(nR_CGI->nRCellIdentity.size == 36);
 		BIT_STRING_TO_CELL_IDENTITY (&nR_CGI->nRCellIdentity, nr_cgi.cell_identity);
 
 		
@@ -1002,11 +1002,11 @@ ngap_amf_handle_ng_initial_ue_message(
 		DevAssert(pFiveG_S_TMSI != NULL);
 		   
 		//aMFSetID  10B
-		DevAssert(pFiveG_S_TMSI->aMFSetID.size != 10);
+		DevAssert(pFiveG_S_TMSI->aMFSetID.size == 10);
 		fiveG_s_tmsi.amf_set_id  = (uint16_t)((*(uint16_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFSetID.buf)	& 0x3FF);  //10 BITS
 		   
 		//aMFPointer 6B;
-		DevAssert(pFiveG_S_TMSI->aMFPointer.size != 6);
+		DevAssert(pFiveG_S_TMSI->aMFPointer.size == 6);
 		fiveG_s_tmsi.amf_pointer =  (uint8_t) ((*(uint8_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFPointer.buf) & 0x3F);  //6	BITS
 		   
 		//fiveG_TMSI 32B;
