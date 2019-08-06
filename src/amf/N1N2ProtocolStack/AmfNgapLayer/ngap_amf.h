@@ -31,7 +31,7 @@ enum ng_ue_state_s{
 typedef struct ue_description_s{
   struct gnb_description_s * gnb;
   enum ng_ue_state_s         ng_ue_state;
-  ran_ue_ngap_id_t           ran_ue_ngap_id:24;
+  ran_ue_ngap_id_t           ran_ue_ngap_id;
   //gnb_ue_ngap_id_t           gnb_ue_ngap_id:24;
   amf_ue_ngap_id_t           amf_ue_ngap_id;
   sctp_stream_id_t           sctp_stream_recv;

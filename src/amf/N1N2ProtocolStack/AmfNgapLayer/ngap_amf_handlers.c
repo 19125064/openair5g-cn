@@ -964,14 +964,12 @@ ngap_amf_handle_ng_initial_ue_message(
 		//AllowedNSSAI
 		NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_AllowedNSSAI, container, Ngap_ProtocolIE_ID_id_AllowedNSSAI, false);
 		
-
-
          //NR	 nR_CGI;tAI;
 	    nr_tai_t         nr_tai = {.plmn = {0}, .tac = INVALID_TAC};
 	    nr_cgi_t         nr_cgi = {.plmn = {0}, .cell_identity = {0}};
-		fiveG_s_tmsi_t   nr_fiveG_s_tmsi = {.amf_set_id = 0, .amf_pointer = 0, .fiveG_s_tmsi = 0};
-	    amf_set_id_t     nr_amf_set_id  = {.amf_set_id = 0};
-		allowed_nssai_t  nr_allowed_nssai = {.s_nssai = NULL, .count = 0};
+		fiveG_s_tmsi_t   fiveG_s_tmsi = {.amf_set_id = 0, .amf_pointer = 0, .fiveG_s_tmsi = 0};
+	    amf_set_id_t     amf_set_id  = {.amf_set_id = 0};
+		allowed_nssai_t  allowed_nssai = {.s_nssai = NULL, .count = 0};
 
 
         DevAssert(pUserLocationInfoNR != NULL);
@@ -1005,36 +1003,36 @@ ngap_amf_handle_ng_initial_ue_message(
 		   
 		//aMFSetID  10B
 		DevAssert(pFiveG_S_TMSI->aMFSetID.size != 10);
-		nr_fiveG_s_tmsi.amf_set_id  = (uint16_t)((*(uint16_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFSetID.buf)	& 0x3FF);  //10 BITS
+		fiveG_s_tmsi.amf_set_id  = (uint16_t)((*(uint16_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFSetID.buf)	& 0x3FF);  //10 BITS
 		   
 		//aMFPointer 6B;
 		DevAssert(pFiveG_S_TMSI->aMFPointer.size != 6);
-		nr_fiveG_s_tmsi.amf_pointer =  (uint8_t) ((*(uint8_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFPointer.buf) & 0x3F);  //6	BITS
+		fiveG_s_tmsi.amf_pointer =  (uint8_t) ((*(uint8_t *)ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI.aMFPointer.buf) & 0x3F);  //6	BITS
 		   
 		//fiveG_TMSI 32B;
-		OCTET_STRING_TO_INT32(&pFiveG_S_TMSI->fiveG_TMSI, nr_fiveG_s_tmsi.fiveG_s_tmsi);
+		OCTET_STRING_TO_INT32(&pFiveG_S_TMSI->fiveG_TMSI, fiveG_s_tmsi.fiveG_s_tmsi);
 	
 		
 		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI, aMFSetID:%u,aMFPointer:%u, fiveG_s_tmsi:%\n", 
-		nr_fiveG_s_tmsi.amf_set_id, nr_fiveG_s_tmsi.amf_pointer,  nr_fiveG_s_tmsi.fiveG_s_tmsi);
+		fiveG_s_tmsi.amf_set_id, fiveG_s_tmsi.amf_pointer,  fiveG_s_tmsi.fiveG_s_tmsi);
 
 
         //nr_amf_set_id 10B
-        nr_amf_set_id.amf_set_id = (uint16_t)((*(uint16_t *)ie_AMFSetID->value.choice.AMFSetID.buf)  & 0x3FF); 
-		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID:%u\n",nr_amf_set_id.amf_set_id);
+        amf_set_id.amf_set_id = (uint16_t)((*(uint16_t *)ie_AMFSetID->value.choice.AMFSetID.buf)  & 0x3FF); 
+		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID:%u\n",amf_set_id.amf_set_id);
 
 
         //nr_allowed_nssai
         if(ie_AllowedNSSAI && ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count != 0)
         {
-            nr_allowed_nssai.count   = ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count;
-            nr_allowed_nssai.s_nssai = calloc(nr_allowed_nssai.count, sizeof(allowed_nssai));
+            allowed_nssai.count   = ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count;
+            allowed_nssai.s_nssai = calloc(allowed_nssai.count, sizeof(allowed_nssai));
 
 			//init  nr_allowed_nssai.s_nssai  ?
 			int i = 0;
-			for(; i < nr_allowed_nssai.count; i++)
+			for(; i < allowed_nssai.count; i++)
 			{
-                memset(&nr_allowed_nssai.s_nssai[i], 0, sizeof(allowed_nssai));
+                memset(&allowed_nssai.s_nssai[i], 0, sizeof(allowed_nssai));
 			}
 			
 	        for (i = 0; i < ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count; i++)
@@ -1044,10 +1042,10 @@ ngap_amf_handle_ng_initial_ue_message(
 				
 				if(pNgap_AllowedNSSAI_p)
 				{
-				    OCTET_STRING_TO_INT8(&pNgap_AllowedNSSAI_p->s_NSSAI.sST, nr_allowed_nssai.s_nssai[i].sST);
+				    OCTET_STRING_TO_INT8(&pNgap_AllowedNSSAI_p->s_NSSAI.sST, allowed_nssai.s_nssai[i].sST);
 					if(pNgap_AllowedNSSAI_p->s_NSSAI.sD)
 					{
-                    	nr_allowed_nssai.s_nssai[i].sD = asn1str_to_u24(pNgap_AllowedNSSAI_p->s_NSSAI.sD);  
+                    	allowed_nssai.s_nssai[i].sD = asn1str_to_u24(pNgap_AllowedNSSAI_p->s_NSSAI.sD);  
 					}
 				}
 	        }
@@ -1065,9 +1063,9 @@ ngap_amf_handle_ng_initial_ue_message(
 		&nr_tai,
 		&nr_cgi,
 		ie_UEContextRequest->value.choice.RRCEstablishmentCause,
-		ie_FiveG_S_TMSI ?(&nr_fiveG_s_tmsi):NULL,
-		ie_AMFSetID ? (&nr_amf_set_id):NULL,
-		ie_AllowedNSSAI ? (&nr_allowed_nssai):NULL);
+		ie_FiveG_S_TMSI ?(&fiveG_s_tmsi):NULL,
+		ie_AMFSetID ? (&amf_set_id):NULL,
+		ie_AllowedNSSAI ? (&allowed_nssai):NULL);
 
 		//@5
 		#if 0

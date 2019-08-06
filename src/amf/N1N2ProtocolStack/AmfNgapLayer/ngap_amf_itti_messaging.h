@@ -29,8 +29,8 @@ static inline void ngap_amf_itti_amf_app_initial_ue_message(
   const amf_ue_ngap_id_t     amf_ue_ngap_id,
   const uint8_t * const      nas_msg,
   const size_t               nas_msg_length,
-  const nr_tai_t             const*  tai,
-  const nr_cgi_t             const*  cgi,
+  const nr_tai_t             const*  nr_tai,
+  const nr_cgi_t             const*  nr_cgi,
   const long                 rrc_cause,
   const fiveG_s_tmsi_t       const*  fiveG_s_tmsi,
   const amf_set_id_t         const*  amfSetID,
@@ -46,12 +46,12 @@ static inline void ngap_amf_itti_amf_app_initial_ue_message(
   AMF_APP_INITIAL_UE_MESSAGE(message_p).ran_ue_ngap_id               = ran_ue_ngap_id;
   AMF_APP_INITIAL_UE_MESSAGE(message_p).amf_ue_ngap_id               = amf_ue_ngap_id;
   AMF_APP_INITIAL_UE_MESSAGE(message_p).nas                          = blk2bstr(nas_msg,nas_msg_length);
-  AMF_APP_INITIAL_UE_MESSAGE(message_p).tai                          = *tai;
-  AMF_APP_INITIAL_UE_MESSAGE(message_p).cgi                          = *cgi;
+  AMF_APP_INITIAL_UE_MESSAGE(message_p).tai                          = *nr_tai;
+  AMF_APP_INITIAL_UE_MESSAGE(message_p).cgi                          = *nr_cgi;
   AMF_APP_INITIAL_UE_MESSAGE(message_p).as_cause                     = rrc_cause; 
   AMF_APP_INITIAL_UE_MESSAGE(message_p).transparent.ran_ue_ngap_id   = ran_ue_ngap_id;
   AMF_APP_INITIAL_UE_MESSAGE(message_p).transparent.amf_ue_ngap_id   = amf_ue_ngap_id;
-  AMF_APP_INITIAL_UE_MESSAGE(message_p).transparent.nr_cgi           = *cgi;
+  AMF_APP_INITIAL_UE_MESSAGE(message_p).transparent.nr_cgi           = *nr_cgi;
   
   if(!fiveG_s_tmsi)
   {
