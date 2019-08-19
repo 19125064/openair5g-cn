@@ -40,11 +40,11 @@ static void *nas_intertask_interface (void *args_p)
           int                                     rc = RETURNerror;
 
         fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-        security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
+        security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA0;
         security->dl_count.overflow = 0xffff;
         security->dl_count.seq_num =  0x23;
         security->knas_enc[0] = 0x14;
-        security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
+        security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA0;
         security->knas_int[0] = 0x41;
 
           //mm_ctx = mm_data_context_get (&_mm_data, NGAP_UL_DATA_IND(received_message_p).ue_id);

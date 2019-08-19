@@ -651,7 +651,7 @@ ngap_amf_handle_ng_setup_request(
 	#endif
     //@3
 	max_gnb_connected = amf_config.max_gnbs;
-	if(nb_gnb_associated >= max_gnb_connected)
+	if(nb_gnb_associated > max_gnb_connected)
 	{
          OAILOG_ERROR (LOG_NGAP, "There is too much gNB connected to AMF, rejecting the association\n");
          OAILOG_DEBUG (LOG_NGAP, "Connected = %d, maximum allowed = %d\n", nb_gnb_associated, max_gnb_connected);
@@ -874,41 +874,54 @@ ngap_amf_handle_ng_initial_ue_message(
     if ((gnb_ref = ngap_is_gnb_assoc_id_in_list (assoc_id)) == NULL)
 	{
     	OAILOG_ERROR (LOG_NGAP, "Unknown gNB on assoc_id %d\n", assoc_id);
+        printf("Unknown gNB on assoc_id(%d)\n",assoc_id);
 
 		//@7
     	OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
+    }else{
+        OAILOG_DEBUG(LOG_NGAP, "Get gNB context with assoc_id(%d)\n", assoc_id);
+        printf("Get gNB context with assoc_id()%d\n",assoc_id);  
     }  
 
 /**************************************************************************************/
 
 /********************** prase available parameters ************************************/
     //RAN_UE_NGAP_ID
+    printf("test1\n");
     NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_RAN_UE_NGAP_ID, container, Ngap_ProtocolIE_ID_id_RAN_UE_NGAP_ID, false);
+    printf("test2\n");
     if (ie_RAN_UE_NGAP_ID) 
 	{  
 		ran_ue_ngap_id  = ie_RAN_UE_NGAP_ID->value.choice.RAN_UE_NGAP_ID;
 	    OAILOG_INFO(LOG_NGAP,"ng initial ue message,ran_ue_ngap_id:%u\n", ran_ue_ngap_id);
-		
+            printf("ng initial ue message, ran_ue_ngap_id:%u\n",ran_ue_ngap_id); 
+	    	
+    }else{
+        OAILOG_DEBUG(LOG_NGAP, "NO RAN_UE_NGAP_ID in INITIAL UE MESSAGE\n");
+        printf("NO RAN_UE_NGAP_ID in INITIAL UE MESSAGE\n");
     }
 /******************************************************************/
 /*******************  context handle ******************************/
     #if 0
        ran_ue_ngap_id  = 0x90;
     #endif
-
+    printf("test3\n");
     OAILOG_INFO (LOG_NGAP, "Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID " RAN_UE_NGAP_ID_FMT "\n", ran_ue_ngap_id);
 
 	//@2
 	ue_ref = ngap_is_ue_gnb_id_in_list(gnb_ref,ran_ue_ngap_id);
+    printf("test4\n");
     if(ue_ref == NULL)
     {
+        printf("test5\n");
 	    //@3
         if ((ue_ref = ngap_new_ue (assoc_id, ran_ue_ngap_id)) == NULL) 
 		{
+            printf("test6\n");
             OAILOG_ERROR (LOG_NGAP, "NGAP:Initial UE Message- Failed to allocate NGAP UE Context, gNBUeNGAPId:" GNB_UE_NGAP_ID_FMT "\n", ran_ue_ngap_id);
             OAILOG_FUNC_RETURN (LOG_NGAP, RETURNerror);
         }
-        
+        printf("test7\n"); 
 		ue_ref->ng_ue_state = NGAP_UE_WAITING_CRR;
         ue_ref->ran_ue_ngap_id = ran_ue_ngap_id;
         ue_ref->amf_ue_ngap_id = INVALID_AMF_UE_NGAP_ID;
@@ -923,7 +936,7 @@ ngap_amf_handle_ng_initial_ue_message(
             ue_ref->gnb->next_sctp_stream = 1;
         }
 
-
+        printf("test8\n");
 	    //NAS_PDU
 		NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_NAS_PDU, container, Ngap_ProtocolIE_ID_id_NAS_PDU, false);
 	   
@@ -963,7 +976,7 @@ ngap_amf_handle_ng_initial_ue_message(
 	   
 		//AllowedNSSAI
 		NGAP_FIND_PROTOCOLIE_BY_ID(Ngap_InitialUEMessage_IEs_t, ie_AllowedNSSAI, container, Ngap_ProtocolIE_ID_id_AllowedNSSAI, false);
-		
+	 printf("test9\n");	
          //NR	 nR_CGI;tAI;
 	    nr_tai_t         nr_tai = {.plmn = {0}, .tac = INVALID_TAC};
 	    nr_cgi_t         nr_cgi = {.plmn = {0}, .cell_identity = {0}};
@@ -976,14 +989,17 @@ ngap_amf_handle_ng_initial_ue_message(
 		const Ngap_TAI_t	  * const  tAI = &pUserLocationInfoNR->tAI;
 				  
 		//TAC
+                printf("test10\n");
 		DevAssert(tAI != NULL);
+                printf("test11\n");
 		DevAssert(tAI->tAC.size == 3);
+                printf("test12\n");
 		nr_tai.tac = asn1str_to_u24(&tAI->tAC);
 				  
 		//pLMNIdentity
 		DevAssert (tAI->pLMNIdentity.size == 3);
 		TBCD_TO_PLMN_T(&tAI->pLMNIdentity, &nr_tai.plmn);
-						
+	        printf("test13\n");					
 		//CGI mandator
 		const Ngap_NR_CGI_t * const nR_CGI = &pUserLocationInfoNR->nR_CGI;
 						 
@@ -996,10 +1012,11 @@ ngap_amf_handle_ng_initial_ue_message(
 		//DevAssert(nR_CGI->nRCellIdentity.size == 36);
 		BIT_STRING_TO_CELL_IDENTITY (&nR_CGI->nRCellIdentity, nr_cgi.cell_identity);
 
-		
+		printf("test14\n");
         //fiveG_s_tmsi_t
+                if(ie_FiveG_S_TMSI){
 		Ngap_FiveG_S_TMSI_t	*pFiveG_S_TMSI = &ie_FiveG_S_TMSI->value.choice.FiveG_S_TMSI;
-		DevAssert(pFiveG_S_TMSI != NULL);
+		//DevAssert(pFiveG_S_TMSI != NULL);
 		   
 		//aMFSetID  10B
 		//DevAssert(pFiveG_S_TMSI->aMFSetID.size == 10);
@@ -1012,16 +1029,17 @@ ngap_amf_handle_ng_initial_ue_message(
 		//fiveG_TMSI 32B;
 		OCTET_STRING_TO_INT32(&pFiveG_S_TMSI->fiveG_TMSI, fiveG_s_tmsi.fiveG_s_tmsi);
 	
-		
+		printf("test15\n");
 		OAILOG_INFO(LOG_NGAP, "ng initial ue message, FiveG_S_TMSI, aMFSetID:%u,aMFPointer:%u, fiveG_s_tmsi:%\n", 
 		fiveG_s_tmsi.amf_set_id, fiveG_s_tmsi.amf_pointer,  fiveG_s_tmsi.fiveG_s_tmsi);
-
+                }
 
         //nr_amf_set_id 10B
-        amf_set_id.amf_set_id = (uint16_t)((*(uint16_t *)ie_AMFSetID->value.choice.AMFSetID.buf)  & 0x3FF); 
+                if(ie_AMFSetID){
+                amf_set_id.amf_set_id = (uint16_t)((*(uint16_t *)ie_AMFSetID->value.choice.AMFSetID.buf)  & 0x3FF); 
 		OAILOG_INFO(LOG_NGAP, "ng initial ue message, AMFSetID:%u\n",amf_set_id.amf_set_id);
-
-
+                }
+                printf("test16\n");
         //nr_allowed_nssai
         if(ie_AllowedNSSAI && ie_AllowedNSSAI->value.choice.AllowedNSSAI.list.count != 0)
         {
@@ -1053,7 +1071,8 @@ ngap_amf_handle_ng_initial_ue_message(
 
 	    
 		//ngap_amf_itti_amf_app_initial_ue_message(assoc_id,10, 100,100,bdata(nas_msg),blength(nas_msg),NULL,NULL,0,NULL,NULL,NULL,NULL);
-		ngap_amf_itti_amf_app_initial_ue_message(
+	
+         	ngap_amf_itti_amf_app_initial_ue_message(
 		assoc_id,
 		ue_ref->gnb->gnb_id,
 		ue_ref->ran_ue_ngap_id,

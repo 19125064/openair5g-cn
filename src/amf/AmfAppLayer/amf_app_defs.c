@@ -11,7 +11,7 @@ static void notify_ngap_new_ue_amf_ngap_id_association (amf_ue_ngap_id_t amf_ue_
 
 void amf_app_handle_initial_ue_message       (itti_amf_app_initial_ue_message_t * const conn_est_ind_pP){
   OAILOG_FUNC_IN(LOG_AMF_APP);
-  notify_ngap_new_ue_amf_ngap_id_association(0x80,0x90,conn_est_ind_pP->sctp_assoc_id);
+  notify_ngap_new_ue_amf_ngap_id_association(0x80,conn_est_ind_pP->ran_ue_ngap_id,conn_est_ind_pP->sctp_assoc_id);
 
   int i = 0;
   bstring nas_msg = conn_est_ind_pP->nas;
