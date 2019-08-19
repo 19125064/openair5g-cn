@@ -238,6 +238,7 @@ int nas_message_decode (
   }
   //printf("calling _nas_message_header_decode , length:%d\n", length);
   size  = _nas_message_header_decode (buffer, &msg->header, length, status, &is_sr);
+  OAILOG_DEBUG(LOG_NAS, "return header size(%d)\n",size);
   //printf("msg->header.extended_protocol_discriminator:0x%x\n", (&msg->header)->extended_protocol_discriminator);
   //printf("msg->header.security_header_type:0x%x\n", (&msg->header)->security_header_type);
   //printf("msg->header.sequence_number:0x%x\n", (&msg->header)->sequence_number);
@@ -761,7 +762,7 @@ static int _nas_message_header_decode (
    */
   DECODE_U8 (buffer, header->extended_protocol_discriminator , size);
   DECODE_U8 (buffer + size, header->security_header_type , size);
-
+  OAILOG_DEBUG(LOG_NAS,"security header type(%x)\n",header->security_header_type&0x0f);
   *is_sr = false;
   if (header->extended_protocol_discriminator == FIVEGS_MOBILITY_MANAGEMENT_MESSAGES) {
     if (header->security_header_type != SECURITY_HEADER_TYPE_NOT_PROTECTED) {
@@ -796,9 +797,9 @@ static int _nas_message_header_decode (
          //OAILOG_FUNC_RETURN (LOG_NAS, RETURNerror);
         }
         // Decode the message authentication code
-        DECODE_U32 (buffer + size, header->message_authentication_code, size);
+        //DECODE_U32 (buffer + size, header->message_authentication_code, size);
         // Decode the sequence number
-        DECODE_U8 (buffer + size, header->sequence_number, size);
+        //DECODE_U8 (buffer + size, header->sequence_number, size);
 
 		#if 0
 		printf("decode size:%d, message_authentication_code:0x%x,sequence_number:0x%x\n",
