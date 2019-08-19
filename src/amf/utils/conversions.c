@@ -158,7 +158,9 @@ uint32_t asn1str_to_u24(const OCTET_STRING_t *in)
 {
     uint32_t tac_Value = 0;
 	ASN1C_ASSERT(in && in->size == sizeof(uint32_t) - 1);
-
+        OAILOG_DEBUG(LOG_NGAP,"buffer[0] %x\n",in->buf[0]);
+        OAILOG_DEBUG(LOG_NGAP,"buffer[1] %x\n",in->buf[1]);
+        OAILOG_DEBUG(LOG_NGAP,"buffer[2] %x\n",in->buf[2]);
 	tac_Value =   in->buf[0]  << 16 |
 		          in->buf[1]  << 8  |
 		          in->buf[2];

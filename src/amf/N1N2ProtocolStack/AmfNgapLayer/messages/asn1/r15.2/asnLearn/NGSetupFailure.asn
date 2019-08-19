@@ -1,0 +1,59 @@
+NGSetupFailure{test(0)}
+DEFINITIONS AUTOMATIC TAGS ::=
+
+BEGIN
+
+-- **************************************************************
+--
+-- IE parameter types from other modules.
+--
+-- **************************************************************
+
+--IMPORTS
+--	PrivateIE-Container{},
+--	ProtocolIE-Container{},
+--	NGAP-PROTOCOL-IES
+--FROM NGAP-Containers
+
+--	id-Cause
+--FROM NGAP-Constants
+
+--	Cause
+--FROM NGAP-IEs;
+
+NGAP-PROTOCOL-IES ::= CLASS {
+    &id                         ProtocolIE-ID                                   UNIQUE,
+    &criticality                Criticality,
+    &Value,
+    &presence                   Presence
+}
+WITH SYNTAX {
+        ID                              &id
+        CRITICALITY                     &criticality
+        TYPE                            &Value
+        PRESENCE                        &presence
+}
+
+ProtocolIE-Container {NGAP-PROTOCOL-IES : IEsSetParam} ::=
+        SEQUENCE (SIZE (0..maxProtocolIEs)) OF
+        ProtocolIE-Field {{IEsSetParam}}
+
+ProtocolIE-Field {NGAP-PROTOCOL-IES : IEsSetParam} ::= SEQUENCE {
+        id                              NGAP-PROTOCOL-IES.&id                           ({IEsSetParam}),
+        criticality                     NGAP-PROTOCOL-IES.&criticality                  ({IEsSetParam}{@id}),
+        value                           NGAP-PROTOCOL-IES.&Value                        ({IEsSetParam}{@id})
+}
+
+
+NGSetupFailure ::= SEQUENCE {
+        protocolIEs             ProtocolIE-Container            { {NGSetupFailureIEs} },
+        ...
+}
+
+NGSetupFailureIEs NGAP-PROTOCOL-IES ::= {
+        { ID id-Cause                                           CRITICALITY ignore      TYPE Cause                                              PRESENCE mandatory      },
+        --{ ID id-TimeToWait                                      CRITICALITY ignore      TYPE TimeToWait                                 PRESENCE optional               }|
+        --{ ID id-CriticalityDiagnostics          CRITICALITY ignore      TYPE CriticalityDiagnostics             PRESENCE optional               },
+        ...
+}
+END

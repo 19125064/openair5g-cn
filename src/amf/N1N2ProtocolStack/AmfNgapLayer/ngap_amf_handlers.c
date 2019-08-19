@@ -621,7 +621,7 @@ ngap_amf_handle_ng_setup_request(
                DevAssert (plmn != NULL);
                TBCD_TO_MCC_MNC (plmn, mcc, mnc, mnc_len);
 			   
-               OAILOG_DEBUG(LOG_NGAP,"pLMNIdentity, mnc:0x%x,mcc:0x%x,mnc_len:0x%x\n",  mcc, mnc, mnc_len);
+               OAILOG_DEBUG(LOG_NGAP,"pLMNIdentity, mcc:0x%x,mnc:0x%x,mnc_len:0x%x\n",  mcc, mnc, mnc_len);
 			   
     		}
 		    break;

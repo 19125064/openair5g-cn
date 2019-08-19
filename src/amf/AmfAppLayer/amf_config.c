@@ -63,7 +63,7 @@ static void amf_config_init (amf_config_t * config_pP)
    * IP configuration
    */
   config_pP->ipv4.if_name_ng_amf = NULL;
-  config_pP->ipv4.ng_amf = 0;
+  config_pP->ipv4.ng_amf = 38412;
   config_pP->itti_config.queue_size = ITTI_QUEUE_MAX_ELEMENTS;
   config_pP->itti_config.log_file = NULL;
   config_pP->sctp_config.in_streams = SCTP_IN_STREAMS;
@@ -263,7 +263,7 @@ static int amf_config_parse_file (amf_config_t * config_pP)
         config_pP->ngap_config.outcome_drop_timer_sec = (uint8_t) aint;
       }
       if ((config_setting_lookup_int (setting, AMF_CONFIG_STRING_NGAP_PORT, &aint))) {
-        config_pP->ngap_config.port_number = (uint16_t) aint;
+        //config_pP->ngap_config.port_number = (uint16_t) aint;
       }
     }
     //GUAMFI_LIST
@@ -567,6 +567,7 @@ static void amf_config_display (amf_config_t * config_pP)
   OAILOG_INFO (LOG_CONFIG, "- SCTP:\n");
   OAILOG_INFO (LOG_CONFIG, "    in streams .......: %u\n", config_pP->sctp_config.in_streams);
   OAILOG_INFO (LOG_CONFIG, "    out streams ......: %u\n", config_pP->sctp_config.out_streams);
+  OAILOG_INFO (LOG_CONFIG, "    AMF supported plmn ......: %x  %x  %x\n", config_pP->served_tai.plmn_mcc[0], config_pP->served_tai.plmn_mnc[0], config_pP->served_tai.tac[0]);
 }
 
 static void usage (char *target)

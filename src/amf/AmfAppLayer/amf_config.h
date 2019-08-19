@@ -145,7 +145,7 @@ typedef struct amf_config_s {
 
   struct {
     uint16_t port_number;
-#define NGAP_PORT_NUMBER 36412
+#define NGAP_PORT_NUMBER 38412
     uint8_t  outcome_drop_timer_sec;
   } ngap_config;
 

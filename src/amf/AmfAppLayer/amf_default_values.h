@@ -39,7 +39,7 @@
  * NGAP Constants
  ******************************************************************************/
 
-#define NGAP_PORT_NUMBER (36412) ///< NGAP SCTP IANA ASSIGNED Port Number
+#define NGAP_PORT_NUMBER (38412) ///< NGAP SCTP IANA ASSIGNED Port Number
 #define NGAP_SCTP_PPID   (60)    ///< NGAP SCTP Payload Protocol Identifier (PPID)
 
 #define NGAP_OUTCOME_TIMER_DEFAULT (5)     ///< NGAP Outcome drop timer (s)
