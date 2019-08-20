@@ -67,6 +67,7 @@ static void *nas_intertask_interface (void *args_p)
           } else if (decoder_rc < 0) {
               //*emm_cause = EMM_CAUSE_PROTOCOL_ERROR;
           }
+          OAILOG_DEBUG(LOG_NAS,"nas message type:%x\n", decoded_nas_msg.plain.mm.header.message_type);
           amf_handle_nas_mm_message(&decoded_nas_msg, NGAP_UL_DATA_IND(received_message_p).tai, NGAP_UL_DATA_IND(received_message_p).cgi, &decode_status);
  
         }

@@ -11,8 +11,8 @@
 #include "OCTET_STRING.h"
 #include "log.h"
 
-#define BUFFER_LEN 256
-void downlink_nas_transport_with_authentication_request(uint8_t *data)
+#define BUFFER_LEN 20
+int downlink_nas_transport_with_authentication_request(uint8_t *data)
 {
 	
     OAILOG_DEBUG (LOG_NAS,"AUTHENTICATION_REQUEST encode dump ------------------");
@@ -23,7 +23,7 @@ void downlink_nas_transport_with_authentication_request(uint8_t *data)
 	memset (&nas_msg,		0, sizeof (nas_message_t));
 	  
 	nas_msg.header.extended_protocol_discriminator = FIVEGS_MOBILITY_MANAGEMENT_MESSAGES;
-	nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
+	nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_NOT_PROTECTED;
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
@@ -34,7 +34,7 @@ void downlink_nas_transport_with_authentication_request(uint8_t *data)
 	  
 	MM_msg * mm_msg = &nas_msg.plain.mm;
 	mm_msg->header.extended_protocol_discriminator = FIVEGS_MOBILITY_MANAGEMENT_MESSAGES;
-	mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
+	mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_NOT_PROTECTED;
 	mm_msg->header.message_type = AUTHENTICATION_REQUEST;
 	  
 	memset (&mm_msg->specific_msg.authentication_request,		0, sizeof (authentication_request_msg));
@@ -53,7 +53,7 @@ void downlink_nas_transport_with_authentication_request(uint8_t *data)
 	rand->data = (unsigned char *)(&bitStream_rand);
 	rand->slen = 1;
 	  
-	mm_msg->specific_msg.authentication_request.presence = 0x07;
+	mm_msg->specific_msg.authentication_request.presence = 0x00;
 	mm_msg->specific_msg.authentication_request.authenticationparameterrand = rand;
 	mm_msg->specific_msg.authentication_request.authenticationparameterautn = abba;
 	mm_msg->specific_msg.authentication_request.eapmessage = abba;
@@ -66,11 +66,11 @@ void downlink_nas_transport_with_authentication_request(uint8_t *data)
 	  
 	//construct security context
 	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
+	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA0;
 	security->dl_count.overflow = 0xffff;
 	security->dl_count.seq_num =  0x23;
 	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
+	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA0;
 	security->knas_int[0] = 0x41;
 	//complete sercurity context
 	  
@@ -98,7 +98,7 @@ void downlink_nas_transport_with_authentication_request(uint8_t *data)
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
     #endif
 	bytes = nas_message_encode (data, &nas_msg, BUFFER_LEN/*don't know the size*/, security);
-
+        return bytes;
 	//OAILOG_DEBUG (LOG_NAS,"authentication_request encode finished !!!");
 	
 }
@@ -113,10 +113,11 @@ int amf_handle_mm_msg_registration_request(registration_request_msg * registrati
     
     uint8_t  *data = calloc(BUFFER_LEN, sizeof(uint8_t));
 	memset(data, 0, BUFFER_LEN );
-	downlink_nas_transport_with_authentication_request(data);
-	
+        int encoded_length = 0;
+	encoded_length = downlink_nas_transport_with_authentication_request(data);
+        OAILOG_DEBUG(LOG_NAS,"encoded authentication request message length(%d)\n",encoded_length);	
 	bstring nas_msg;
-	nas_msg =  blk2bstr(data, BUFFER_LEN);
+	nas_msg =  blk2bstr(data, encoded_length);
 
 	amf_app_itti_send_ngap_dl_nas_transport_request(0x80, 0x90, nas_msg);
     OAILOG_FUNC_RETURN(LOG_NAS,0);	
@@ -133,7 +134,8 @@ int downlink_nas_transport_with_authentication_result(uint8_t *data)
 	 memset (&nas_msg,		 0, sizeof (nas_message_t));
    
 	 nas_msg.header.extended_protocol_discriminator = FIVEGS_MOBILITY_MANAGEMENT_MESSAGES;
-	 nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
+	 nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_NOT_PROTECTED;
+	 //nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
 	 uint8_t sequencenumber = 0xfe;
 	 //uint32_t mac = 0xffffeeee;
 	 uint32_t mac = 0xffee;
@@ -144,7 +146,8 @@ int downlink_nas_transport_with_authentication_result(uint8_t *data)
    
 	 MM_msg * mm_msg = &nas_msg.plain.mm;
 	 mm_msg->header.extended_protocol_discriminator = FIVEGS_MOBILITY_MANAGEMENT_MESSAGES;
-	 mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
+	 mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_NOT_PROTECTED;
+	 //mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
 	 mm_msg->header.message_type = AUTHENTICATION_RESULT;
    
 	 memset (&mm_msg->specific_msg.authentication_result,		 0, sizeof (authentication_result_msg));
@@ -179,11 +182,11 @@ int downlink_nas_transport_with_authentication_result(uint8_t *data)
    
 	 //construct security context
 	 fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	 security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
+	 security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA0;
 	 security->dl_count.overflow = 0xffff;
 	 security->dl_count.seq_num =  0x23;
 	 security->knas_enc[0] = 0x14;
-	 security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
+	 security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA0;
 	 security->knas_int[0] = 0x41;
 	 //complete sercurity context
    
@@ -211,7 +214,7 @@ int downlink_nas_transport_with_authentication_result(uint8_t *data)
 
 	 //bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
 	 bytes = nas_message_encode (data, &nas_msg, BUFFER_LEN/*don't know the size*/, security);
-	 return 0;
+	 return bytes;
 }
 
 int downlink_nas_transport_with_security_mode_command(uint8_t *data)
@@ -224,7 +227,8 @@ int downlink_nas_transport_with_security_mode_command(uint8_t *data)
 	 memset (&nas_msg,		 0, sizeof (nas_message_t));
    
 	 nas_msg.header.extended_protocol_discriminator = FIVEGS_MOBILITY_MANAGEMENT_MESSAGES;
-	 nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
+	 nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_NOT_PROTECTED;
+	 //nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
 	 uint8_t sequencenumber = 0xfe;
 	 //uint32_t mac = 0xffffeeee;
 	 uint32_t mac = 0xffee;
@@ -235,7 +239,8 @@ int downlink_nas_transport_with_security_mode_command(uint8_t *data)
    
 	 MM_msg * mm_msg = &nas_msg.plain.mm;
 	 mm_msg->header.extended_protocol_discriminator = FIVEGS_MOBILITY_MANAGEMENT_MESSAGES;
-	 mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
+	 mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_NOT_PROTECTED;
+	 //mm_msg->header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
 	 mm_msg->header.message_type = SECURITY_MODE_COMMAND;
    
 	 memset (&mm_msg->specific_msg.security_mode_command,		 0, sizeof (security_mode_command_msg));
@@ -282,11 +287,11 @@ int downlink_nas_transport_with_security_mode_command(uint8_t *data)
    
 	 //construct security context
 	 fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	 security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
+	 security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA0;
 	 security->dl_count.overflow = 0xffff;
 	 security->dl_count.seq_num =  0x23;
 	 security->knas_enc[0] = 0x14;
-	 security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
+	 security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA0;
 	 security->knas_int[0] = 0x41;
 	 //complete sercurity context
    
@@ -332,7 +337,7 @@ int downlink_nas_transport_with_security_mode_command(uint8_t *data)
 	 //bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
 	 bytes = nas_message_encode (data, &nas_msg, BUFFER_LEN/*don't know the size*/, security);
 
-     return  0;
+     return  bytes;
 }
 
 
@@ -343,10 +348,11 @@ int amf_handle_mm_msg_authentication_response(authentication_response_msg * auth
     //authentication result
     uint8_t  *data = calloc(BUFFER_LEN, sizeof(uint8_t));
 	memset(data, 0, BUFFER_LEN );
-	downlink_nas_transport_with_authentication_result(data);
+        int encoded_length = 0;
+	encoded_length = downlink_nas_transport_with_authentication_result(data);
 	
 	bstring nas_msg;
-	nas_msg =  blk2bstr(data, BUFFER_LEN);
+	nas_msg =  blk2bstr(data, encoded_length);
 	
     amf_app_itti_send_ngap_dl_nas_transport_request(0x80, 0x90, nas_msg);
 
@@ -355,9 +361,9 @@ int amf_handle_mm_msg_authentication_response(authentication_response_msg * auth
    
     //security mode command
     memset(data, 0, BUFFER_LEN );
-    downlink_nas_transport_with_security_mode_command(data);
+    encoded_length = downlink_nas_transport_with_security_mode_command(data);
 	bstring nas_msg1;
-	nas_msg1 =  blk2bstr(data, BUFFER_LEN);
+	nas_msg1 =  blk2bstr(data, encoded_length);
 	
     amf_app_itti_send_ngap_dl_nas_transport_request(0x80, 0x90, nas_msg1);
 	
@@ -585,19 +591,20 @@ int amf_handle_nas_mm_message(nas_message_t * nas_msg, tai_t tai, cgi_t cgi, nas
 {
   OAILOG_FUNC_IN(LOG_NAS);
   MM_msg *mmMsg = &(nas_msg->plain.mm);
+  OAILOG_DEBUG(LOG_NAS,"nas messgae type(%x)\n",mmMsg->header.message_type);
   switch(mmMsg->header.message_type)
   {
     case REGISTRATION_REQUEST:
 	{
         OAILOG_DEBUG(LOG_NAS,"message type(%d):REGISTRATION_REQUEST\n",mmMsg->header.message_type);
-        decode_registration_request_dump(*nas_msg);
+        //decode_registration_request_dump(*nas_msg);
         amf_handle_mm_msg_registration_request(&mmMsg->specific_msg.registration_request); 
     }
     break; 
 	case AUTHENTICATION_RESPONSE:
 	{
         OAILOG_DEBUG(LOG_NAS,"message type(%d):AUTHENTICATION_RESPONSE\n",mmMsg->header.message_type);
-        decode_authentication_response_dump(*nas_msg);
+        //decode_authentication_response_dump(*nas_msg);
 		amf_handle_mm_msg_authentication_response(&mmMsg->specific_msg.authentication_response);
 	}
 	break;

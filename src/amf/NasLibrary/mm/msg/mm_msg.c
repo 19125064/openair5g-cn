@@ -180,7 +180,7 @@ mm_msg_decode (
   uint8_t * buffer,
   uint32_t len)
 {
-  //OAILOG_FUNC_IN (LOG_NAS_EMM);
+  OAILOG_FUNC_IN (LOG_NAS);
   int                                     header_result = 0;
   int                                     decode_result = 0;
   uint8_t                                *buffer_log = buffer;
@@ -191,6 +191,7 @@ mm_msg_decode (
    * First decode the MM message header
    */
   header_result = _fivegmm_msg_decode_header (&msg->header, buffer, len);
+  OAILOG_DEBUG(LOG_NAS,"header_result(%d)\n",header_result);
   //printf("after _fivegmm_msg_decode_header,decoded protocol %x\n",msg->header.extended_protocol_discriminator);
   //printf("after _fivegmm_msg_decode_header,decoded security type %x\n",msg->header.security_header_type);
   //printf("after _fivegmm_msg_decode_header,decoded message type %x\n",msg->header.message_type);

@@ -130,7 +130,7 @@ int nas_message_encode (
   //printf("_nas_message_header_encode, size:%d\n", size);
   if (size < 0) {
     //OAILOG_FUNC_RETURN (LOG_NAS, TLV_BUFFER_TOO_SHORT);
-  } else if (size > 1) {
+  } else if (size > 2) {
     /*
      * Encode security protected NAS message
      */
@@ -250,7 +250,7 @@ int nas_message_decode (
     return TLV_BUFFER_TOO_SHORT;
     //OAILOG_FUNC_RETURN (LOG_NAS, TLV_BUFFER_TOO_SHORT);
   }
-  if (size > 1) {
+  if (size > 2) {
     // found security header
     /*
      * Compute offset of the sequence number field
@@ -299,10 +299,10 @@ int nas_message_decode (
   }
 
   if (size > 1) {
-    return size+bytes;
+    //return size+bytes;
     OAILOG_FUNC_RETURN (LOG_NAS, size + bytes);
   }
-  return bytes;
+  //return bytes;
   OAILOG_FUNC_RETURN (LOG_NAS, bytes);
 }
 
@@ -374,11 +374,11 @@ static int _nas_message_header_encode (
       /*
        * Encode the message authentication code
        */
-	  ENCODE_U32 (buffer + size, header->message_authentication_code, size);
+	  //ENCODE_U32 (buffer + size, header->message_authentication_code, size);
 	  /*
        * Encode the sequence number
        */
-      ENCODE_U8 (buffer + size, header->sequence_number, size);
+      //ENCODE_U8 (buffer + size, header->sequence_number, size);
     }
   }
   return size;
@@ -1011,7 +1011,7 @@ static int _nas_message_plain_decode (
     nas_message_plain_t * msg,
     size_t length)
 {
-  //OAILOG_FUNC_IN (LOG_NAS);
+  OAILOG_FUNC_IN (LOG_NAS);
   int                                     bytes = TLV_PROTOCOL_NOT_SUPPORTED;
   //printf("_nas_message_plain_decode extended_protocol_discriminator:%0x\n", header->extended_protocol_discriminator);
   if (header->extended_protocol_discriminator == FIVEGS_MOBILITY_MANAGEMENT_MESSAGES) {

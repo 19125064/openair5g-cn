@@ -11,6 +11,7 @@ int decode_registration_request( registration_request_msg *registration_request,
     uint32_t decoded = 0;
     int decoded_result = 0;
     printf("decode_registration_request len:%d\n", len);
+    OAILOG_DEBUG(LOG_NAS,"decode_registration_request len:%d\n", len);
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     //CHECK_PDU_POINTER_AND_LENGTH_DECODER (buffer, REGISTRATION_REQUEST_MINIMUM_LENGTH, len);
 
@@ -23,7 +24,7 @@ int decode_registration_request( registration_request_msg *registration_request,
     if ((decoded_result = decode_u8_nas_key_set_identifier (&registration_request->naskeysetidentifier, 0, *(buffer + decoded) >> 4, len - decoded)) < 0)
       return decoded_result;
     decoded++;
-	
+    return decoded;	
 /*
     if ((decoded_result = decode__5gs_mobile_identity (&registration_request->_5gsmobileidentity, 0, buffer + decoded, len - decoded)) < 0)
       return decoded_result;

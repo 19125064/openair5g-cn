@@ -1,51 +1,51 @@
 Initializing OAI Logging
-000002 00000:073466 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0544    ==== BUPT BUPT TEST CONFIGURATION v1.0 ====
-000003 00000:073470 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0545    Configuration:
-000004 00000:073475 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0546    - File .................................: /usr/local/etc/oai/amf.conf
-000005 00000:073478 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0547    - Realm ................................: openair5G.amf
-000006 00000:073484 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0548    - Amf_Name .............................: bupt amf test
-000007 00000:073491 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0549    - Run mode .............................: TEST
-000008 00000:073497 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0550    - Max gNBs .............................: 4
-000009 00000:073503 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0551    - Max UEs ..............................: 16
-000010 00000:073517 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0552    - IMS voice over PS session in NG ......: false
-000011 00000:073526 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0553    - Emergency bearer services in NG mode .: false
-000012 00000:073534 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0554    - Location services via 5gc ............: false
-000013 00000:073540 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0555    - Extended service request .............: false
-000014 00000:073547 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0556    - Unauth IMSI support ..................: false
-000015 00000:073553 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0557    - Relative capa ........................: 10
-000016 00000:073559 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0558    - Statistics timer .....................: 10 (seconds)
+000002 00000:920513 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0544    ==== BUPT BUPT TEST CONFIGURATION v1.0 ====
+000003 00000:920537 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0545    Configuration:
+000004 00000:920542 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0546    - File .................................: /usr/local/etc/oai/amf.conf
+000005 00000:920545 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0547    - Realm ................................: openair5G.amf
+000006 00000:920550 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0548    - Amf_Name .............................: bupt amf test
+000007 00000:920558 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0549    - Run mode .............................: TEST
+000008 00000:920563 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0550    - Max gNBs .............................: 4
+000009 00000:920569 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0551    - Max UEs ..............................: 16
+000010 00000:920575 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0552    - IMS voice over PS session in NG ......: false
+000011 00000:920582 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0553    - Emergency bearer services in NG mode .: false
+000012 00000:920588 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0554    - Location services via 5gc ............: false
+000013 00000:920594 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0555    - Extended service request .............: false
+000014 00000:920600 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0556    - Unauth IMSI support ..................: false
+000015 00000:920606 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0557    - Relative capa ........................: 10
+000016 00000:920612 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0558    - Statistics timer .....................: 10 (seconds)
 
-000017 00000:073564 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0559    - NG-AMF:
-000018 00000:073569 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0560        port number ......: 38412
-000019 00000:073577 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0561    - IP:
-000020 00000:073885 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0562        ng-AMF iface .....: ens33
-000021 00000:074541 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0563        ng-AMF ip ........: 192.168.110.10
-000022 00000:074553 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0564    - ITTI:
-000023 00000:074559 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0565        queue size .......: 2000000 (bytes)
-000024 00000:074564 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0566        log file .........: (null)
-000025 00000:074568 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0567    - SCTP:
-000026 00000:074573 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0568        in streams .......: 8
-000027 00000:074580 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0569        out streams ......: 8
-000028 00000:074586 7F2A1CB19740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0570        AMF supported plmn ......: 1c2  5  1112
-000029 00000:101127 7F2A1CB19740 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0793      Initializing SCTP task interface
-000030 00000:103114 7F2A1CB19740 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0809      Initializing SCTP task interface: DONE
-000031 00000:103131 7F2A1CB19740 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0157    Entering ngap_amf_init()
-000032 00000:103142 7F2A1CB19740 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0158      Initializing NGAP interface
-000033 00000:105002 7F2A1CB19740 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0182      Create TASK NGAP
-000034 00000:105079 7F2A1CB19740 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0188      Initializing NGAP interface: DONE
-000035 00000:105087 7F2A1CB19740 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0189    Leaving ngap_amf_init() (rc=0)
-000036 00000:105094 7F2A1CB19740 TRACE NAS    tocolStack/AmfNasLayer/nas_amf.c:0088    Entering nas_amf_init()
-000037 00000:105101 7F2A1CB19740 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0089      Initializing NAS task interface
-000038 00000:105143 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0676    Received SCTP_INIT_MSG
-000039 00000:105158 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0333    Creating new listen socket on port 38412 with
-000040 00000:105164 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0338    ipv4 addresses:
-000041 00000:105176 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0347    	- 192.168.110.10
-000042 00000:105262 7F2A1CB19740 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0098      Initializing NAS task interface: DONE
-000043 00000:105304 7F2A1CB19740 TRACE NAS    tocolStack/AmfNasLayer/nas_amf.c:0099    Leaving nas_amf_init() (rc=0)
-000044 00000:105550 7F2A1CB19740 TRACE AMF-AP cn/src/amf/AmfAppLayer/amf_app.c:0074    Entering amf_app_init()
-000045 00000:105673 7F2A1CB19740 DEBUG AMF-AP cn/src/amf/AmfAppLayer/amf_app.c:0113      Initializing AMF applicative layer: DONE
-000046 00000:105684 7F2A1CB19740 TRACE AMF-AP cn/src/amf/AmfAppLayer/amf_app.c:0114    Leaving amf_app_init() (rc=0)
-000047 00000:105690 7F2A1CB19740 DEBUG AMF-AP openair5g-cn/src/amf/AmfMain.cpp:0215    AMF app initialization complete
+000017 00000:920617 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0559    - NG-AMF:
+000018 00000:920623 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0560        port number ......: 38412
+000019 00000:920632 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0561    - IP:
+000020 00000:920643 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0562        ng-AMF iface .....: ens33
+000021 00000:920651 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0563        ng-AMF ip ........: 192.168.110.10
+000022 00000:920656 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0564    - ITTI:
+000023 00000:920662 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0565        queue size .......: 2000000 (bytes)
+000024 00000:920668 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0566        log file .........: (null)
+000025 00000:920676 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0567    - SCTP:
+000026 00000:920682 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0568        in streams .......: 8
+000027 00000:920688 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0569        out streams ......: 8
+000028 00000:920695 7F8826E38740 INFO  CONFIG src/amf/AmfAppLayer/amf_config.c:0570        AMF supported plmn ......: 1c2  5  1112
+000029 00000:944484 7F8826E38740 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0793      Initializing SCTP task interface
+000030 00000:945234 7F8826E38740 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0809      Initializing SCTP task interface: DONE
+000031 00000:945380 7F8826E38740 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0157    Entering ngap_amf_init()
+000032 00000:945429 7F8826E38740 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0158      Initializing NGAP interface
+000033 00000:947138 7F8826E38740 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0182      Create TASK NGAP
+000034 00000:947196 7F8826E38740 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0188      Initializing NGAP interface: DONE
+000035 00000:947205 7F8826E38740 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0189    Leaving ngap_amf_init() (rc=0)
+000036 00000:947232 7F8826E38740 TRACE NAS    tocolStack/AmfNasLayer/nas_amf.c:0088    Entering nas_amf_init()
+000037 00000:947240 7F8826E38740 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0089      Initializing NAS task interface
+000038 00000:947265 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0676    Received SCTP_INIT_MSG
+000039 00000:947309 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0333    Creating new listen socket on port 38412 with
+000040 00000:947384 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0338    ipv4 addresses:
+000042 00000:947423 7F8826E38740 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0098      Initializing NAS task interface: DONE
+000043 00000:947525 7F8826E38740 TRACE NAS    tocolStack/AmfNasLayer/nas_amf.c:0099    Leaving nas_amf_init() (rc=0)
+000044 00000:947535 7F8826E38740 TRACE AMF-AP cn/src/amf/AmfAppLayer/amf_app.c:0074    Entering amf_app_init()
+000041 00000:947396 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0347    	- 192.168.110.10
+000045 00000:949111 7F8826E38740 DEBUG AMF-AP cn/src/amf/AmfAppLayer/amf_app.c:0113      Initializing AMF applicative layer: DONE
+000046 00000:949126 7F8826E38740 TRACE AMF-AP cn/src/amf/AmfAppLayer/amf_app.c:0114    Leaving amf_app_init() (rc=0)
+000047 00000:949170 7F8826E38740 DEBUG AMF-AP openair5g-cn/src/amf/AmfMain.cpp:0215    AMF app initialization complete
 SCTP association change event received
 ngap_amf_decode_pdu
 InitiatingMessage ::= {
@@ -108,43 +108,43 @@ InitiatingMessage ::= {
         }
     }
 }
-000048 00000:366516 7F2A16449700 INFO  SCTP   tpLayer/sctp_primitives_server.c:0609    Received a connection from a SCTP client
-000049 00000:366582 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0481    SCTP association change event received
-000050 00000:366586 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0112    sctp_add_new_peer
-000051 00000:366599 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0211    ----------------------
-000052 00000:366602 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0212    Local addresses:
-000053 00000:366606 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0231        - [::ffff:192.168.110.10]
-000054 00000:366609 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0237    ----------------------
-000055 00000:366616 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0155    ----------------------
-000056 00000:366619 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0156    Peer addresses:
-000057 00000:366624 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0175        - [::ffff:192.168.177.40]
-000058 00000:366627 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0180    ----------------------
-000059 00000:366736 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0078    SCTP_NEW_ASSOCIATION
-000060 00000:366743 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1253    Entering ngap_handle_new_association()
-000061 00000:366746 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:1260      Create gNB context for assoc_id: 67
-000062 00000:366753 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1294    Leaving ngap_handle_new_association() (rc=0)
-000063 00000:367059 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(64)
-000064 00000:367071 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 64 received from port 38412, on stream 0, PPID 60
-000065 00000:367088 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083    SCTP_DATA_IND(recv N2 Messages from AN)
-000066 00000:367092 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225    Entering ngap_amf_decode_pdu()
-000067 00000:367184 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0511      Entering ngap_amf_handle_ng_setup_request()
-000068 00000:367188 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0532         ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
-000069 00000:367657 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0534         ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
-000070 00000:367664 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0572         New ng setup request incoming from 
-000071 00000:367696 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0581         RANNodeName, gnb_name_size:4,gnb_name:gNB0,
-000072 00000:367700 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0624         pLMNIdentity, mcc:0x1c2,mnc:0x5,mnc_len:0x2
-000073 00000:367702 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161         buffer[0] 0
-000074 00000:367705 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162         buffer[1] 11
-000075 00000:367706 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163         buffer[2] 12
-000076 00000:367708 7F2A1744B700 DEBUG NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0084         ngap_amf_compare_tac, tac:4370, tac_value:4370
-000077 00000:367711 7F2A1744B700 TRACE NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0031         Comparing plmn_mcc:450, ,mcc:450, plmn_mnc:5, mnc:5, plmn_mnc_len:2,len:2
-000078 00000:367715 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0707         gnb_id:1, gnb_name:gNB0,default_paging_drx:0
-000079 00000:367718 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0447         Entering ngap_generate_ng_setup_response()
-000080 00000:367764 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0471            ng setup response check_NGAP_pdu_constraints ret:0
-000081 00000:367802 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0501         Leaving ngap_generate_ng_setup_response() (rc=0)
-000082 00000:367805 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0716      Leaving ngap_amf_handle_ng_setup_request() (rc=0)
-000083 00000:367817 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [23][67] Sending buffer 0x7f2a0c0021d0 of 464 bytes on stream 0 with ppid 60
-000084 00000:367843 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 464 bytes on stream 0
+000048 00001:524501 7F88137FE700 INFO  SCTP   tpLayer/sctp_primitives_server.c:0609    Received a connection from a SCTP client
+000049 00001:524577 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0481    SCTP association change event received
+000050 00001:524581 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0112    sctp_add_new_peer
+000051 00001:524593 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0211    ----------------------
+000052 00001:524596 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0212    Local addresses:
+000053 00001:524600 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0231        - [::ffff:192.168.110.10]
+000054 00001:524603 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0237    ----------------------
+000055 00001:524609 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0155    ----------------------
+000056 00001:524612 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0156    Peer addresses:
+000057 00001:524615 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0175        - [::ffff:192.168.177.40]
+000058 00001:524617 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0180    ----------------------
+000059 00001:524635 7F882176A700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0078    SCTP_NEW_ASSOCIATION
+000060 00001:524638 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1253    Entering ngap_handle_new_association()
+000061 00001:524642 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:1260      Create gNB context for assoc_id: 21
+000062 00001:524648 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1294    Leaving ngap_handle_new_association() (rc=0)
+000063 00001:524933 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(64)
+000064 00001:524945 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [21][23] Msg of length 64 received from port 38412, on stream 0, PPID 60
+000065 00001:524962 7F882176A700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083    SCTP_DATA_IND(recv N2 Messages from AN)
+000066 00001:524965 7F882176A700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225    Entering ngap_amf_decode_pdu()
+000067 00001:525047 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0511      Entering ngap_amf_handle_ng_setup_request()
+000068 00001:525050 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0532         ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
+000069 00001:525445 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0534         ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
+000070 00001:525449 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0572         New ng setup request incoming from 
+000071 00001:525451 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0581         RANNodeName, gnb_name_size:4,gnb_name:gNB0,
+000072 00001:525454 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0624         pLMNIdentity, mcc:0x1c2,mnc:0x5,mnc_len:0x2
+000073 00001:525457 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161         buffer[0] 0
+000074 00001:525460 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162         buffer[1] 11
+000075 00001:525462 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163         buffer[2] 12
+000076 00001:525465 7F882176A700 DEBUG NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0084         ngap_amf_compare_tac, tac:4370, tac_value:4370
+000077 00001:525468 7F882176A700 TRACE NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0031         Comparing plmn_mcc:450, ,mcc:450, plmn_mnc:5, mnc:5, plmn_mnc_len:2,len:2
+000078 00001:525471 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0707         gnb_id:1, gnb_name:gNB0,default_paging_drx:0
+000079 00001:525473 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0447         Entering ngap_generate_ng_setup_response()
+000080 00001:525487 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0471            ng setup response check_NGAP_pdu_constraints ret:0
+000081 00001:525530 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0501         Leaving ngap_generate_ng_setup_response() (rc=0)
+000082 00001:525533 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0716      Leaving ngap_amf_handle_ng_setup_request() (rc=0)
+000083 00001:525714 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [23][21] Sending buffer 0x7f88180021d0 of 464 bytes on stream 0 with ppid 60
+000084 00001:525844 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 464 bytes on stream 0
 SCTP association change event received
 ngap_amf_decode_pdu
 InitiatingMessage ::= {
@@ -207,52 +207,43 @@ InitiatingMessage ::= {
         }
     }
 }
-000085 00000:528441 7F2A16449700 INFO  SCTP   tpLayer/sctp_primitives_server.c:0609    Received a connection from a SCTP client
-000086 00000:528515 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0481    SCTP association change event received
-000087 00000:528520 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0112    sctp_add_new_peer
-000088 00000:528534 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0211    ----------------------
-000089 00000:528537 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0212    Local addresses:
-000090 00000:528542 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0231        - [::ffff:192.168.110.10]
-000091 00000:528545 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0237    ----------------------
-000092 00000:528549 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0155    ----------------------
-000093 00000:528552 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0156    Peer addresses:
-000094 00000:528555 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0175        - [::ffff:192.168.177.41]
-000095 00000:528557 7F2A16449700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0180    ----------------------
-000096 00000:528577 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0078      SCTP_NEW_ASSOCIATION
-000097 00000:528581 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1253      Entering ngap_handle_new_association()
-000098 00000:528587 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:1260         Create gNB context for assoc_id: 68
-000099 00000:528595 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1294      Leaving ngap_handle_new_association() (rc=0)
-000100 00000:529065 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(64)
-000101 00000:529075 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [68][25] Msg of length 64 received from port 38412, on stream 0, PPID 60
-000102 00000:529099 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083      SCTP_DATA_IND(recv N2 Messages from AN)
-000103 00000:529121 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225      Entering ngap_amf_decode_pdu()
-000104 00000:529160 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0511         Entering ngap_amf_handle_ng_setup_request()
-000105 00000:529163 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0532            ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
-000106 00000:529688 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0534            ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
-000107 00000:529692 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0572            New ng setup request incoming from 
-000108 00000:529693 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0581            RANNodeName, gnb_name_size:4,gnb_name:gNB1,
-000109 00000:529695 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0624            pLMNIdentity, mcc:0x1c2,mnc:0x5,mnc_len:0x2
-000110 00000:529697 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161            buffer[0] 0
-000111 00000:529698 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162            buffer[1] 11
-000112 00000:529700 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163            buffer[2] 12
-000113 00000:529704 7F2A1744B700 DEBUG NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0084            ngap_amf_compare_tac, tac:4370, tac_value:4370
-000114 00000:529719 7F2A1744B700 TRACE NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0031            Comparing plmn_mcc:450, ,mcc:450, plmn_mnc:5, mnc:5, plmn_mnc_len:2,len:2
-000115 00000:529722 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0707            gnb_id:2, gnb_name:gNB1,default_paging_drx:0
-000116 00000:529724 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0447            Entering ngap_generate_ng_setup_response()
-000117 00000:529732 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0471               ng setup response check_NGAP_pdu_constraints ret:0
-000118 00000:529762 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0501            Leaving ngap_generate_ng_setup_response() (rc=0)
-000119 00000:529764 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0716         Leaving ngap_amf_handle_ng_setup_request() (rc=0)
-000120 00000:529772 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [25][68] Sending buffer 0x7f2a0c0031f0 of 464 bytes on stream 0 with ppid 60
-000121 00000:529826 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 464 bytes on stream 0
-000122 00010:106457 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000123 00010:106487 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000124 00010:106495 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              2              |             0               |
-000125 00010:106504 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000126 00010:106512 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000127 00010:106519 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000128 00010:106527 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
+000085 00001:692132 7F88137FE700 INFO  SCTP   tpLayer/sctp_primitives_server.c:0609    Received a connection from a SCTP client
+000086 00001:692297 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0481    SCTP association change event received
+000087 00001:692303 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0112    sctp_add_new_peer
+000088 00001:692425 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0211    ----------------------
+000089 00001:692429 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0212    Local addresses:
+000090 00001:692434 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0231        - [::ffff:192.168.110.10]
+000091 00001:692437 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0237    ----------------------
+000092 00001:692441 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0155    ----------------------
+000093 00001:692463 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0156    Peer addresses:
+000094 00001:692466 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0175        - [::ffff:192.168.177.41]
+000095 00001:692469 7F88137FE700 DEBUG SCTP   Stack/AmfSctpLayer/sctp_common.c:0180    ----------------------
+000096 00001:692537 7F882176A700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0078      SCTP_NEW_ASSOCIATION
+000097 00001:692544 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1253      Entering ngap_handle_new_association()
+000098 00001:692565 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:1260         Create gNB context for assoc_id: 22
+000099 00001:692573 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1294      Leaving ngap_handle_new_association() (rc=0)
+000100 00001:693138 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(64)
+000101 00001:693147 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [22][25] Msg of length 64 received from port 38412, on stream 0, PPID 60
+000102 00001:693221 7F882176A700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083      SCTP_DATA_IND(recv N2 Messages from AN)
+000103 00001:693227 7F882176A700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225      Entering ngap_amf_decode_pdu()
+000104 00001:693326 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0511         Entering ngap_amf_handle_ng_setup_request()
+000105 00001:693431 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0532            ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
+000106 00001:699429 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0534            ----------------------- DECODED NG SETUP REQUEST NGAP MSG --------------------------
+000107 00001:699454 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0572            New ng setup request incoming from 
+000108 00001:699459 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0581            RANNodeName, gnb_name_size:4,gnb_name:gNB1,
+000109 00001:699465 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0624            pLMNIdentity, mcc:0x1c2,mnc:0x5,mnc_len:0x2
+000110 00001:699471 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161            buffer[0] 0
+000111 00001:699475 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162            buffer[1] 11
+000112 00001:699478 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163            buffer[2] 12
+000113 00001:699483 7F882176A700 DEBUG NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0084            ngap_amf_compare_tac, tac:4370, tac_value:4370
+000114 00001:699495 7F882176A700 TRACE NGAP   Stack/AmfNgapLayer/ngap_amf_ta.c:0031            Comparing plmn_mcc:450, ,mcc:450, plmn_mnc:5, mnc:5, plmn_mnc_len:2,len:2
+000115 00001:699504 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0707            gnb_id:2, gnb_name:gNB1,default_paging_drx:0
+000116 00001:699522 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0447            Entering ngap_generate_ng_setup_response()
+000117 00001:699599 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0471               ng setup response check_NGAP_pdu_constraints ret:0
+000118 00001:701183 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0501            Leaving ngap_generate_ng_setup_response() (rc=0)
+000119 00001:701207 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0716         Leaving ngap_amf_handle_ng_setup_request() (rc=0)
+000120 00001:701225 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [25][22] Sending buffer 0x7f88180031f0 of 464 bytes on stream 0 with ppid 60
+000121 00001:701579 7F8821F6B700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 464 bytes on stream 0
 ngap_amf_decode_pdu
 -------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
 InitiatingMessage ::= {
@@ -263,15 +254,16 @@ InitiatingMessage ::= {
             InitialUEMessage-IEs ::= {
                 id: 85
                 criticality: 0 (reject)
-                value: 31
+                value: 10
             }
             InitialUEMessage-IEs ::= {
                 id: 38
                 criticality: 0 (reject)
                 value: 
-                    7E 00 41 71 00 0D 01 62 F2 10 97 FF 00 00 43 65 
-                    87 09 21 10 01 03 2E 04 E0 E0 E0 E0 2F 05 04 02 
-                    22 22 22 17 07 80 60 E0 60 00 3C 30
+                    7E 01 00 00 00 00 0A 7E 00 41 01 00 0D 01 62 F2 
+                    10 97 FF 00 00 43 65 87 09 21 10 01 03 2E 04 E0 
+                    E0 E0 E0 2F 05 04 02 22 22 22 17 07 80 60 E0 60 
+                    00 3C 30
             }
             InitialUEMessage-IEs ::= {
                 id: 121
@@ -290,7 +282,12 @@ InitiatingMessage ::= {
             InitialUEMessage-IEs ::= {
                 id: 90
                 criticality: 1 (ignore)
-                value: 3 (mo-Signalling)
+                value: 3000122 00008:174721 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(98)
+000123 00008:174750 7F88137FE700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [21][23] Msg of length 98 received from port 38412, on stream 1, PPID 60
+000124 00008:174993 7F882176A700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083         SCTP_DATA_IND(recv N2 Messages from AN)
+000125 00008:175014 7F882176A700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225         Entering ngap_amf_decode_pdu()
+000126 00008:175180 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0844            Entering ngap_amf_handle_ng_initial_ue_message()
+ (mo-Signalling)
             }
             InitialUEMessage-IEs ::= {
                 id: 112
@@ -301,10 +298,10 @@ InitiatingMessage ::= {
     }
 }
 -------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-Get gNB context with assoc_id()67
+Get gNB context with assoc_id()21
 test1
 test2
-ng initial ue message, ran_ue_ngap_id:31
+ng initial ue message, ran_ue_ngap_id:10
 test3
 test4
 test5
@@ -317,771 +314,41 @@ test12
 test13
 test14
 test16
-decode_registration_request len:41
-ngap_amf_decode_pdu
-InitiatingMessage ::= {
-    procedureCode: 46
-    criticality: 1 (ignore)
-    value: UplinkNASTransport ::= {
-        protocolIEs: ProtocolIE-Container ::= {
-            UplinkNASTransport-IEs ::= {
-                id: 10
-                criticality: 0 (reject)
-                value: 1342177280
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 85
-                criticality: 0 (reject)
-                value: 31
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 38
-                criticality: 0 (reject)
-                value: 7E 02 00 00 00 00 09 7E 00 59 14
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 121
-                criticality: 0 (reject)
-                value: UserLocationInformationNR ::= {
-                    nR-CGI: NR-CGI ::= {
-                        pLMNIdentity: 54 F0 50
-                        nRCellIdentity: 00 00 00 00 10 (4 bits unused)
-                    }
-                    tAI: TAI ::= {
-                        pLMNIdentity: 54 F0 50
-                        tAC: 00 11 12
-                    }
-                }
-            }
-        }
-    }
-}
-000129 00016:082713 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(91)
-000130 00016:082743 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 91 received from port 38412, on stream 1, PPID 60
-000131 00016:082969 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083         SCTP_DATA_IND(recv N2 Messages from AN)
-000132 00016:082990 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225         Entering ngap_amf_decode_pdu()
-000133 00016:083218 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0844            Entering ngap_amf_handle_ng_initial_ue_message()
-000134 00016:085734 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0882               Get gNB context with assoc_id(67)
-000135 00016:085877 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0896               ng initial ue message,ran_ue_ngap_id:31
-000136 00016:085900 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0909               Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID 0x00001F
-000137 00016:085961 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161               buffer[0] 0
-000138 00016:085972 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162               buffer[1] 11
-000139 00016:085981 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163               buffer[2] 12
-000140 00016:086006 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0040               Entering ngap_amf_itti_amf_app_initial_ue_message()
-000141 00016:086322 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0087               Leaving ngap_amf_itti_amf_app_initial_ue_message() (rc=0)
-000142 00016:086346 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1109            Leaving ngap_amf_handle_ng_initial_ue_message() (rc=0)
-000143 00016:086698 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0013    Entering amf_app_handle_initial_ue_message()
-000144 00016:086719 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0049      Entering notify_ngap_new_ue_amf_ngap_id_association()
-000145 00016:086795 7F2A15C48700 DEBUG AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0058          Sent AMF_APP_NGAP_AMF_UE_ID_NOTIFICATION to NGAP for UE Id 128
-000146 00016:086809 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0059      Leaving notify_ngap_new_ue_amf_ngap_id_association() (rc=0)
-000147 00016:087165 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0040    Leaving amf_app_handle_initial_ue_message() (rc=0)
-000148 00016:087178 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034    NGAP_DATA_IND
-000149 00016:087201 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223    Entering nas_message_decode()
-000150 00016:087212 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765      security header type(0)
-000151 00016:087223 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241      return header size(2)
-000152 00016:087232 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014      Entering _nas_message_plain_decode()
-000153 00016:087263 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183         Entering mm_msg_decode()
-000154 00016:087273 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194            header_result(3)
-000155 00016:087366 7F2A16C4A700 DEBUG NAS    ary/mm/msg/RegistrationRequest.c:0014            decode_registration_request len:41
-000156 00016:087382 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303         Leaving nas_message_decode() (rc=7)
-000157 00016:087393 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070         nas message type:41
-000158 00016:087403 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586         Entering amf_handle_nas_mm_message()
-000159 00016:087412 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588            nas messgae type(41)
-000160 00016:087421 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0593            message type(65):REGISTRATION_REQUEST
-000161 00016:087430 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0110            Entering amf_handle_mm_msg_registration_request()
-000162 00016:087440 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0018               AUTHENTICATION_REQUEST encode dump ------------------000163 00016:087522 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0122            Leaving amf_handle_mm_msg_registration_request() (rc=0)
-000164 00016:087536 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622         Leaving amf_handle_nas_mm_message() (rc=0)
-000165 00016:088333 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0233            Entering ngap_handle_amf_ue_id_notification()
-000166 00016:088362 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0302               Associated  sctp_assoc_id 67, ran_ue_ngap_id 0x00001F, amf_ue_ngap_id 0x00000080:HASH_TABLE_OK 
-000167 00016:088375 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0237            Leaving ngap_handle_amf_ue_id_notification()
-000168 00016:088392 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0113            Entering ngap_generate_downlink_nas_transport()
-000169 00016:088408 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0134               Found ue_ref 0x7f2a0c001d80 amf_ue_ngap_id 0x00000080
-000170 00016:088417 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0147               Found ue_ref 0x7f2a0c001d80 amf_ue_ngap_id 0x00000080
-000171 00016:088426 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0256               Return ue_ref 0x7f2a0c001d80 
-000172 00016:088574 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0225            Leaving ngap_generate_downlink_nas_transport() (rc=0)
-000173 00016:088608 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [23][67] Sending buffer 0x7f2a0c003c60 of 376 bytes on stream 1 with ppid 60
-000174 00016:089051 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 376 bytes on stream 1
-000175 00016:090147 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(57)
-000176 00016:090190 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 57 received from port 38412, on stream 1, PPID 60
-000177 00016:090406 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083            SCTP_DATA_IND(recv N2 Messages from AN)
-000178 00016:090446 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225            Entering ngap_amf_decode_pdu()
-000179 00016:090618 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1117               Entering ngap_amf_handle_ng_uplink_nas_transport()
-000180 00016:092148 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034         NGAP_DATA_IND
-000181 00016:092189 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223         Entering nas_message_decode()
-000182 00016:092207 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765            security header type(2)
-000183 00016:092221 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241            return header size(2)
-000184 00016:092236 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014            Entering _nas_message_plain_decode()
-000185 00016:092250 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183               Entering mm_msg_decode()
-000186 00016:092272 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194                  header_result(3)
-000187 00016:092285 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303               Leaving nas_message_decode() (rc=5)
-000188 00016:092299 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070               nas message type:0
-000189 00016:092313 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586               Entering amf_handle_nas_mm_message()
-000190 00016:092328 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588                  nas messgae type(0)
-000191 00016:092343 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622               Leaving amf_handle_nas_mm_message() (rc=0)
-000192 00020:106700 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
+000127 00008:176612 7F882176A700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0882               Get gNB context with assoc_id(21)
+000128 00008:176718 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0896               ng initial ue message,ran_ue_ngap_id:10
+000129 00008:176735 7F882176A700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0909               Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID 0x00000A
+000130 00008:176786 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161               buffer[0] 0
+000131 00008:176793 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162               buffer[1] 11
+000132 00008:176797 7F882176A700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163               buffer[2] 12
+000133 00008:176815 7F882176A700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0040               Entering ngap_amf_itti_amf_app_initial_ue_message()
+000134 00008:176857 7F8813FFF700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0013    Entering amf_app_handle_initial_ue_message()
+000135 00008:176864 7F8813FFF700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0049      Entering notify_ngap_new_ue_amf_ngap_id_association()
+000136 00008:176875 7F8813FFF700 DEBUG AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0058          Sent AMF_APP_NGAP_AMF_UE_ID_NOTIFICATION to NGAP for UE Id 128
+000137 00008:176881 7F8813FFF700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0059      Leaving notify_ngap_new_ue_amf_ngap_id_association() (rc=0)
+000138 00008:176896 7F8813FFF700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0040    Leaving amf_app_handle_initial_ue_message() (rc=0)
+000139 00008:176915 7F8820F69700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034    NGAP_DATA_IND
+000140 00008:176923 7F8820F69700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223    Entering nas_message_decode()
+000141 00008:176929 7F8820F69700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765      security header type(1)
+000142 00008:176934 7F8820F69700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241      return header size(2)
+000143 00008:176939 7F8820F69700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014      Entering _nas_message_plain_decode()
+000144 00008:176962 7F8820F69700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183         Entering mm_msg_decode()
+000145 00008:176968 7F8820F69700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194            header_result(3)
+000146 00008:176973 7F8820F69700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303         Leaving nas_message_decode() (rc=5)
+000147 00008:176979 7F8820F69700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070         nas message type:0
+000148 00008:176985 7F8820F69700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0592         Entering amf_handle_nas_mm_message()
+000149 00008:176990 7F8820F69700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0594            nas messgae type(0)
+000150 00008:176995 7F8820F69700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0628         Leaving amf_handle_nas_mm_message() (rc=0)
+000151 00008:177008 7F882176A700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0087               Leaving ngap_amf_itti_amf_app_initial_ue_message() (rc=0)
+000152 00008:177014 7F882176A700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1109            Leaving ngap_amf_handle_ng_initial_ue_message() (rc=0)
+000153 00008:177029 7F882176A700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0234            Entering ngap_handle_amf_ue_id_notification()
+000154 00008:177045 7F882176A700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0302               Associated  sctp_assoc_id 21, ran_ue_ngap_id 0x00000A, amf_ue_ngap_id 0x00000080:HASH_TABLE_OK 
+000155 00008:177053 7F882176A700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0238            Leaving ngap_handle_amf_ue_id_notification()
+000156 00010:950109 7F8813FFF700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
 
-000193 00020:106732 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000194 00020:106740 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000195 00020:106750 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000196 00020:106759 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000197 00020:106767 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000198 00020:106776 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000199 00030:106824 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000200 00030:106846 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000201 00030:106853 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000202 00030:106862 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000203 00030:106870 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000204 00030:106878 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000205 00030:106886 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-ngap_amf_decode_pdu
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-InitiatingMessage ::= {
-    procedureCode: 15
-    criticality: 1 (ignore)
-    value: InitialUEMessage ::= {
-        protocolIEs: ProtocolIE-Container ::= {
-            InitialUEMessage-IEs ::= {
-                id: 85
-                criticality: 0 (reject)
-                value: 32
-            }
-            InitialUEMessage-IEs ::= {
-                id: 38
-                criticality: 0 (reject)
-                value: 
-                    7E 00 41 71 00 0D 01 62 F2 10 97 FF 00 00 43 65 
-                    87 09 21 10 01 03 2E 04 E0 E0 E0 E0 2F 05 04 02 
-                    22 22 22 17 07 80 60 E0 60 00 3C 30
-            }
-            InitialUEMessage-IEs ::= {
-                id: 121
-                criticality: 0 (reject)
-                value: UserLocationInformationNR ::= {
-                    nR-CGI: NR-CGI ::= {
-                        pLMNIdentity: 54 F0 50
-                        nRCellIdentity: 00 00 00 00 10 (4 bits unused)
-                    }
-                    tAI: TAI ::= {
-                        pLMNIdentity: 54 F0 50
-                        tAC: 00 11 12
-                    }
-                }
-            }
-            InitialUEMessage-IEs ::= {
-                id: 90
-                criticality: 1 (ignore)
-                value: 3 (mo-Signalling)
-            }
-            InitialUEMessage-IEs ::= {
-                id: 112
-                criticality: 1 (ignore)
-                value: 0 (requested)
-            }
-        }
-    }
-}
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-Get gNB context with assoc_id()67
-test1
-test2
-ng initial ue message, ran_ue_ngap_id:32
-test3
-test4
-test5
-test7
-test8
-test9
-test10
-test11
-test12
-test13
-test14
-test16
-decode_registration_request len:41
-ngap_amf_decode_pdu
-InitiatingMessage ::= {
-    procedureCode: 46
-    criticality: 1 (ignore)
-    value: UplinkNASTransport ::= {
-        protocolIEs: ProtocolIE-Container ::= {
-            UplinkNASTransport-IEs ::= {
-                id: 10
-                criticality: 0 (reject)
-                value: 1342177280
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 85
-                criticality: 0 (reject)
-                value: 32
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 38
-                criticality: 0 (reject)
-                value: 7E 02 00 00 00 00 0A 7E 00 59 14
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 121
-                criticality: 0 (reject)
-                value: UserLocationInformationNR ::= {
-                    nR-CGI: NR-CGI ::= {
-                        pLMNIdentity: 54 F0 50
-                        nRCellIdentity: 00 00 00 00 10 (4 bits unused)
-                    }
-                    tAI: TAI ::= {
-                        pLMNIdentity: 54 F0 50
-                        tAC: 00 11 12
-                    }
-                }
-            }
-        }
-    }
-}
-000206 00031:052226 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(91)
-000207 00031:052253 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 91 received from port 38412, on stream 1, PPID 60
-000208 00031:052521 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083                  SCTP_DATA_IND(recv N2 Messages from AN)
-000209 00031:052541 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225                  Entering ngap_amf_decode_pdu()
-000210 00031:052684 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0844                     Entering ngap_amf_handle_ng_initial_ue_message()
-000211 00031:053644 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0882                        Get gNB context with assoc_id(67)
-000212 00031:053672 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0896                        ng initial ue message,ran_ue_ngap_id:32
-000213 00031:053685 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0909                        Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID 0x000020
-000214 00031:053739 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161                        buffer[0] 0
-000215 00031:053746 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162                        buffer[1] 11
-000216 00031:053752 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163                        buffer[2] 12
-000217 00031:053769 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0040                        Entering ngap_amf_itti_amf_app_initial_ue_message()
-000218 00031:053983 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0087                        Leaving ngap_amf_itti_amf_app_initial_ue_message() (rc=0)
-000219 00031:053998 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1109                     Leaving ngap_amf_handle_ng_initial_ue_message() (rc=0)
-000220 00031:055303 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0013    Entering amf_app_handle_initial_ue_message()
-000221 00031:055320 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0049      Entering notify_ngap_new_ue_amf_ngap_id_association()
-000222 00031:055387 7F2A15C48700 DEBUG AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0058          Sent AMF_APP_NGAP_AMF_UE_ID_NOTIFICATION to NGAP for UE Id 128
-000223 00031:055400 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0059      Leaving notify_ngap_new_ue_amf_ngap_id_association() (rc=0)
-000224 00031:055524 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0233                     Entering ngap_handle_amf_ue_id_notification()
-000225 00031:055538 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0302                        Associated  sctp_assoc_id 67, ran_ue_ngap_id 0x000020, amf_ue_ngap_id 0x00000080:HASH_TABLE_INSERT_OVERWRITTEN_DATA 
-000226 00031:055551 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0237                     Leaving ngap_handle_amf_ue_id_notification()
-000227 00031:055698 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034               NGAP_DATA_IND
-000228 00031:055718 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223               Entering nas_message_decode()
-000229 00031:055726 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765                  security header type(0)
-000230 00031:055733 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241                  return header size(2)
-000231 00031:055739 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014                  Entering _nas_message_plain_decode()
-000232 00031:055745 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183                     Entering mm_msg_decode()
-000233 00031:055751 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194                        header_result(3)
-000234 00031:055821 7F2A16C4A700 DEBUG NAS    ary/mm/msg/RegistrationRequest.c:0014                        decode_registration_request len:41
-000235 00031:055830 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303                     Leaving nas_message_decode() (rc=7)
-000236 00031:055837 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070                     nas message type:41
-000237 00031:055843 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586                     Entering amf_handle_nas_mm_message()
-000238 00031:055848 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588                        nas messgae type(41)
-000239 00031:055854 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0593                        message type(65):REGISTRATION_REQUEST
-000240 00031:055860 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0110                        Entering amf_handle_mm_msg_registration_request()
-000241 00031:055866 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0018                           AUTHENTICATION_REQUEST encode dump ------------------000242 00031:055946 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0122                        Leaving amf_handle_mm_msg_registration_request() (rc=0)
-000243 00031:055955 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622                     Leaving amf_handle_nas_mm_message() (rc=0)
-000244 00031:055979 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0040    Leaving amf_app_handle_initial_ue_message() (rc=0)
-000245 00031:056274 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0113                     Entering ngap_generate_downlink_nas_transport()
-000246 00031:056316 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0134                        Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000247 00031:056325 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0147                        Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000248 00031:056331 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0256                        Return ue_ref 0x7f2a0c0031b0 
-000249 00031:056436 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0225                     Leaving ngap_generate_downlink_nas_transport() (rc=0)
-000250 00031:056655 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [23][67] Sending buffer 0x7f2a0c00b310 of 376 bytes on stream 1 with ppid 60
-000251 00031:056720 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 376 bytes on stream 1
-000252 00031:058338 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(57)
-000253 00031:058361 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 57 received from port 38412, on stream 1, PPID 60
-000254 00031:058650 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083                     SCTP_DATA_IND(recv N2 Messages from AN)
-000255 00031:058669 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225                     Entering ngap_amf_decode_pdu()
-000256 00031:058861 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1117                        Entering ngap_amf_handle_ng_uplink_nas_transport()
-000257 00031:061247 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034                     NGAP_DATA_IND
-000258 00031:061269 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223                     Entering nas_message_decode()
-000259 00031:061279 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765                        security header type(2)
-000260 00031:061289 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241                        return header size(2)
-000261 00031:061298 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014                        Entering _nas_message_plain_decode()
-000262 00031:061308 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183                           Entering mm_msg_decode()
-000263 00031:061323 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194                              header_result(3)
-000264 00031:061342 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303                           Leaving nas_message_decode() (rc=5)
-000265 00031:061356 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070                           nas message type:0
-000266 00031:061370 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586                           Entering amf_handle_nas_mm_message()
-000267 00031:061382 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588                              nas messgae type(0)
-000268 00031:061400 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622                           Leaving amf_handle_nas_mm_message() (rc=0)
-000269 00040:106740 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000270 00040:106764 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000271 00040:106772 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000272 00040:106782 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000273 00040:106790 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000274 00040:106799 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000275 00040:106807 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-ngap_amf_decode_pdu
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-InitiatingMessage ::= {
-    procedureCode: 15
-    criticality: 1 (ignore)
-    value: InitialUEMessage ::= {
-        protocolIEs: ProtocolIE-Container ::= {
-            InitialUEMessage-IEs ::= {
-                id: 85
-                criticality: 0 (reject)
-                value: 33
-            }
-            InitialUEMessage-IEs ::= {
-                id: 38
-                criticality: 0 (reject)
-                value: 
-                    7E 00 41 71 00 0D 01 62 F2 10 97 FF 00 00 43 65 
-                    87 09 21 10 01 03 2E 04 E0 E0 E0 E0 2F 05 04 02 
-                    22 22 22 17 07 80 60 E0 60 00 3C 30
-            }
-            InitialUEMessage-IEs ::= {
-                id: 121
-                criticality: 0 (reject)
-                value: UserLocationInformationNR ::= {
-                    nR-CGI: NR-CGI ::= {
-                        pLMNIdentity: 54 F0 50
-                        nRCellIdentity: 00 00 00 00 10 (4 bits unused)
-                    }
-                    tAI: TAI ::= {
-                        pLMNIdentity: 54 F0 50
-                        tAC: 00 11 12
-                    }
-                }
-            }
-            InitialUEMessage-IEs ::= {
-                id: 90
-                criticality: 1 (ignore)
-                value: 3 (mo-Signalling)
-            }
-            InitialUEMessage-IEs ::= {
-                id: 112
-                criticality: 1 (ignore)
-                value: 0 (requested)
-            }
-        }
-    }
-}
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-Get gNB context with assoc_id()67
-test1
-test2
-ng initial ue message, ran_ue_ngap_id:33
-test3
-test4
-test5
-test7
-test8
-test9
-test10
-test11
-test12
-test13
-test14
-test16
-decode_registration_request len:41
-ngap_amf_decode_pdu
-InitiatingMessage ::= {
-    procedureCode: 46
-    criticality: 1 (ignore)
-    value: UplinkNASTransport ::= {
-        protocolIEs: ProtocolIE-Container ::= {
-            UplinkNASTransport-IEs ::= {
-                id: 10
-                criticality: 0 (reject)
-                value: 1342177280
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 85
-                criticality: 0 (reject)
-                value: 33
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 38
-                criticality: 0 (reject)
-                value: 7E 02 00 00 00 00 0B 7E 00 59 14
-            }
-            UplinkNASTransport-IEs ::= {
-                id: 121
-                criticality: 0 (reject)
-                value: UserLocationInformationNR ::= {
-                    nR-CGI: NR-CGI ::= {
-                        pLMNIdentity: 54 F0 50
-                        nRCellIdentity: 00 00 00 00 10 (4 bits unused)
-                    }
-                    tAI: TAI ::= {
-                        pLMNIdentity: 54 F0 50
-                        tAC: 00 11 12
-                    }
-                }
-            }
-        }
-    }
-}
-000276 00041:032389 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(91)
-000277 00041:032413 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 91 received from port 38412, on stream 1, PPID 60
-000278 00041:032660 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083                           SCTP_DATA_IND(recv N2 Messages from AN)
-000279 00041:032687 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225                           Entering ngap_amf_decode_pdu()
-000280 00041:032847 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0844                              Entering ngap_amf_handle_ng_initial_ue_message()
-000281 00041:033753 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0882                                 Get gNB context with assoc_id(67)
-000282 00041:033791 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0896                                 ng initial ue message,ran_ue_ngap_id:33
-000283 00041:033810 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0909                                 Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID 0x000021
-000284 00041:034080 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161                                 buffer[0] 0
-000285 00041:034103 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162                                 buffer[1] 11
-000286 00041:034114 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163                                 buffer[2] 12
-000287 00041:034148 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0040                                 Entering ngap_amf_itti_amf_app_initial_ue_message()
-000288 00041:034183 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0087                                 Leaving ngap_amf_itti_amf_app_initial_ue_message() (rc=0)
-000289 00041:034196 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1109                              Leaving ngap_amf_handle_ng_initial_ue_message() (rc=0)
-000290 00041:035082 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0013    Entering amf_app_handle_initial_ue_message()
-000291 00041:035101 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0049      Entering notify_ngap_new_ue_amf_ngap_id_association()
-000292 00041:035167 7F2A15C48700 DEBUG AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0058          Sent AMF_APP_NGAP_AMF_UE_ID_NOTIFICATION to NGAP for UE Id 128
-000293 00041:035180 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0059      Leaving notify_ngap_new_ue_amf_ngap_id_association() (rc=0)
-000294 00041:035219 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034                           NGAP_DATA_IND
-000295 00041:035238 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223                           Entering nas_message_decode()
-000296 00041:035252 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765                              security header type(0)
-000297 00041:035272 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241                              return header size(2)
-000298 00041:035291 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014                              Entering _nas_message_plain_decode()
-000299 00041:035309 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183                                 Entering mm_msg_decode()
-000300 00041:035327 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194                                    header_result(3)
-000301 00041:035400 7F2A16C4A700 DEBUG NAS    ary/mm/msg/RegistrationRequest.c:0014                                    decode_registration_request len:41
-000302 00041:035423 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303                                 Leaving nas_message_decode() (rc=7)
-000303 00041:035443 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070                                 nas message type:41
-000304 00041:035461 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586                                 Entering amf_handle_nas_mm_message()
-000305 00041:035479 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588                                    nas messgae type(41)
-000306 00041:035498 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0593                                    message type(65):REGISTRATION_REQUEST
-000307 00041:035516 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0110                                    Entering amf_handle_mm_msg_registration_request()
-000308 00041:035536 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0018                                       AUTHENTICATION_REQUEST encode dump ------------------000310 00041:035794 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0233                              Entering ngap_handle_amf_ue_id_notification()
-000311 00041:035830 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0302                                 Associated  sctp_assoc_id 67, ran_ue_ngap_id 0x000021, amf_ue_ngap_id 0x00000080:HASH_TABLE_INSERT_OVERWRITTEN_DATA 
-000312 00041:035854 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0237                              Leaving ngap_handle_amf_ue_id_notification()
-000313 00041:035882 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0113                              Entering ngap_generate_downlink_nas_transport()
-000314 00041:035917 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0134                                 Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000315 00041:035939 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0147                                 Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000316 00041:035960 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0256                                 Return ue_ref 0x7f2a0c0031b0 
-000317 00041:036015 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0040    Leaving amf_app_handle_initial_ue_message() (rc=0)
-000318 00041:036059 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [23][67] Sending buffer 0x7f2a0c00cb10 of 376 bytes on stream 1 with ppid 60
-000319 00041:036116 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 376 bytes on stream 1
-000309 00041:035569 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0122                                    Leaving amf_handle_mm_msg_registration_request() (rc=0)
-000320 00041:036138 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0225                              Leaving ngap_generate_downlink_nas_transport() (rc=0)
-000321 00041:036143 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622                                 Leaving amf_handle_nas_mm_message() (rc=0)
-000322 00041:037837 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(57)
-000323 00041:037859 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 57 received from port 38412, on stream 1, PPID 60
-000324 00041:038165 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083                              SCTP_DATA_IND(recv N2 Messages from AN)
-000325 00041:038197 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225                              Entering ngap_amf_decode_pdu()
-000326 00041:038358 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1117                                 Entering ngap_amf_handle_ng_uplink_nas_transport()
-000327 00041:040430 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034                                 NGAP_DATA_IND
-000328 00041:040465 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223                                 Entering nas_message_decode()
-000329 00041:040485 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765                                    security header type(2)
-000330 00041:040505 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241                                    return header size(2)
-000331 00041:040525 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014                                    Entering _nas_message_plain_decode()
-000332 00041:040545 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183                                       Entering mm_msg_decode()
-000333 00041:040564 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194                                          header_result(3)
-000334 00041:040627 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303                                       Leaving nas_message_decode() (rc=5)
-000335 00041:040648 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070                                       nas message type:0
-000336 00041:040667 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586                                       Entering amf_handle_nas_mm_message()
-000337 00041:040685 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588                                          nas messgae type(0)
-000338 00041:040704 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622                                       Leaving amf_handle_nas_mm_message() (rc=0)
-000339 00050:106999 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000340 00050:107021 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000341 00050:107030 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000342 00050:107043 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000343 00050:107052 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000344 00050:107060 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000345 00050:107069 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-ngap_amf_decode_pdu
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-InitiatingMessage ::= {
-    procedureCode: 15
-    criticality: 1 (ignore)
-    value: InitialUEMessage ::= {
-        protocolIEs: ProtocolIE-Container ::= {
-            InitialUEMessage-IEs ::= {
-                id: 85
-                criticality: 0 (reject)
-                value: 34
-            }
-            InitialUEMessage-IEs ::= {
-                id: 38
-                criticality: 0 (reject)
-                value: 
-                    7E 00 41 71 00 0D 01 62 F2 10 97 FF 00 00 43 65 
-                    87 09 21 10 01 03 2E 04 E0 E0 E0 E0 2F 05 04 02 
-                    22 22 22 17 07 80 60 E0 60 00 3C 30
-            }
-            InitialUEMessage-IEs ::= {
-                id: 121
-                criticality: 0 (reject)
-                value: UserLocationInformationNR ::= {
-                    nR-CGI: NR-CGI ::= {
-                        pLMNIdentity: 54 F0 50
-                        nRCellIdentity: 00 00 00 00 10 (4 bits unused)
-                    }
-                    tAI: TAI ::= {
-                        pLMNIdentity: 54 F0 50
-                        tAC: 00 11 12
-                    }
-                }
-            }
-            InitialUEMessage-IEs ::= {
-                id: 90
-                criticality: 1 (ignore)
-                value: 3 (mo-Signalling)
-            }
-            InitialUEMessage-IEs ::= {
-                id: 112
-                criticality: 1 (ignore)
-                value: 0 (requested)
-            }
-        }
-    }
-}
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-Get gNB context with assoc_id()67
-test1
-test2
-ng initial ue message, ran_ue_ngap_id:34
-test3
-test4
-test5
-test7
-test8
-test9
-test10
-test11
-test12
-test13
-test14
-test16
-decode_registration_request len:41
-000346 00051:012404 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(91)
-000347 00051:012431 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 91 received from port 38412, on stream 1, PPID 60
-000348 00051:012654 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083                                    SCTP_DATA_IND(recv N2 Messages from AN)
-000349 00051:012688 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225                                    Entering ngap_amf_decode_pdu()
-000350 00051:012846 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0844                                       Entering ngap_amf_handle_ng_initial_ue_message()
-000351 00051:013847 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0882                                          Get gNB context with assoc_id(67)
-000352 00051:013890 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0896                                          ng initial ue message,ran_ue_ngap_id:34
-000353 00051:013910 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0909                                          Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID 0x000022
-000354 00051:014089 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161                                          buffer[0] 0
-000355 00051:014183 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162                                          buffer[1] 11
-000356 00051:014198 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163                                          buffer[2] 12
-000357 00051:014361 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0040                                          Entering ngap_amf_itti_amf_app_initial_ue_message()
-000358 00051:014427 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0087                                          Leaving ngap_amf_itti_amf_app_initial_ue_message() (rc=0)
-000359 00051:014450 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1109                                       Leaving ngap_amf_handle_ng_initial_ue_message() (rc=0)
-000360 00051:015302 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0013    Entering amf_app_handle_initial_ue_message()
-000361 00051:015318 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0049      Entering notify_ngap_new_ue_amf_ngap_id_association()
-000362 00051:015447 7F2A15C48700 DEBUG AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0058          Sent AMF_APP_NGAP_AMF_UE_ID_NOTIFICATION to NGAP for UE Id 128
-000363 00051:015465 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0059      Leaving notify_ngap_new_ue_amf_ngap_id_association() (rc=0)
-000364 00051:015497 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0040    Leaving amf_app_handle_initial_ue_message() (rc=0)
-000365 00051:015534 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034                                       NGAP_DATA_IND
-000366 00051:015647 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0233                                       Entering ngap_handle_amf_ue_id_notification()
-000367 00051:015676 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223                                       Entering nas_message_decode()
-000369 00051:015691 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765                                          security header type(0)
-000368 00051:015683 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0302                                          Associated  sctp_assoc_id 67, ran_ue_ngap_id 0x000022, amf_ue_ngap_id 0x00000080:HASH_TABLE_INSERT_OVERWRITTEN_DATA 
-000370 00051:015703 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241                                          return header size(2)
-000371 00051:015707 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0237                                       Leaving ngap_handle_amf_ue_id_notification()
-000372 00051:015716 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014                                          Entering _nas_message_plain_decode()
-000373 00051:015728 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183                                             Entering mm_msg_decode()
-000374 00051:015741 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194                                                header_result(3)
-000375 00051:015806 7F2A16C4A700 DEBUG NAS    ary/mm/msg/RegistrationRequest.c:0014                                                decode_registration_request len:41
-000376 00051:015821 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303                                             Leaving nas_message_decode() (rc=7)
-000377 00051:015833 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070                                             nas message type:41
-000378 00051:015845 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586                                             Entering amf_handle_nas_mm_message()
-000379 00051:015856 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588                                                nas messgae type(41)
-000380 00051:015867 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0593                                                message type(65):REGISTRATION_REQUEST
-000381 00051:015878 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0110                                                Entering amf_handle_mm_msg_registration_request()
-000382 00051:015890 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0018                                                   AUTHENTICATION_REQUEST encode dump ------------------000383 00051:015959 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0122                                                Leaving amf_handle_mm_msg_registration_request() (rc=0)
-000384 00051:015974 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622                                             Leaving amf_handle_nas_mm_message() (rc=0)
-000385 00051:016115 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0113                                       Entering ngap_generate_downlink_nas_transport()
-000386 00051:016181 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0134                                          Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000387 00051:016204 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0147                                          Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000388 00051:016225 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0256                                          Return ue_ref 0x7f2a0c0031b0 
-000389 00051:016351 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0225                                       Leaving ngap_generate_downlink_nas_transport() (rc=0)
-000390 00051:016418 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [23][67] Sending buffer 0x7f2a0c00e450 of 376 bytes on stream 1 with ppid 60
-000391 00051:017323 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 376 bytes on stream 1
-000392 00060:106105 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000393 00060:106118 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000394 00060:106120 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000395 00060:106123 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000396 00060:106126 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000397 00060:106129 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000398 00060:106132 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-ngap_amf_decode_pdu
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-InitiatingMessage ::= {
-    procedureCode: 15
-    criticality: 1 (ignore)
-    value: InitialUEMessage ::= {
-        protocolIEs: ProtocolIE-Container ::= {
-            InitialUEMessage-IEs ::= {
-                id: 85
-                criticality: 0 (reject)
-                value: 35
-            }
-            InitialUEMessage-IEs ::= {
-                id: 38
-                criticality: 0 (reject)
-                value: 
-                    7E 00 41 71 00 0D 01 62 F2 10 97 FF 00 00 43 65 
-                    87 09 21 10 01 03 2E 04 E0 E0 E0 E0 2F 05 04 02 
-                    22 22 22 17 07 80 60 E0 60 00 3C 30
-            }
-            InitialUEMessage-IEs ::= {
-                id: 121
-                criticality: 0 (reject)
-                value: UserLocationInformationNR ::= {
-                    nR-CGI: NR-CGI ::= {
-                        pLMNIdentity: 54 F0 50
-                        nRCellIdentity: 00 00 00 00 10 (4 bits unused)
-                    }
-                    tAI: TAI ::= {
-                        pLMNIdentity: 54 F0 50
-                        tAC: 00 11 12
-                    }
-                }
-            }
-            InitialUEMessage-IEs ::= {
-                id: 90
-                criticality: 1 (ignore)
-                value: 3 (mo-Signalling)
-            }
-            InitialUEMessage-IEs ::= {
-                id: 112
-                criticality: 1 (ignore)
-                value: 0 (requested)
-            }
-        }
-    }
-}
--------------------------------- DECODED INITIAL UE MESSAGE NGAP MSG ------------------------------
-Get gNB context with assoc_id()67
-test1
-test2
-ng initial ue message, ran_ue_ngap_id:35
-test3
-test4
-test5
-test7
-test8
-test9
-test10
-test11
-test12
-test13
-test14
-test16
-decode_registration_request len:41
-000399 00060:992188 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0496    sctp server recv buffer length(91)
-000400 00060:992202 7F2A16449700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0521    [67][23] Msg of length 91 received from port 38412, on stream 1, PPID 60
-000401 00060:992299 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0083                                       SCTP_DATA_IND(recv N2 Messages from AN)
-000402 00060:992310 7F2A1744B700 TRACE NGAP   /AmfNgapLayer/ngap_amf_decoder.c:0225                                       Entering ngap_amf_decode_pdu()
-000403 00060:992371 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:0844                                          Entering ngap_amf_handle_ng_initial_ue_message()
-000404 00060:992607 7F2A1744B700 DEBUG NGAP   AmfNgapLayer/ngap_amf_handlers.c:0882                                             Get gNB context with assoc_id(67)
-000405 00060:992630 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0896                                             ng initial ue message,ran_ue_ngap_id:35
-000406 00060:992638 7F2A1744B700 INFO  NGAP   AmfNgapLayer/ngap_amf_handlers.c:0909                                             Received NGAP INITIAL_UE_MESSAGE GNB_UE_NGAP_ID 0x000023
-000407 00060:992684 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0161                                             buffer[0] 0
-000408 00060:992692 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0162                                             buffer[1] 11
-000409 00060:992698 7F2A1744B700 DEBUG NGAP   g-cn/src/amf/utils/conversions.c:0163                                             buffer[2] 12
-000410 00060:992708 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0040                                             Entering ngap_amf_itti_amf_app_initial_ue_message()
-000411 00060:992730 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0013    Entering amf_app_handle_initial_ue_message()
-000412 00060:992733 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0049      Entering notify_ngap_new_ue_amf_ngap_id_association()
-000413 00060:992738 7F2A15C48700 DEBUG AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0058          Sent AMF_APP_NGAP_AMF_UE_ID_NOTIFICATION to NGAP for UE Id 128
-000414 00060:992741 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0059      Leaving notify_ngap_new_ue_amf_ngap_id_association() (rc=0)
-000415 00060:992747 7F2A15C48700 TRACE AMF-AP c/amf/AmfAppLayer/amf_app_defs.c:0040    Leaving amf_app_handle_initial_ue_message() (rc=0)
-000416 00060:992756 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0034                                             NGAP_DATA_IND
-000417 00060:992763 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0223                                             Entering nas_message_decode()
-000418 00060:992769 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0765                                                security header type(0)
-000419 00060:992776 7F2A16C4A700 DEBUG NAS    src/amf/NasLibrary/nas_message.c:0241                                                return header size(2)
-000420 00060:992782 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:1014                                                Entering _nas_message_plain_decode()
-000421 00060:992788 7F2A16C4A700 TRACE NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0183                                                   Entering mm_msg_decode()
-000422 00060:992795 7F2A16C4A700 DEBUG NAS    c/amf/NasLibrary/mm/msg/mm_msg.c:0194                                                      header_result(3)
-000423 00060:992803 7F2A16C4A700 DEBUG NAS    ary/mm/msg/RegistrationRequest.c:0014                                                      decode_registration_request len:41
-000424 00060:992809 7F2A16C4A700 TRACE NAS    src/amf/NasLibrary/nas_message.c:0303                                                   Leaving nas_message_decode() (rc=7)
-000425 00060:992816 7F2A16C4A700 DEBUG NAS    tocolStack/AmfNasLayer/nas_amf.c:0070                                                   nas message type:41
-000426 00060:992822 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0586                                                   Entering amf_handle_nas_mm_message()
-000427 00060:992828 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0588                                                      nas messgae type(41)
-000428 00060:992834 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0593                                                      message type(65):REGISTRATION_REQUEST
-000429 00060:992841 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0110                                                      Entering amf_handle_mm_msg_registration_request()
-000430 00060:992847 7F2A16C4A700 DEBUG NAS    k/AmfNasLayer/nas_amf_handlers.c:0018                                                         AUTHENTICATION_REQUEST encode dump ------------------000431 00060:992857 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0122                                                      Leaving amf_handle_mm_msg_registration_request() (rc=0)
-000432 00060:992863 7F2A16C4A700 TRACE NAS    k/AmfNasLayer/nas_amf_handlers.c:0622                                                   Leaving amf_handle_nas_mm_message() (rc=0)
-000433 00060:992872 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_itti_messaging.h:0087                                             Leaving ngap_amf_itti_amf_app_initial_ue_message() (rc=0)
-000434 00060:992879 7F2A1744B700 TRACE NGAP   AmfNgapLayer/ngap_amf_handlers.c:1109                                          Leaving ngap_amf_handle_ng_initial_ue_message() (rc=0)
-000435 00060:992888 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0233                                          Entering ngap_handle_amf_ue_id_notification()
-000436 00060:992895 7F2A1744B700 DEBUG NGAP   colStack/AmfNgapLayer/ngap_amf.c:0302                                             Associated  sctp_assoc_id 67, ran_ue_ngap_id 0x000023, amf_ue_ngap_id 0x00000080:HASH_TABLE_INSERT_OVERWRITTEN_DATA 
-000437 00060:992902 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0237                                          Leaving ngap_handle_amf_ue_id_notification()
-000438 00060:992910 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0113                                          Entering ngap_generate_downlink_nas_transport()
-000439 00060:992921 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0134                                             Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000440 00060:992927 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0147                                             Found ue_ref 0x7f2a0c0031b0 amf_ue_ngap_id 0x00000080
-000441 00060:992934 7F2A1744B700 TRACE NGAP   colStack/AmfNgapLayer/ngap_amf.c:0256                                             Return ue_ref 0x7f2a0c0031b0 
-000442 00060:992963 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0289    [23][67] Sending buffer 0x7f2a0c00f910 of 376 bytes on stream 1 with ppid 60
-000443 00060:993110 7F2A17C4C700 DEBUG SCTP   tpLayer/sctp_primitives_server.c:0301    Successfully sent 376 bytes on stream 1
-000444 00060:993125 7F2A1744B700 TRACE NGAP   pLayer/ngap_amf_nas_procedures.c:0225                                          Leaving ngap_generate_downlink_nas_transport() (rc=0)
-000445 00070:106297 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000446 00070:106310 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000447 00070:106312 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000448 00070:106316 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000449 00070:106318 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000450 00070:106321 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000451 00070:106324 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000452 00080:106903 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000453 00080:106932 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000454 00080:106935 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000455 00080:106939 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000456 00080:106942 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000457 00080:106945 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000458 00080:106948 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000459 00090:106706 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000460 00090:106732 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000461 00090:106735 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000462 00090:106738 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000463 00090:106741 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000464 00090:106743 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000465 00090:106746 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000466 00100:105944 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000467 00100:105957 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000468 00100:105959 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000469 00100:105962 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000470 00100:105965 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000471 00100:105967 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000472 00100:105970 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000473 00110:106138 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000474 00110:106151 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000475 00110:106154 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000476 00110:106157 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000477 00110:106160 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000478 00110:106163 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000479 00110:106165 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000480 00120:106319 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000481 00120:106332 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000482 00120:106335 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000483 00120:106338 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000484 00120:106340 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000485 00120:106343 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000486 00120:106346 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000487 00130:106565 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000488 00130:106578 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000489 00130:106580 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000490 00130:106583 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000491 00130:106586 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000492 00130:106589 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000493 00130:106591 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
-
-000494 00140:118910 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0013    ======================================= STATISTICS ============================================
-
-000495 00140:118922 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
-000496 00140:118925 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              0              |             0               |
-000497 00140:118928 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
-000498 00140:118931 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
-000499 00140:118934 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
-000500 00140:118937 7F2A15C48700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
+000157 00010:950134 7F8813FFF700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0014                   |   Current Status| Added since last display|  Removed since last display |
+000158 00010:950144 7F8813FFF700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0016    Connected gNBs |          2      |              2              |             0               |
+000159 00010:950155 7F8813FFF700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0018    Attached UEs   |          0      |              0              |             0               |
+000160 00010:950166 7F8813FFF700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0020    Connected UEs  |          0      |              0              |             0               |
+000161 00010:950176 7F8813FFF700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0022    Default Bearers|          0      |              0              |             0               |
+000162 00010:950185 7F8813FFF700 DEBUG AMF-AP AmfAppLayer/amf_app_statistics.c:0025    ======================================= STATISTICS ============================================
 
