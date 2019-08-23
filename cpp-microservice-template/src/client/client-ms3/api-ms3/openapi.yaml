@@ -1,0 +1,24 @@
+---
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Simple API
+  description: A simple API to illustrate OpenAPI concepts
+
+servers:
+  - url: https://example.io/v1
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
+
+#  ----- Added lines  ----------------------------------------
+paths:
+  /artists:
+    get:
+      description: Returns a list of artists
+#  ---- /Added lines  ----------------------------------------

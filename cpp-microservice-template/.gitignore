@@ -1,0 +1,13 @@
+.dep/
+obj/
+gen-cpp/
+*.swp
+CMakeLists.txt
+server/DefaultApiMainServer.cpp
+server/api/*
+!server/api/.keep
+server/model/*
+!server/model/json.hpp
+server/.openapi-generator/
+server/impl/DefaultApiImpl*
+server/server-ms1

@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Simple API
+  description: A simple API to illustrate OpenAPI concepts
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /artists:
+    get:
+      summary: Returns a list of artists
+      operationId: getList
+      tags:
+        - Artists
+      responses:
+        '200':
+          description: Successfully returned a list of artists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/artists'
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    artist:
+      type: object
+      properties:
+        artist_name:
+          type: string
+        artist_genre:
+          type: string
+        albums_recorded:
+          type: integer
+        username:
+          type: string
+      required:
+        - username
+
+    artists:
+      type: array
+      items:
+        $ref: '#/components/schemas/artist'
