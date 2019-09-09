@@ -2,11 +2,13 @@
 #include <stdlib.h>
 
 #include "nas_message.h"
-#include "mm_msg.h"
+//#include "mm_msg.h"
 #include "bstrlib.h"
 #include "mmData.h"
 #include "common_types.h"
 #include "common_defs.h"
+
+#if 0
 
 //add-test
 #define BUF_LEN 512
@@ -2589,7 +2591,7 @@ int security_mode_reject()
      return 0;
     
 }
-
+#endif
 int main()
 { 
   #if 0

@@ -599,8 +599,8 @@
 
 //0b11******
 //5GS Session Management Messages
-
-#define PDUSessionEstablishmentRequest      0b11000001
+         
+#define PDU_SESSION_ESTABLISHMENT_REQUEST   0b11000001
 #define PDUSessionEstablishmentAccept       0b11000010
 #define PDUSessionEstablishmentReject       0b11000011
 
