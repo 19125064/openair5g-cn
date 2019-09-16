@@ -12,20 +12,15 @@ int encode__5gsm_capability ( _5GSMCapability _5gsmcapability, uint8_t iei, uint
     uint32_t encoded = 0;
     int encode_result;
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,_5GSM_CAPABILITY_MINIMUM_LENGTH , len);
-    
 
-       if( iei >0  )
-       {
-           *buffer=iei;
-               encoded++;
-       }
-
-
+	if( iei >0  )
+    {
+    	*buffer=iei;
+        encoded++;
+    }
 
     lenPtr = (buffer + encoded);
     encoded++;
-
-
 
     if ((encode_result = encode_bstring (_5gsmcapability, buffer + encoded, len - encoded)) < 0)//加密,实体,首地址,长度
         return encode_result;

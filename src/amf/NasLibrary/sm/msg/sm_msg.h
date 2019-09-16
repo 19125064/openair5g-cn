@@ -20,8 +20,9 @@
 
 #include "_5GSMStatus.h"
 
-typedef union {
+typedef struct {
   sm_msg_header_t header;
+  union {
   pdu_session_establishment_request_msg pdu_session_establishment_request;
   pdu_session_establishment_accept_msg pdu_session_establishment_accept;
   pdu_session_establishment_reject_msg pdu_session_establishment_reject;
@@ -42,4 +43,5 @@ typedef union {
   pdu_session_release_complete_msg pdu_session_release_complete;
 
   _5gsm_status_msg _5gsm_status;
+  } specific_msg;
 }SM_msg;

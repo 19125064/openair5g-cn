@@ -37,7 +37,7 @@ int encode_authentication_parameter_rand ( AuthenticationParameterRAND  authenti
 int decode_authentication_parameter_rand ( AuthenticationParameterRAND * authenticationparameterrand, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
   int                                     decoded = 0;
-  uint8_t                                 ielen = 1;
+  uint8_t                                 ielen = 16;
   int                                     decode_result;
 
   if (iei > 0) {

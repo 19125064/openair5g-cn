@@ -14,17 +14,15 @@ int encode_smpdudn_request_container ( SMPDUDNRequestContainer smpdudnrequestcon
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,SMPDUDN_REQUEST_CONTAINER_MINIMUM_LENGTH , len);
     
 
-       if( iei >0  )
-       {
-           *buffer=iei;
-               encoded++;
-       }
-
+	if( iei >0  )
+    {
+    	*buffer=iei;
+        encoded++;
+    }
 
 
     lenPtr = (buffer + encoded);
     encoded++;
-
 
 
     if ((encode_result = encode_bstring (smpdudnrequestcontainer, buffer + encoded, len - encoded)) < 0)//加密,实体,首地址,长度

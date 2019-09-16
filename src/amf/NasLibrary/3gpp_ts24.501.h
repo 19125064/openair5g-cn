@@ -582,7 +582,7 @@
 #define AUTHENTICATION_REQUEST                  0b01010110
 #define AUTHENTICATION_RESPONSE                 0b01010111
 #define AUTHENTICATION_REJECT                   0b01011000
-#define AUTHENTICATION_FAILURE                  0b01011001 
+#define AUTHENTICATION_FAILURE                  0b01011001
 #define AUTHENTICATION_RESULT                   0b01011010
 #define IDENTITY_REQUEST                        0b01011011
 #define IDENTITY_RESPONSE                       0b01011100
@@ -599,27 +599,27 @@
 
 //0b11******
 //5GS Session Management Messages
-         
-#define PDU_SESSION_ESTABLISHMENT_REQUEST   0b11000001
-#define PDUSessionEstablishmentAccept       0b11000010
-#define PDUSessionEstablishmentReject       0b11000011
 
-#define PDUSessionAuthenticationCommand     0b11000101
-#define PDUSessionAuthenticationComplete    0b11000110
-#define PDUSessionAuthenticationResult      0b11000111
+#define PDU_SESSION_ESTABLISHMENT_REQUEST       0b11000001
+#define PDU_SESSION_ESTABLISHMENT_ACCPET        0b11000010
+#define PDU_SESSION_ESTABLISHMENT_REJECT        0b11000011
 
-#define PDUSessionModificationRequest       0b11001001
-#define PDUSessionModificationReject        0b11001010
-#define PDUSessionModificationCommand       0b11001011
-#define PDUSessionModificationComplete      0b11001100
-#define PDUSessionModificationCommandReject 0b11001101
+#define PDU_SESSION_AUTHENTICATION_COMMAND      0b11000101
+#define PDU_SESSION_AUTHENTICATION_COMPLETE     0b11000110
+#define PDU_SESSION_AUTHENTICATION_RESULT       0b11000111
 
-#define PDUSessionReleaseRequest            0b11010001
-#define PDUSessionReleaseReject             0b11010010
-#define PDUSessionReleaseCommand            0b11010011
-#define PDUSessionReleaseComplete           0b11010100
+#define PDU_SESSION_MODIFICATION_REQUEST        0b11001001
+#define PDU_SESSION_MODIFICATION_REJECT         0b11001010
+#define PDU_SESSION_MODIFICATION_COMMAND        0b11001011
+#define PDU_SESSION_MODIFICATION_COMPLETE       0b11001100
+#define PDU_SESSION_MODIFICATION_COMMANDREJECT  0b11001101
 
-#define _5GSMStatus                         0b11010110
+#define PDU_SESSION_RELEASE_REQUEST             0b11010001
+#define PDU_SESSION_RELEASE_REJECT              0b11010010
+#define PDU_SESSION_RELEASE_COMMAND             0b11010011
+#define PDU_SESSION_RELEASE_COMPLETE            0b11010100
+
+#define _5GSMStatus                             0b11010110
 
 
 /*
@@ -678,7 +678,7 @@
  * 5GMM cause types
 */
 
-#define IIEGAL_UE                         	0b00000011 
+#define IIEGAL_UE                         	    0b00000011
 #define PEI_NOT_ACCEPTED                        0b00000101
 #define IIEGAL_ME                               0b00000110
 #define FGS_SERVICES_NOT_ALLOWED                0b00000111
@@ -686,13 +686,13 @@
 #define PLMN_NOT_ALLOWED                        0b00001011
 #define TRACKING_AREA_NOT_ALLOWED               0b00001100
 #define ROAMING_NOT_ALLOWED_IN_THIS_TA          0b00001101
-//#define 
-//#define 
-//#define 
-//#define 
-//#define 
-//#define 
-//#define 
+//#define
+//#define
+//#define
+//#define
+//#define
+//#define
+//#define
 //#define
 
 /*********************************************************************************************/

@@ -36,7 +36,7 @@ int encode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximum
 int decode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximumDataRate * intergrityprotectionmaximumdatarate, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
 	int decoded=0;
-	uint8_t ielen=0;
+	uint8_t ielen=3;
 	int decode_result;
 
     if (iei > 0)
