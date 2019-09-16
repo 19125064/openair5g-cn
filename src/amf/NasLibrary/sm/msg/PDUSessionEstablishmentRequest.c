@@ -14,7 +14,7 @@ int decode_pdu_session_establishment_request( pdu_session_establishment_request_
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_DECODER (buffer, PDU_SESSION_ESTABLISHMENT_REQUEST_MINIMUM_LENGTH, len);
 
-    //#if 0
+    #if 0
     if((decoded_result = decode_extended_protocol_discriminator (&pdu_session_establishment_request->extendedprotocoldiscriminator, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
@@ -34,7 +34,7 @@ int decode_pdu_session_establishment_request( pdu_session_establishment_request_
         return decoded_result;
     else
         decoded+=decoded_result;
-	//#endif
+	#endif
    
     if((decoded_result = decode_intergrity_protection_maximum_data_rate (&pdu_session_establishment_request->intergrityprotectionmaximumdatarate, INTEGRITY_PROTECTION_MAXIMUM_DATA_RATE_IEI, buffer+decoded,len-decoded))<0)
         return decoded_result;
@@ -89,7 +89,7 @@ int encode_pdu_session_establishment_request( pdu_session_establishment_request_
     
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer, PDU_SESSION_ESTABLISHMENT_REQUEST_MINIMUM_LENGTH, len);
-
+	#if 0
     if((encoded_result = encode_extended_protocol_discriminator (pdu_session_establishment_request->extendedprotocoldiscriminator, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
@@ -109,6 +109,7 @@ int encode_pdu_session_establishment_request( pdu_session_establishment_request_
         return encoded_result;
     else
         encoded+=encoded_result;
+	#endif
 
     if((encoded_result = encode_intergrity_protection_maximum_data_rate (pdu_session_establishment_request->intergrityprotectionmaximumdatarate, INTEGRITY_PROTECTION_MAXIMUM_DATA_RATE_IEI, buffer+encoded,len-encoded))<0)
         return encoded_result;
