@@ -7,6 +7,9 @@
 #define SSC_MODE_MINIMUM_LENGTH 1
 #define SSC_MODE_MAXIMUM_LENGTH 1
 
+#define SSC_MODE_IEI	0XA0
+
+
 typedef struct{
   uint8_t ssc_mode_value:3;
 }SSCMode;

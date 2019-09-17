@@ -14,15 +14,11 @@ int encode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximum
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,INTERGRITY_PROTECTION_MAXIMUM_DATA_RATE_MINIMUM_LENGTH , len);
     
 
-       if( iei >0  )
-       {
-           *buffer=iei;
-               encoded++;
-       }
-
-
-
-
+    if( iei > 0)
+    {
+    	*buffer=iei;
+        encoded++;
+    }
 
     if ((encode_result = encode_bstring (intergrityprotectionmaximumdatarate, buffer + encoded, len - encoded)) < 0)//加密,实体,首地址,长度
         return encode_result;
@@ -36,7 +32,7 @@ int encode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximum
 int decode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximumDataRate * intergrityprotectionmaximumdatarate, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
 	int decoded=0;
-	uint8_t ielen=3;
+	uint8_t ielen=2;
 	int decode_result;
 
     if (iei > 0)
@@ -44,9 +40,6 @@ int decode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximum
         CHECK_IEI_DECODER (iei, *buffer);
         decoded++;
     }
-
-
-
 
     if((decode_result = decode_bstring (intergrityprotectionmaximumdatarate, ielen, buffer + decoded, len - decoded)) < 0)
         return decode_result;

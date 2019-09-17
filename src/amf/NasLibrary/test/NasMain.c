@@ -2658,10 +2658,10 @@ int auth_request()
      #endif
 
 
-	 unsigned char bitStream_intergrityprotectionmaximumdatarate[3] = {0x01,0x02,0x03};
-     bstring intergrityprotectionmaximumdatarate_tmp = bfromcstralloc(3, "\0");
+	 unsigned char bitStream_intergrityprotectionmaximumdatarate[2] = {0x01,0x02};
+     bstring intergrityprotectionmaximumdatarate_tmp = bfromcstralloc(2, "\0");
      //intergrityprotectionmaximumdatarate_tmp->data = bitStream_intergrityprotectionmaximumdatarate;
-     intergrityprotectionmaximumdatarate_tmp->slen = 3;
+     intergrityprotectionmaximumdatarate_tmp->slen = 2;
      memcpy(intergrityprotectionmaximumdatarate_tmp->data,bitStream_intergrityprotectionmaximumdatarate,sizeof(bitStream_intergrityprotectionmaximumdatarate));
      sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate = intergrityprotectionmaximumdatarate_tmp;
 
@@ -2753,7 +2753,7 @@ int auth_request()
      //printf("pdu identity buffer:0x%x\n",*(unsigned char *)((sm_msg->specific_msg.pdu_session_establishment_request.pdusessionidentity)->data));
      //printf("PTI buffer:0x%x\n",*(unsigned char *)((sm_msg->specific_msg.pdu_session_establishment_request.proceduretransactionidentity)->data));
 
-	 printf("intergrity buffer:0x%x 0x%x 0x%x\n",(unsigned char)((sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[0]),(unsigned char )((sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[1]),(unsigned char )((sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[2]));
+	 printf("intergrity buffer:0x%x 0x%x\n",(unsigned char)((sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[0]),(unsigned char )((sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[1]));
      printf("_pdusessiontype bits_3:0x%x\n",sm_msg->specific_msg.pdu_session_establishment_request._pdusessiontype.pdu_session_type_value);
      printf("sscmode bits_3:0x%x\n",sm_msg->specific_msg.pdu_session_establishment_request.sscmode.ssc_mode_value);
      printf("_5gsmcapability bits_5 --- MPTCP:0x%x ATS-LL:0x%x EPT-S1:0x%x MH6-PDU:0x%x RqoS:0x%x\n",sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_MPTCP_supported,sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_ATSLL_supported,sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_EPTS1_supported,sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_MH6PDU_supported,sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_Rqos_supported);
@@ -2821,7 +2821,7 @@ int auth_request()
      //printf("pdu identity buffer:0x%x\n",*(unsigned char *)((decoded_sm_msg->specific_msg.pdu_session_establishment_request.pdusessionidentity)->data));
      //printf("PTI buffer:0x%x\n",*(unsigned char *)((decoded_sm_msg->specific_msg.pdu_session_establishment_request.proceduretransactionidentity)->data));
 
-	 printf("intergrity buffer:0x%x 0x%x 0x%x\n",(unsigned char)((decoded_sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[0]),(unsigned char )((decoded_sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[1]),(unsigned char )((decoded_sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[2]));
+	 printf("intergrity buffer:0x%x 0x%x\n",(unsigned char)((decoded_sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[0]),(unsigned char )((decoded_sm_msg->specific_msg.pdu_session_establishment_request.intergrityprotectionmaximumdatarate)->data[1]));
      printf("_pdusessiontype bits_3:0x%x\n",decoded_sm_msg->specific_msg.pdu_session_establishment_request._pdusessiontype.pdu_session_type_value);
      printf("sscmode bits_3:0x%x\n",decoded_sm_msg->specific_msg.pdu_session_establishment_request.sscmode.ssc_mode_value);
      printf("_5gsmcapability bits_5 --- MPTCP:0x%x ATS-LL:0x%x EPT-S1:0x%x MH6-PDU:0x%x RqoS:0x%x\n",decoded_sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_MPTCP_supported,decoded_sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_ATSLL_supported,decoded_sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_EPTS1_supported,decoded_sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_MH6PDU_supported,decoded_sm_msg->specific_msg.pdu_session_establishment_request._5gsmcapability.is_Rqos_supported);

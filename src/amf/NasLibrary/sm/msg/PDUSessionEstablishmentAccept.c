@@ -14,6 +14,7 @@ int decode_pdu_session_establishment_accept( pdu_session_establishment_accept_ms
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_DECODER (buffer, PDU_SESSION_ESTABLISHMENT_ACCEPT_MINIMUM_LENGTH, len);
 
+#if 0
     if((decoded_result = decode_extended_protocol_discriminator (&pdu_session_establishment_accept->extendedprotocoldiscriminator, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
@@ -33,7 +34,7 @@ int decode_pdu_session_establishment_accept( pdu_session_establishment_accept_ms
         return decoded_result;
     else
         decoded+=decoded_result;
-
+#endif
     if((decoded_result = decode__pdu_session_type (&pdu_session_establishment_accept->_pdusessiontype, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else

@@ -4,7 +4,8 @@
 #define MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_MINIMUM_LENGTH 3
 #define MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_MAXIMUM_LENGTH 3
 
-//typedef bstring MaximumNumberOfSupportedPacketFilters;
+#define MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_IEI	0X55
+
 typedef uint16_t MaximumNumberOfSupportedPacketFilters;
 
 

@@ -18,7 +18,7 @@ int encode_alwayson_pdu_session_requested ( AlwaysonPDUSessionRequested alwayson
     }
 
 	if(alwaysonpdusessionrequested.apsr_requested)
-		bitStream |= 0X01;
+		bitStream |= 0x01;
 	
     ENCODE_U8(buffer+encoded,bitStream,encoded);
 

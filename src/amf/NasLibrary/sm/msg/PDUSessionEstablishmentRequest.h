@@ -61,16 +61,5 @@ typedef struct pdu_session_establishment_request_msg_tag{
 	ExtendedProtocolConfigurationOptions extendedprotocolconfigurationoptions;
 }pdu_session_establishment_request_msg;
 
-
-#define INTEGRITY_PROTECTION_MAXIMUM_DATA_RATE_IEI		0X00
-#define PDU_SESSION_TYPE_IEI							0X90
-#define SSC_MODE_IEI									0XA0
-#define _5GSM_CAPABILITY_IEI							0X28
-#define MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_IEI	0X55
-#define ALWAYSON_PDU_SESSION_REQUESTED_IEI				0XB0
-#define SMPDUDN_REQUEST_CONTAINER_INFORMATION_IEI		0X39
-#define EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI		0X7B
-
-
 int decode_pdu_session_establishment_request(pdu_session_establishment_request_msg *pdusessionestablishmentrequest, uint8_t *buffer, uint32_t len);
 int encode_pdu_session_establishment_request(pdu_session_establishment_request_msg *pdusessionestablishmentrequest, uint8_t *buffer, uint32_t len);
