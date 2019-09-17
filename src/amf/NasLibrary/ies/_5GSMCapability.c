@@ -10,7 +10,8 @@ int encode__5gsm_capability ( _5GSMCapability _5gsmcapability, uint8_t iei, uint
 {
     uint8_t *lenPtr;
     uint32_t encoded = 0;
-    int encode_result;
+	uint8_t _5gsmcapability_bits = 0;
+	
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,_5GSM_CAPABILITY_MINIMUM_LENGTH , len);
 
 	if( iei >0  )
@@ -22,12 +23,21 @@ int encode__5gsm_capability ( _5GSMCapability _5gsmcapability, uint8_t iei, uint
     lenPtr = (buffer + encoded);
     encoded++;
 
-    if ((encode_result = encode_bstring (_5gsmcapability, buffer + encoded, len - encoded)) < 0)//加密,实体,首地址,长度
-        return encode_result;
-    else
-        encoded += encode_result;
+	if(_5gsmcapability.is_MPTCP_supported)
+		_5gsmcapability_bits |= 0X10;
+	if(_5gsmcapability.is_ATSLL_supported)
+		_5gsmcapability_bits |= 0X08;
+	if(_5gsmcapability.is_EPTS1_supported)
+		_5gsmcapability_bits |= 0X04;
+	if(_5gsmcapability.is_MH6PDU_supported)
+		_5gsmcapability_bits |= 0X02;
+	if(_5gsmcapability.is_Rqos_supported)
+		_5gsmcapability_bits |= 0X01;
 
-    *lenPtr = encoded - 1 - ((iei > 0) ? 1 : 0);    
+	ENCODE_U8(buffer+encoded, _5gsmcapability_bits, encoded);
+
+    *lenPtr = encoded - 1 - ((iei > 0) ? 1 : 0);  
+	
     return encoded;
 }
 
@@ -36,6 +46,8 @@ int decode__5gsm_capability ( _5GSMCapability * _5gsmcapability, uint8_t iei, ui
 	int decoded=0;
 	uint8_t ielen=0;
 	int decode_result;
+
+	uint8_t _5gsmcapability_bits = 0;
 
     if (iei > 0)
     {
@@ -49,10 +61,34 @@ int decode__5gsm_capability ( _5GSMCapability * _5gsmcapability, uint8_t iei, ui
     CHECK_LENGTH_DECODER (len - decoded, ielen);
 
 
-    if((decode_result = decode_bstring (_5gsmcapability, ielen, buffer + decoded, len - decoded)) < 0)
-        return decode_result;
+	DECODE_U8(buffer+decoded,_5gsmcapability_bits,decoded);
+
+    
+	if(_5gsmcapability_bits & 0x10)
+      _5gsmcapability->is_MPTCP_supported = true;
     else
-        decoded += decode_result;
-            return decoded;
+      _5gsmcapability->is_MPTCP_supported = false;
+	
+	if(_5gsmcapability_bits & 0x08)
+      _5gsmcapability->is_ATSLL_supported = true;
+    else
+      _5gsmcapability->is_ATSLL_supported = false;
+	
+    if(_5gsmcapability_bits & 0x04)
+      _5gsmcapability->is_EPTS1_supported = true;
+    else
+      _5gsmcapability->is_EPTS1_supported = false;
+
+    if(_5gsmcapability_bits & 0x02)
+      _5gsmcapability->is_MH6PDU_supported = true;
+    else
+      _5gsmcapability->is_MH6PDU_supported = false;
+
+    if(_5gsmcapability_bits & 0x01)
+      _5gsmcapability->is_Rqos_supported = true;
+    else
+      _5gsmcapability->is_Rqos_supported = false;
+	
+	return decoded;
 }
 

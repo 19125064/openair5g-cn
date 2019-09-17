@@ -56,6 +56,6 @@ int decode_smpdudn_request_container ( SMPDUDNRequestContainer * smpdudnrequestc
         return decode_result;
     else
         decoded += decode_result;
-            return decoded;
+    return decoded;
 }
 
