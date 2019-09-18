@@ -119,6 +119,9 @@ sm_msg_decode (
       case PDU_SESSION_RELEASE_COMPLETE:
 	  	   decode_result = decode_pdu_session_release_complete(&msg->specific_msg.pdu_session_release_complete, buffer, len);
 	  break;
+	  case _5GSM_STAUS:
+	  	   decode_result = decode__5gsm_status(&msg->specific_msg._5gsm_status, buffer, len);
+	  break;
 
 	  default:
 	    //OAILOG_ERROR (LOG_NAS, "SM-MSG   - Unexpected message type: 0x%x\n",msg->header.message_type);
@@ -230,6 +233,9 @@ fivegsm_msg_encode (
 	  break;
       case PDU_SESSION_RELEASE_COMPLETE:
 	  	   encode_result = encode_pdu_session_release_complete(&msg->specific_msg.pdu_session_release_complete, buffer, len);
+	  break;
+	  case _5GSM_STAUS:
+	  	   encode_result = encode__5gsm_status(&msg->specific_msg._5gsm_status, buffer, len);
 	  break;
 
 	  default:
