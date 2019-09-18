@@ -7,6 +7,8 @@
 #include "_5GSMCause.h"
 #include "GPRSTimer3.h"
 #include "ExtendedProtocolConfigurationOptions.h"
+#include "_5GSMCongestionReattemptIndicator.h"
+
 
 
 /* Minimum length macro. Formed by minimum length of each mandatory field */
@@ -39,6 +41,7 @@ typedef struct pdu_session_modification_reject_msg_tag{
 	_5GSMCause _5gsmcause;
 	GPRSTimer3 gprstimer3;
 	ExtendedProtocolConfigurationOptions extendedprotocolconfigurationoptions;
+	_5GSMCongestionReattemptIndicator _5gsmcongestionreattemptindicator;
 }pdu_session_modification_reject_msg;
 
 
