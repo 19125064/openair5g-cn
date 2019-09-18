@@ -8,40 +8,71 @@
 
 int encode_allowed_ssc_mode ( AllowedSSCMode allowedsscmode, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
-    uint8_t *lenPtr;
     uint32_t encoded = 0;
-    int encode_result;
+    uint8_t bitStream = 0x00;
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,ALLOWED_SSC_MODE_MINIMUM_LENGTH , len);
     
+	if(iei > 0){
+		bitStream |= (iei & 0xf0);
+	}
 
+	if(allowedsscmode.is_ssc3_allowed)
+	{
+		bitStream |= 0x04;
+	}
+	if(allowedsscmode.is_ssc2_allowed)
+	{
+		bitStream |= 0x02;
+	}
+	if(allowedsscmode.is_ssc1_allowed)
+	{
+		bitStream |= 0x01;
+	}
 
-
-
-
-
-    if ((encode_result = encode_bstring (allowedsscmode, buffer + encoded, len - encoded)) < 0)//加密,实体,首地址,长度
-        return encode_result;
-    else
-        encoded += encode_result;
-
-
+	ENCODE_U8(buffer+encoded,bitStream,encoded);
+	
     return encoded;
 }
 
 int decode_allowed_ssc_mode ( AllowedSSCMode * allowedsscmode, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
 	int decoded=0;
-	uint8_t ielen=0;
-	int decode_result;
+	uint8_t bitStream = 0x00;
 
+	DECODE_U8(buffer+decoded,bitStream,decoded);
 
+	if(iei != bitStream&0xf0){
+		return -1;
+	}
+	if(iei > 0){
+		bitStream = (bitStream & 0x07);	
+	}
 
-
-
-    if((decode_result = decode_bstring (allowedsscmode, ielen, buffer + decoded, len - decoded)) < 0)
-        return decode_result;
-    else
-        decoded += decode_result;
-            return decoded;
+	if(bitStream & 0x01)
+	{
+		allowedsscmode->is_ssc1_allowed = true;
+	}
+	else
+	{
+		allowedsscmode->is_ssc1_allowed = false;
+	}
+	if(bitStream & 0x02)
+	{
+		allowedsscmode->is_ssc2_allowed = true;
+	}
+	else
+	{
+		allowedsscmode->is_ssc2_allowed = false;
+	}
+	if(bitStream & 0x04)
+	{
+		allowedsscmode->is_ssc3_allowed = true;
+	}
+	else
+	{
+		allowedsscmode->is_ssc3_allowed = false;
+	}
+	
+	return decoded;
 }
 

@@ -63,6 +63,7 @@ int decode_extended_protocol_configuration_options ( ExtendedProtocolConfigurati
         return decode_result;
     else
         decoded += decode_result;
-            return decoded;
+
+	return decoded;
 }
 

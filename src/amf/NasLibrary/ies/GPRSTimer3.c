@@ -13,7 +13,7 @@ int encode_gprs_timer3 ( GPRSTimer3 gprstimer3, uint8_t iei, uint8_t * buffer, u
     uint8_t timeValue = 0;
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,GPRS_TIMER3_MINIMUM_LENGTH , len);
 
-    if( iei >0  ){
+    if( iei > 0){
       *buffer=iei;
       encoded++;
     }

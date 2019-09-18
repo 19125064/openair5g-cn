@@ -9,6 +9,8 @@
 #include "AllowedSSCMode.h"
 #include "EAPMessage.h"
 #include "ExtendedProtocolConfigurationOptions.h"
+#include "_5GSMCongestionReattemptIndicator.h"
+
 
 
 /* Minimum length macro. Formed by minimum length of each mandatory field */
@@ -47,6 +49,7 @@ typedef struct pdu_session_establishment_reject_msg_tag{
 	AllowedSSCMode allowedsscmode;
 	EAPMessage eapmessage;
 	ExtendedProtocolConfigurationOptions extendedprotocolconfigurationoptions;
+	_5GSMCongestionReattemptIndicator _5gsmcongestionreattemptindicator;
 }pdu_session_establishment_reject_msg;
 
 

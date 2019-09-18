@@ -7,7 +7,7 @@
 #define SSC_MODE_MINIMUM_LENGTH 1
 #define SSC_MODE_MAXIMUM_LENGTH 1
 
-#define SSC_MODE_IEI	0XA0
+#define SSC_MODE_IEI	0xa0
 
 
 typedef struct{

@@ -8,7 +8,7 @@
 #define _PDU_SESSION_TYPE_MINIMUM_LENGTH 1
 #define _PDU_SESSION_TYPE_MAXIMUM_LENGTH 1
 
-#define PDU_SESSION_TYPE_IEI	0X90
+#define PDU_SESSION_TYPE_IEI	0x90
 
 typedef struct  {
   uint8_t pdu_session_type_value:3;

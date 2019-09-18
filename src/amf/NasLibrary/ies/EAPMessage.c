@@ -8,26 +8,21 @@
 
 int encode_eap_message ( EAPMessage eapmessage, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
-    printf("encode_eap_message\n");
     uint8_t *lenPtr;
     uint32_t encoded = 0;
     int encode_result;
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,EAP_MESSAGE_MINIMUM_LENGTH , len);
     
 
-       if( iei >0  )
-       {
-           *buffer=iei;
-               encoded++;
-       }
-
-
+	if( iei >0  )
+    {
+    	*buffer=iei;
+        encoded++;
+    }
 
     lenPtr = (buffer + encoded);
     encoded++;
     encoded++;
-
-
 
     if ((encode_result = encode_bstring (eapmessage, buffer + encoded, len - encoded)) < 0)//加密,实体,首地址,长度
         return encode_result;
@@ -53,7 +48,7 @@ int decode_eap_message ( EAPMessage * eapmessage, uint8_t iei, uint8_t * buffer,
         CHECK_IEI_DECODER (iei, *buffer);
         decoded++;
     }
-
+	
 
     ielen = *(buffer + decoded);
     decoded++;
@@ -66,6 +61,7 @@ int decode_eap_message ( EAPMessage * eapmessage, uint8_t iei, uint8_t * buffer,
         return decode_result;
     else
         decoded += decode_result;
-            return decoded;
+	
+    return decoded;
 }
 

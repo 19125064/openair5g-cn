@@ -36,7 +36,7 @@ int decode_pdu_session_establishment_request( pdu_session_establishment_request_
         decoded+=decoded_result;
 	#endif
    
-    if((decoded_result = decode_intergrity_protection_maximum_data_rate (&pdu_session_establishment_request->intergrityprotectionmaximumdatarate, INTEGRITY_PROTECTION_MAXIMUM_DATA_RATE_IEI, buffer+decoded,len-decoded))<0)
+    if((decoded_result = decode_intergrity_protection_maximum_data_rate (&pdu_session_establishment_request->intergrityprotectionmaximumdatarate, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
@@ -111,7 +111,7 @@ int encode_pdu_session_establishment_request( pdu_session_establishment_request_
         encoded+=encoded_result;
 	#endif
 
-    if((encoded_result = encode_intergrity_protection_maximum_data_rate (pdu_session_establishment_request->intergrityprotectionmaximumdatarate, INTEGRITY_PROTECTION_MAXIMUM_DATA_RATE_IEI, buffer+encoded,len-encoded))<0)
+    if((encoded_result = encode_intergrity_protection_maximum_data_rate (pdu_session_establishment_request->intergrityprotectionmaximumdatarate, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
