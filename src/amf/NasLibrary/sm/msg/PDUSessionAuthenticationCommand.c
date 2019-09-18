@@ -14,6 +14,7 @@ int decode_pdu_session_authentication_command( pdu_session_authentication_comman
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_DECODER (buffer, PDU_SESSION_AUTHENTICATION_COMMAND_MINIMUM_LENGTH, len);
 
+	#if 0
     if((decoded_result = decode_extended_protocol_discriminator (&pdu_session_authentication_command->extendedprotocoldiscriminator, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
@@ -33,13 +34,13 @@ int decode_pdu_session_authentication_command( pdu_session_authentication_comman
         return decoded_result;
     else
         decoded+=decoded_result;
-
-    if((decoded_result = decode_eap_message (&pdu_session_authentication_command->eapmessage, 0, buffer+decoded,len-decoded))<0)
+	#endif
+    if((decoded_result = decode_eap_message (&pdu_session_authentication_command->eapmessage, EAP_MESSAGE_IEI, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
 
-    if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_authentication_command->extendedprotocolconfigurationoptions, 0, buffer+decoded,len-decoded))<0)
+    if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_authentication_command->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
@@ -57,6 +58,7 @@ int encode_pdu_session_authentication_command( pdu_session_authentication_comman
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer, PDU_SESSION_AUTHENTICATION_COMMAND_MINIMUM_LENGTH, len);
 
+	#if 0
     if((encoded_result = encode_extended_protocol_discriminator (pdu_session_authentication_command->extendedprotocoldiscriminator, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
@@ -76,13 +78,14 @@ int encode_pdu_session_authentication_command( pdu_session_authentication_comman
         return encoded_result;
     else
         encoded+=encoded_result;
+	#endif
 
-    if((encoded_result = encode_eap_message (pdu_session_authentication_command->eapmessage, 0, buffer+encoded,len-encoded))<0)
+    if((encoded_result = encode_eap_message (pdu_session_authentication_command->eapmessage, EAP_MESSAGE_IEI, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
 
-    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_authentication_command->extendedprotocolconfigurationoptions, 0, buffer+encoded,len-encoded))<0)
+    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_authentication_command->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
