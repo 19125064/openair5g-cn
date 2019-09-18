@@ -35,7 +35,7 @@ int decode_pdu_session_authentication_command( pdu_session_authentication_comman
     else
         decoded+=decoded_result;
 	#endif
-    if((decoded_result = decode_eap_message (&pdu_session_authentication_command->eapmessage, EAP_MESSAGE_IEI, buffer+decoded,len-decoded))<0)
+    if((decoded_result = decode_eap_message (&pdu_session_authentication_command->eapmessage, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
@@ -80,7 +80,7 @@ int encode_pdu_session_authentication_command( pdu_session_authentication_comman
         encoded+=encoded_result;
 	#endif
 
-    if((encoded_result = encode_eap_message (pdu_session_authentication_command->eapmessage, EAP_MESSAGE_IEI, buffer+encoded,len-encoded))<0)
+    if((encoded_result = encode_eap_message (pdu_session_authentication_command->eapmessage, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
