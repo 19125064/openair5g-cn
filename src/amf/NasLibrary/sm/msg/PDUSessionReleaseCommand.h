@@ -7,6 +7,7 @@
 #include "_5GSMCause.h"
 #include "GPRSTimer3.h"
 #include "EAPMessage.h"
+#include "_5GSMCongestionReattemptIndicator.h"
 #include "ExtendedProtocolConfigurationOptions.h"
 
 
@@ -42,6 +43,7 @@ typedef struct pdu_session_release_command_msg_tag{
 	_5GSMCause _5gsmcause;
 	GPRSTimer3 gprstimer3;
 	EAPMessage eapmessage;
+	_5GSMCongestionReattemptIndicator _5gsmcongestionreattemptindicator;
 	ExtendedProtocolConfigurationOptions extendedprotocolconfigurationoptions;
 }pdu_session_release_command_msg;
 

@@ -14,6 +14,7 @@ int decode_pdu_session_release_command( pdu_session_release_command_msg *pdu_ses
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_DECODER (buffer, PDU_SESSION_RELEASE_COMMAND_MINIMUM_LENGTH, len);
 
+	#if 0
     if((decoded_result = decode_extended_protocol_discriminator (&pdu_session_release_command->extendedprotocoldiscriminator, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
@@ -33,23 +34,29 @@ int decode_pdu_session_release_command( pdu_session_release_command_msg *pdu_ses
         return decoded_result;
     else
         decoded+=decoded_result;
-
+	#endif
+	
     if((decoded_result = decode__5gsm_cause (&pdu_session_release_command->_5gsmcause, 0, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
 
-    if((decoded_result = decode_gprs_timer3 (&pdu_session_release_command->gprstimer3, 0, buffer+decoded,len-decoded))<0)
+    if((decoded_result = decode_gprs_timer3 (&pdu_session_release_command->gprstimer3, GPRS_TIMER3_IEI, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
 
-    if((decoded_result = decode_eap_message (&pdu_session_release_command->eapmessage, 0, buffer+decoded,len-decoded))<0)
+    if((decoded_result = decode_eap_message (&pdu_session_release_command->eapmessage, EAP_MESSAGE_IEI, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
 
-    if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_release_command->extendedprotocolconfigurationoptions, 0, buffer+decoded,len-decoded))<0)
+	if((decoded_result = decode__5gsm_congestion_reattempt_indicator (&pdu_session_release_command->_5gsmcongestionreattemptindicator, _5GSM_CONGESTION_REATTEMPT_INDICATOR_IEI, buffer+decoded,len-decoded))<0)
+        return decoded_result;
+    else
+        decoded+=decoded_result;
+	
+    if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_release_command->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+decoded,len-decoded))<0)
         return decoded_result;
     else
         decoded+=decoded_result;
@@ -67,6 +74,7 @@ int encode_pdu_session_release_command( pdu_session_release_command_msg *pdu_ses
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer, PDU_SESSION_RELEASE_COMMAND_MINIMUM_LENGTH, len);
 
+	#if 0
     if((encoded_result = encode_extended_protocol_discriminator (pdu_session_release_command->extendedprotocoldiscriminator, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
@@ -86,23 +94,29 @@ int encode_pdu_session_release_command( pdu_session_release_command_msg *pdu_ses
         return encoded_result;
     else
         encoded+=encoded_result;
-
+	#endif
+	
     if((encoded_result = encode__5gsm_cause (pdu_session_release_command->_5gsmcause, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
 
-    if((encoded_result = encode_gprs_timer3 (pdu_session_release_command->gprstimer3, 0, buffer+encoded,len-encoded))<0)
+    if((encoded_result = encode_gprs_timer3 (pdu_session_release_command->gprstimer3, GPRS_TIMER3_IEI, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
 
-    if((encoded_result = encode_eap_message (pdu_session_release_command->eapmessage, 0, buffer+encoded,len-encoded))<0)
+    if((encoded_result = encode_eap_message (pdu_session_release_command->eapmessage, EAP_MESSAGE_IEI, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
 
-    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_release_command->extendedprotocolconfigurationoptions, 0, buffer+encoded,len-encoded))<0)
+	if((encoded_result = encode__5gsm_congestion_reattempt_indicator (pdu_session_release_command->_5gsmcongestionreattemptindicator, _5GSM_CONGESTION_REATTEMPT_INDICATOR_IEI, buffer+encoded,len-encoded))<0)
+        return encoded_result;
+    else
+        encoded+=encoded_result;
+
+    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_release_command->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
         encoded+=encoded_result;
