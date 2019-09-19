@@ -77,6 +77,7 @@ int encode_pdu_session_establishment_reject( pdu_session_establishment_reject_ms
     // Check if we got a NULL pointer and if buffer length is >= minimum length expected for the message.
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer, PDU_SESSION_ESTABLISHMENT_REJECT_MINIMUM_LENGTH, len);
 
+	#if 0
     if((encoded_result = encode_extended_protocol_discriminator (pdu_session_establishment_reject->extendedprotocoldiscriminator, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
@@ -96,7 +97,8 @@ int encode_pdu_session_establishment_reject( pdu_session_establishment_reject_ms
         return encoded_result;
     else
         encoded+=encoded_result;
-
+	#endif
+	
     if((encoded_result = encode__5gsm_cause (pdu_session_establishment_reject->_5gsmcause, 0, buffer+encoded,len-encoded))<0)
         return encoded_result;
     else
