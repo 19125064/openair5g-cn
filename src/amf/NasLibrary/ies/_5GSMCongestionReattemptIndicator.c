@@ -8,7 +8,7 @@
 
 int encode__5gsm_congestion_reattempt_indicator ( _5GSMCongestionReattemptIndicator _5gsmcongestionreattemptindicator, uint8_t iei, uint8_t * buffer, uint32_t len )
 {
-	uint8_t *lenPtr;
+	uint8_t *lenPtr = NULL;
 	uint32_t encoded = 0;
 	uint8_t _5gsmcongestionreattemptindicator_bit = 0;
 	

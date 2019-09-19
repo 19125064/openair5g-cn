@@ -8,7 +8,6 @@
 
 int encode_maximum_number_of_supported_packet_filters ( MaximumNumberOfSupportedPacketFilters maximumnumberofsupportedpacketfilters, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
-    uint8_t *lenPtr;
     uint32_t encoded = 0;
 	
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_MINIMUM_LENGTH , len);

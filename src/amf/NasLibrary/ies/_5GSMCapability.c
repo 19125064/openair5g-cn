@@ -8,7 +8,7 @@
 
 int encode__5gsm_capability ( _5GSMCapability _5gsmcapability, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
-    uint8_t *lenPtr;
+    uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
 	uint8_t _5gsmcapability_bits = 0;
 	
@@ -45,7 +45,7 @@ int decode__5gsm_capability ( _5GSMCapability * _5gsmcapability, uint8_t iei, ui
 {
 	int decoded=0;
 	uint8_t ielen=0;
-	int decode_result;
+	int decode_result = 0;
 
 	uint8_t _5gsmcapability_bits = 0;
 

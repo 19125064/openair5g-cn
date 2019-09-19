@@ -8,9 +8,9 @@
 
 int encode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximumDataRate intergrityprotectionmaximumdatarate, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
-    uint8_t *lenPtr;
+    uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
-    int encode_result;
+    int encode_result = 0;
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,INTERGRITY_PROTECTION_MAXIMUM_DATA_RATE_MINIMUM_LENGTH , len);
     
 
@@ -33,7 +33,7 @@ int decode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximum
 {
 	int decoded=0;
 	uint8_t ielen=2;
-	int decode_result;
+	int decode_result = 0;
 
     if (iei > 0)
     {
