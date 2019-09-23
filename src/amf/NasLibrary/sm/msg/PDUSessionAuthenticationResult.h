@@ -28,11 +28,18 @@
 		EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MAXIMUM_LENGTH + \
 0)
 
+#define PDU_SESSION_AUTHENTICATION_RESULT_EAP_MESSAGE_IEI 		0x78
+#define PDU_SESSION_AUTHENTICATION_RESULT_E_P_C_O_IEI			0x7B
+
+#define PDU_SESSION_AUTHENTICATION_RESULT_EAP_MESSAGE_PRESENCE 	(1<<0)
+#define PDU_SESSION_AUTHENTICATION_RESULT_E_P_C_O_PRESENCE		(1<<1)
+
 typedef struct pdu_session_authentication_result_msg_tag{
 	ExtendedProtocolDiscriminator extendedprotocoldiscriminator;
 	PDUSessionIdentity pdusessionidentity;
 	ProcedureTransactionIdentity proceduretransactionidentity;
 	MessageType messagetype;
+	uint8_t presence;
 	EAPMessage eapmessage;
 	ExtendedProtocolConfigurationOptions extendedprotocolconfigurationoptions;
 }pdu_session_authentication_result_msg;

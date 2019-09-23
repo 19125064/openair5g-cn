@@ -41,11 +41,30 @@ int decode_pdu_session_authentication_complete( pdu_session_authentication_compl
     else
         decoded+=decoded_result;
 
-    if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_authentication_complete->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+decoded,len-decoded))<0)
-        return decoded_result;
-    else
-        decoded+=decoded_result;
+	while(len - decoded > 0)
+	{
+		//printf("encoding ies left(%d)\n",len-decoded);
+		//printf("decoded(%d)\n",decoded);
+		uint8_t ieiDecoded = *(buffer+decoded);
+		//printf("ieiDecoded = 0x%x\n",ieiDecoded);
+		//sleep(1);
+		
+		if(ieiDecoded == 0)
+			break;
 
+		switch(ieiDecoded)
+		{
+			case PDU_SESSION_AUTHENTICATION_COMPLETE_E_P_C_O_IEI:
+				if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_authentication_complete->extendedprotocolconfigurationoptions, PDU_SESSION_AUTHENTICATION_COMPLETE_E_P_C_O_IEI, buffer+decoded,len-decoded))<0)
+      				return decoded_result;
+				else
+				{
+					decoded+=decoded_result;
+					pdu_session_authentication_complete->presence |= PDU_SESSION_AUTHENTICATION_COMPLETE_E_P_C_O_PRESENCE;
+				}
+			break;
+		}
+	}
 
     return decoded;
 }
@@ -86,10 +105,13 @@ int encode_pdu_session_authentication_complete( pdu_session_authentication_compl
     else
         encoded+=encoded_result;
 
-    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_authentication_complete->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+encoded,len-encoded))<0)
-        return encoded_result;
-    else
-        encoded+=encoded_result;
+	if((pdu_session_authentication_complete->presence & PDU_SESSION_AUTHENTICATION_COMPLETE_E_P_C_O_PRESENCE) == PDU_SESSION_AUTHENTICATION_COMPLETE_E_P_C_O_PRESENCE)
+	{
+	    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_authentication_complete->extendedprotocolconfigurationoptions, PDU_SESSION_AUTHENTICATION_COMPLETE_E_P_C_O_IEI, buffer+encoded,len-encoded))<0)
+	        return encoded_result;
+	    else
+	        encoded+=encoded_result;
+	}
 
 
     return encoded;

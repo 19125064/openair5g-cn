@@ -35,17 +35,40 @@ int decode_pdu_session_release_request( pdu_session_release_request_msg *pdu_ses
     else
         decoded+=decoded_result;
 	#endif
-	
-    if((decoded_result = decode__5gsm_cause (&pdu_session_release_request->_5gsmcause, _5GSM_CAUSE_IEI, buffer+decoded,len-decoded))<0)
-        return decoded_result;
-    else
-        decoded+=decoded_result;
 
-    if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_release_request->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+decoded,len-decoded))<0)
-        return decoded_result;
-    else
-        decoded+=decoded_result;
+	while(len - decoded > 0)
+	{
+		//printf("encoding ies left(%d)\n",len-decoded);
+		//printf("decoded(%d)\n",decoded);
+		uint8_t ieiDecoded = *(buffer+decoded);
+		//printf("ieiDecoded = 0x%x\n",ieiDecoded);
+		//sleep(1);
+		
+		if(ieiDecoded == 0)
+			break;
 
+		switch(ieiDecoded)
+		{
+			case PDU_SESSION_RELEASE_REQUEST__5GSM_CAUSE_IEI:
+				if((decoded_result = decode__5gsm_cause (&pdu_session_release_request->_5gsmcause, PDU_SESSION_RELEASE_REQUEST__5GSM_CAUSE_IEI, buffer+decoded,len-decoded))<0)
+      				return decoded_result;
+				else
+				{
+					decoded+=decoded_result;
+					pdu_session_release_request->presence |= PDU_SESSION_RELEASE_REQUEST__5GSM_CAUSE_PRESENCE;
+				}
+			break;
+			case PDU_SESSION_RELEASE_REQUEST_E_P_C_O_IEI:
+				if(((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_release_request->extendedprotocolconfigurationoptions, PDU_SESSION_RELEASE_REQUEST_E_P_C_O_IEI, buffer+decoded,len-decoded))<0)<0)
+      				return decoded_result;
+				else
+				{
+					decoded+=decoded_result;
+					pdu_session_release_request->presence |= PDU_SESSION_RELEASE_REQUEST_E_P_C_O_PRESENCE;
+				}
+			break;
+		}
+	}
 
     return decoded;
 }
@@ -80,16 +103,22 @@ int encode_pdu_session_release_request( pdu_session_release_request_msg *pdu_ses
     else
         encoded+=encoded_result;
 	#endif
-	
-    if((encoded_result = encode__5gsm_cause (pdu_session_release_request->_5gsmcause, _5GSM_CAUSE_IEI, buffer+encoded,len-encoded))<0)
-        return encoded_result;
-    else
-        encoded+=encoded_result;
 
-    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_release_request->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+encoded,len-encoded))<0)
-        return encoded_result;
-    else
-        encoded+=encoded_result;
+	if((pdu_session_release_request->presence & PDU_SESSION_RELEASE_REQUEST__5GSM_CAUSE_PRESENCE) == PDU_SESSION_RELEASE_REQUEST__5GSM_CAUSE_PRESENCE)
+    {
+	    if((encoded_result = encode__5gsm_cause (pdu_session_release_request->_5gsmcause, PDU_SESSION_RELEASE_REQUEST__5GSM_CAUSE_IEI, buffer+encoded,len-encoded))<0)
+	        return encoded_result;
+	    else
+	        encoded+=encoded_result;
+	}
+
+	if((pdu_session_release_request->presence & PDU_SESSION_RELEASE_REQUEST_E_P_C_O_PRESENCE) == PDU_SESSION_RELEASE_REQUEST_E_P_C_O_PRESENCE)
+    {
+	    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_release_request->extendedprotocolconfigurationoptions, PDU_SESSION_RELEASE_REQUEST_E_P_C_O_IEI, buffer+encoded,len-encoded))<0)
+	        return encoded_result;
+	    else
+	        encoded+=encoded_result;
+	}
 
 
     return encoded;

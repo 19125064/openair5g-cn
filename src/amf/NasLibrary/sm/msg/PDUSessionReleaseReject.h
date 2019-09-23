@@ -28,12 +28,16 @@
 		EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MAXIMUM_LENGTH + \
 0)
 
+#define PDU_SESSION_RELEASE_REJECT_E_P_C_O_IEI	0x7B
+#define PDU_SESSION_RELEASE_REJECT_E_P_C_O_PRESENCE	(1<<0)
+
 typedef struct pdu_session_release_reject_msg_tag{
 	ExtendedProtocolDiscriminator extendedprotocoldiscriminator;
 	PDUSessionIdentity pdusessionidentity;
 	ProcedureTransactionIdentity proceduretransactionidentity;
 	MessageType messagetype;
 	_5GSMCause _5gsmcause;
+	uint8_t presence;
 	ExtendedProtocolConfigurationOptions extendedprotocolconfigurationoptions;
 }pdu_session_release_reject_msg;
 

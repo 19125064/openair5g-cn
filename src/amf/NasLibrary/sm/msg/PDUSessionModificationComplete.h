@@ -25,11 +25,15 @@
 		EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MAXIMUM_LENGTH + \
 0)
 
+#define PDU_SESSION_MODIFICATION_COMPLETE_E_P_C_O_IEI		0x7B
+#define PDU_SESSION_MODIFICATION_COMPLETE_E_P_C_O_PRESENCE	(1<<0)
+
 typedef struct pdu_session_modification_complete_msg_tag{
 	ExtendedProtocolDiscriminator extendedprotocoldiscriminator;
 	PDUSessionIdentity pdusessionidentity;
 	ProcedureTransactionIdentity proceduretransactionidentity;
 	MessageType messagetype;
+	uint8_t presence;
 	ExtendedProtocolConfigurationOptions extendedprotocolconfigurationoptions;
 }pdu_session_modification_complete_msg;
 

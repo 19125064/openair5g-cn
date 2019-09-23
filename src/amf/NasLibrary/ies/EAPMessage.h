@@ -4,8 +4,6 @@
 #define EAP_MESSAGE_MINIMUM_LENGTH 7
 #define EAP_MESSAGE_MAXIMUM_LENGTH 1503
 
-#define EAP_MESSAGE_IEI	0x78
-
 typedef bstring EAPMessage;
 
 int encode_eap_message ( EAPMessage eapmessage, uint8_t iei, uint8_t * buffer, uint32_t len  ) ;

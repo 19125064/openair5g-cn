@@ -41,20 +41,48 @@ int decode_pdu_session_modification_reject( pdu_session_modification_reject_msg 
     else
         decoded+=decoded_result;
 
-    if((decoded_result = decode_gprs_timer3 (&pdu_session_modification_reject->gprstimer3, GPRS_TIMER3_IEI, buffer+decoded,len-decoded))<0)
-        return decoded_result;
-    else
-        decoded+=decoded_result;
+	while(len - decoded > 0)
+	{
+		//printf("encoding ies left(%d)\n",len-decoded);
+		//printf("decoded(%d)\n",decoded);
+		uint8_t ieiDecoded = *(buffer+decoded);
+		//printf("ieiDecoded = 0x%x\n",ieiDecoded);
+		//sleep(1);
+		
+		if(ieiDecoded == 0)
+			break;
 
-    if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_modification_reject->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+decoded,len-decoded))<0)
-        return decoded_result;
-    else
-        decoded+=decoded_result;
-
-	if((decoded_result = decode__5gsm_congestion_reattempt_indicator (&pdu_session_modification_reject->_5gsmcongestionreattemptindicator, _5GSM_CONGESTION_REATTEMPT_INDICATOR_IEI, buffer+decoded,len-decoded))<0)
-        return decoded_result;
-    else
-        decoded+=decoded_result;
+		switch(ieiDecoded)
+		{
+			case PDU_SESSION_MODIFICATION_REJECT_GPRS_TIMER3_IEI:
+				if((decoded_result = decode_gprs_timer3 (&pdu_session_modification_reject->gprstimer3, PDU_SESSION_MODIFICATION_REJECT_GPRS_TIMER3_IEI, buffer+decoded,len-decoded))<0)
+					return decoded_result;
+				else
+				{
+					decoded+=decoded_result;
+					pdu_session_modification_reject->presence |= PDU_SESSION_MODIFICATION_REJECT_GPRS_TIMER3_PRESENCE;
+				}
+			break;
+			case PDU_SESSION_MODIFICATION_REJECT_E_P_C_O_IEI:
+				if((decoded_result = decode_extended_protocol_configuration_options (&pdu_session_modification_reject->extendedprotocolconfigurationoptions, PDU_SESSION_MODIFICATION_REJECT_E_P_C_O_IEI, buffer+decoded,len-decoded))<0)
+					return decoded_result;
+				else
+				{
+					decoded+=decoded_result;
+					pdu_session_modification_reject->presence |= PDU_SESSION_MODIFICATION_REJECT_E_P_C_O_PRESENCE;
+				}
+			break;
+			case PDU_SESSION_MODIFICATION_REJECT__5GSM_CONGESTION_REATTEMPT_INDICATOR_IEI:
+				if((decoded_result = decode__5gsm_congestion_reattempt_indicator (&pdu_session_modification_reject->_5gsmcongestionreattemptindicator, PDU_SESSION_MODIFICATION_REJECT__5GSM_CONGESTION_REATTEMPT_INDICATOR_IEI, buffer+decoded,len-decoded))<0)
+					return decoded_result;
+				else
+				{
+					decoded+=decoded_result;
+					pdu_session_modification_reject->presence |= PDU_SESSION_MODIFICATION_REJECT__5GSM_CONGESTION_REATTEMPT_INDICATOR_PRESENCE;
+				}
+			break;
+		}
+	}
 
     return decoded;
 }
@@ -95,20 +123,29 @@ int encode_pdu_session_modification_reject( pdu_session_modification_reject_msg 
     else
         encoded+=encoded_result;
 
-    if((encoded_result = encode_gprs_timer3 (pdu_session_modification_reject->gprstimer3, GPRS_TIMER3_IEI, buffer+encoded,len-encoded))<0)
-        return encoded_result;
-    else
-        encoded+=encoded_result;
+	if((pdu_session_modification_reject->presence & PDU_SESSION_MODIFICATION_REJECT_GPRS_TIMER3_PRESENCE) == PDU_SESSION_MODIFICATION_REJECT_GPRS_TIMER3_PRESENCE)
+	{
+	    if((encoded_result = encode_gprs_timer3 (pdu_session_modification_reject->gprstimer3, PDU_SESSION_MODIFICATION_REJECT_GPRS_TIMER3_IEI, buffer+encoded,len-encoded))<0)
+	        return encoded_result;
+	    else
+	        encoded+=encoded_result;
+	}
 
-    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_modification_reject->extendedprotocolconfigurationoptions, EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_IEI, buffer+encoded,len-encoded))<0)
-        return encoded_result;
-    else
-        encoded+=encoded_result;
+	if((pdu_session_modification_reject->presence & PDU_SESSION_MODIFICATION_REJECT_E_P_C_O_PRESENCE) == PDU_SESSION_MODIFICATION_REJECT_E_P_C_O_PRESENCE)
+	{
+	    if((encoded_result = encode_extended_protocol_configuration_options (pdu_session_modification_reject->extendedprotocolconfigurationoptions, PDU_SESSION_MODIFICATION_REJECT_E_P_C_O_IEI, buffer+encoded,len-encoded))<0)
+	        return encoded_result;
+	    else
+	        encoded+=encoded_result;
+	}
 
-	if((encoded_result = encode__5gsm_congestion_reattempt_indicator (pdu_session_modification_reject->_5gsmcongestionreattemptindicator, _5GSM_CONGESTION_REATTEMPT_INDICATOR_IEI, buffer+encoded,len-encoded))<0)
-        return encoded_result;
-    else
-        encoded+=encoded_result;
+	if((pdu_session_modification_reject->presence & PDU_SESSION_MODIFICATION_REJECT__5GSM_CONGESTION_REATTEMPT_INDICATOR_PRESENCE) == PDU_SESSION_MODIFICATION_REJECT__5GSM_CONGESTION_REATTEMPT_INDICATOR_PRESENCE)
+	{
+		if((encoded_result = encode__5gsm_congestion_reattempt_indicator (pdu_session_modification_reject->_5gsmcongestionreattemptindicator, PDU_SESSION_MODIFICATION_REJECT__5GSM_CONGESTION_REATTEMPT_INDICATOR_IEI, buffer+encoded,len-encoded))<0)
+	        return encoded_result;
+	    else
+	        encoded+=encoded_result;
+	}
 
     return encoded;
 }

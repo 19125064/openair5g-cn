@@ -56,8 +56,8 @@ int decode_authentication_request( authentication_request_msg *authentication_re
           authentication_request->presence |= AUTHENTICATION_REQUEST_AUTHENTICATION_PARAMETER_AUTN_PRESENT;
         }
       break;
-      case EAP_MESSAGE_IEI:
-        if ((decoded_result = decode_eap_message (&authentication_request->eapmessage, EAP_MESSAGE_IEI, buffer + decoded, len - decoded)) < 0)
+      case AUTHENTICATION_REQUEST_EAP_MESSAGE_IEI:
+        if ((decoded_result = decode_eap_message (&authentication_request->eapmessage, AUTHENTICATION_REQUEST_EAP_MESSAGE_IEI, buffer + decoded, len - decoded)) < 0)
           return decoded_result;
         else{
           decoded += decoded_result;
@@ -104,7 +104,7 @@ int encode_authentication_request( authentication_request_msg *authentication_re
     }
     if((authentication_request->presence & AUTHENTICATION_REQUEST_EAP_MESSAGE_PRESENT)
         == AUTHENTICATION_REQUEST_EAP_MESSAGE_PRESENT){
-      if((encoded_result = encode_eap_message (authentication_request->eapmessage, EAP_MESSAGE_IEI, buffer+encoded,len-encoded))<0)
+      if((encoded_result = encode_eap_message (authentication_request->eapmessage, AUTHENTICATION_REQUEST_EAP_MESSAGE_IEI, buffer+encoded,len-encoded))<0)
         return encoded_result;
       else
         encoded+=encoded_result;
