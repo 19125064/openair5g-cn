@@ -619,7 +619,7 @@
 #define PDU_SESSION_RELEASE_COMMAND             0b11010011
 #define PDU_SESSION_RELEASE_COMPLETE            0b11010100
 
-#define _5GSM_STAUS                             0b11010110
+#define _5GSM_STATUS                            0b11010110
 
 
 /*

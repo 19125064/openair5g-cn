@@ -8,22 +8,20 @@
 
 int encode_alwayson_pdu_session_indication ( AlwaysonPDUSessionIndication alwaysonpdusessionindication, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
-    uint8_t *lenPtr;
     uint32_t encoded = 0;
-    int encode_result;
+	uint8_t bitStream = 0;
+		
     CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,ALWAYSON_PDU_SESSION_INDICATION_MINIMUM_LENGTH , len);
     
 
-
-
-
-
-
-    if ((encode_result = encode_bstring (alwaysonpdusessionindication, buffer + encoded, len - encoded)) < 0)//加密,实体,首地址,长度
-        return encode_result;
-    else
-        encoded += encode_result;
-
+	if(iei > 0){
+		bitStream = iei & 0xf0;
+	}
+	
+	if(alwaysonpdusessionindication.apsi_indication)
+		bitStream |= 0x01;
+	
+	ENCODE_U8(buffer+encoded,bitStream,encoded);
 
     return encoded;
 }
@@ -31,17 +29,23 @@ int encode_alwayson_pdu_session_indication ( AlwaysonPDUSessionIndication always
 int decode_alwayson_pdu_session_indication ( AlwaysonPDUSessionIndication * alwaysonpdusessionindication, uint8_t iei, uint8_t * buffer, uint32_t len  ) 
 {
 	int decoded=0;
-	uint8_t ielen=0;
-	int decode_result;
+	uint8_t bitStream = 0;
+	
+	DECODE_U8(buffer+decoded,bitStream,decoded);
+	
+	if(iei != (bitStream&0xf0)){
+	  return -1;
+	}
+	   
+	if(iei > 0){
+		bitStream = bitStream & 0x01;
+	}
 
+	if(bitStream)
+		alwaysonpdusessionindication->apsi_indication = true;
+	else
+		alwaysonpdusessionindication->apsi_indication = false;
 
-
-
-
-    if((decode_result = decode_bstring (alwaysonpdusessionindication, ielen, buffer + decoded, len - decoded)) < 0)
-        return decode_result;
-    else
-        decoded += decode_result;
-            return decoded;
+	return decoded;
 }
 

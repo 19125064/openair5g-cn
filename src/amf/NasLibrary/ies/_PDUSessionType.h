@@ -1,7 +1,6 @@
 #ifndef __PDUSessionType_H_
 #define __PDUSessionType_H_
 
-
 #include <stdint.h>
 #include "bstrlib.h"
 

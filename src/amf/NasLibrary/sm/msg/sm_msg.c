@@ -119,7 +119,7 @@ sm_msg_decode (
       case PDU_SESSION_RELEASE_COMPLETE:
 	  	   decode_result = decode_pdu_session_release_complete(&msg->specific_msg.pdu_session_release_complete, buffer, len);
 	  break;
-	  case _5GSM_STAUS:
+	  case _5GSM_STATUS:
 	  	   decode_result = decode__5gsm_status(&msg->specific_msg._5gsm_status, buffer, len);
 	  break;
 
@@ -234,7 +234,7 @@ fivegsm_msg_encode (
       case PDU_SESSION_RELEASE_COMPLETE:
 	  	   encode_result = encode_pdu_session_release_complete(&msg->specific_msg.pdu_session_release_complete, buffer, len);
 	  break;
-	  case _5GSM_STAUS:
+	  case _5GSM_STATUS:
 	  	   encode_result = encode__5gsm_status(&msg->specific_msg._5gsm_status, buffer, len);
 	  break;
 

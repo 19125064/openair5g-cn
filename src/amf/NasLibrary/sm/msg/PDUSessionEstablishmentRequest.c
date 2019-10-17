@@ -97,13 +97,13 @@ int decode_pdu_session_establishment_request( pdu_session_establishment_request_
 		        }
 	      	break;
 
-		    case PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_IEI:
-		        if ((decoded_result = decode_maximum_number_of_supported_packet_filters (&pdu_session_establishment_request->maximumnumberofsupportedpacketfilters, PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_IEI, buffer+decoded,len-decoded)) < 0)
+		    case PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_OF_SUPPORTED_IEI:
+		        if ((decoded_result = decode_maximum_number_of_supported_packet_filters (&pdu_session_establishment_request->maximumnumberofsupportedpacketfilters, PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_OF_SUPPORTED_IEI, buffer+decoded,len-decoded)) < 0)
 		        	return decoded_result;                
 		        else
 				{                                    
 		          	decoded += decoded_result;
-		          	pdu_session_establishment_request->presence |= PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_PRESENT;
+		          	pdu_session_establishment_request->presence |= PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_OF_SUPPORTED_PRESENT;
 		        }
 	      	break;
 			
@@ -194,9 +194,9 @@ int encode_pdu_session_establishment_request( pdu_session_establishment_request_
 	        encoded+=encoded_result;
 	}
 	
-	if((pdu_session_establishment_request->presence & PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_PRESENT) == PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_PRESENT)
+	if((pdu_session_establishment_request->presence & PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_OF_SUPPORTED_PRESENT) == PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_OF_SUPPORTED_PRESENT)
 	{
-	    if((encoded_result = encode_maximum_number_of_supported_packet_filters (pdu_session_establishment_request->maximumnumberofsupportedpacketfilters, PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_IEI, buffer+encoded,len-encoded))<0)
+	    if((encoded_result = encode_maximum_number_of_supported_packet_filters (pdu_session_establishment_request->maximumnumberofsupportedpacketfilters, PDU_SESSION_ESTABLISHMENT_REQUEST_MAXIMUM_NUMBER_OF_SUPPORTED_IEI, buffer+encoded,len-encoded))<0)
 	        return encoded_result;
 	    else
 	        encoded+=encoded_result;

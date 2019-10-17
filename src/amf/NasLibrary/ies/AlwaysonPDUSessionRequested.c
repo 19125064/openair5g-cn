@@ -30,9 +30,6 @@ int decode_alwayson_pdu_session_requested ( AlwaysonPDUSessionRequested * always
 	int decoded=0;
 	uint8_t bitStream = 0;
 
-
-
-
 	DECODE_U8(buffer+decoded,bitStream,decoded);
 
 	if(iei != bitStream&0xf0){

@@ -19,11 +19,6 @@ int encode__5gsm_cause ( _5GSMCause _5gsmcause, uint8_t iei, uint8_t * buffer, u
     	encoded++;
     }
 
-/*
-	*(buffer + encoded) = _5gmmcause;
-	encoded++;
-*/
-
 	ENCODE_U8(buffer+encoded,_5gsmcause,encoded);
 
     return encoded;
@@ -41,11 +36,6 @@ int decode__5gsm_cause ( _5GSMCause * _5gsmcause, uint8_t iei, uint8_t * buffer,
 
 	DECODE_U8(buffer+decoded,*_5gsmcause,decoded);
 
-/*
-  	*_5gmmcause = *(buffer + decoded);
-  	decoded++;
-*/
-    
 	return decoded;
 }
 
