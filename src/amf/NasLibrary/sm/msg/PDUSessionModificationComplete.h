@@ -6,7 +6,7 @@
 #include "MessageType.h"
 #include "ExtendedProtocolConfigurationOptions.h"
 
-
+#if 0
 /* Minimum length macro. Formed by minimum length of each mandatory field */
 #define PDU_SESSION_MODIFICATION_COMPLETE_MINIMUM_LENGTH ( \
 		EXTENDED_PROTOCOL_DISCRIMINATOR_MINIMUM_LENGTH + \
@@ -15,6 +15,10 @@
 		MESSAGE_TYPE_MINIMUM_LENGTH + \
 		EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MINIMUM_LENGTH + \
 0)
+#endif
+/* Minimum length macro. Formed by minimum length of each mandatory field */
+#define PDU_SESSION_MODIFICATION_COMPLETE_MINIMUM_LENGTH 0
+
 
 /* Maximum length macro. Formed by maximum length of each field */
 #define PDU_SESSION_MODIFICATION_COMPLETE_MAXIMUM_LENGTH ( \
@@ -22,7 +26,7 @@
 		PDU_SESSION_IDENTITY_MAXIMUM_LENGTH + \
 		PROCEDURE_TRANSACTION_IDENTITY_MAXIMUM_LENGTH + \
 		MESSAGE_TYPE_MAXIMUM_LENGTH + \
-		EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MAXIMUM_LENGTH + \
+		EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MAXIMUM_LENGTH_TLVE + \
 0)
 
 #define PDU_SESSION_MODIFICATION_COMPLETE_E_P_C_O_IEI		0x7B
