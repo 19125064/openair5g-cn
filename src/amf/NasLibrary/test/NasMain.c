@@ -2718,14 +2718,13 @@ int  establishment_request(void)
 	}
 
 	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
+	fivegmm_security_context_t * security = (fivegmm_security_context_t *)calloc(1,sizeof(fivegmm_security_context_t));
 	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
 	security->dl_count.overflow = 0xffff;
 	security->dl_count.seq_num =  0x23;
 	security->knas_enc[0] = 0x14;
 	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
 	security->knas_int[0] = 0x41;
-	//complete sercurity context
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -2807,6 +2806,15 @@ int  establishment_request(void)
 
 	//  int bytes = nas_message_decrypt((*info)->data,plain_msg->data,&header,blength(*info),security,&decode_status);
 
+	//construct security context
+	fivegmm_security_context_t * securityul = (fivegmm_security_context_t *)calloc(1,sizeof(fivegmm_security_context_t));
+	securityul->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
+	securityul->ul_count.overflow = 0xffff;
+	securityul->ul_count.seq_num =  0x23;
+	securityul->knas_enc[0] = 0x14;
+	securityul->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
+	securityul->knas_int[0] = 0x41;
+
 
 	nas_message_t	decoded_nas_msg;
 	memset (&decoded_nas_msg,		 0, sizeof (nas_message_t));
@@ -2814,7 +2822,7 @@ int  establishment_request(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes/*sizeof(data)*/ /*blength(info)*/, securityul, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3261,7 +3269,7 @@ int establishment_accept(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3565,7 +3573,7 @@ int establishment_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3748,7 +3756,7 @@ int authentication_command(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3927,7 +3935,7 @@ int authentication_complete(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -4106,7 +4114,7 @@ int authentication_result(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -4500,7 +4508,7 @@ int modification_request(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -4771,7 +4779,7 @@ int modification_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5155,7 +5163,7 @@ int modification_command(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5416,7 +5424,7 @@ int modification_complete(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5591,7 +5599,7 @@ int modification_command_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5767,7 +5775,7 @@ int release_request(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5942,7 +5950,7 @@ int release_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6133,7 +6141,7 @@ int release_command(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6313,7 +6321,7 @@ int release_complete(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6475,7 +6483,7 @@ int _5gsm_status_(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, sizeof(data) /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6527,22 +6535,22 @@ int main()
   	#endif
 
   	CHECK_INIT_RETURN (OAILOG_INIT (MAX_LOG_ENV, OAILOG_LEVEL_DEBUG, MAX_LOG_PROTOS));
-	// establishment_request();
-	// establishment_accept();
-	// establishment_reject();
-	// authentication_command();
-	// authentication_complete();
-	// authentication_result();
-	// modification_request();
-	// modification_reject();
-	// modification_command();
-	// modification_complete();
-	// modification_command_reject();
-	// release_request();
-	// release_reject();
-	// release_command();
-	// release_complete();
-	// _5gsm_status_();
+	 establishment_request();
+	 establishment_accept();
+	 establishment_reject();
+	 authentication_command();
+	 authentication_complete();
+	 authentication_result();
+	 modification_request();
+	 modification_reject();
+	 modification_command();
+	 modification_complete();
+	 modification_command_reject();
+	 release_request();
+	 release_reject();
+	 release_command();
+	 release_complete();
+	 _5gsm_status_();
 
   	return 0;
 }
