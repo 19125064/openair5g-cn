@@ -12,7 +12,7 @@ int encode__5gsm_congestion_reattempt_indicator ( _5GSMCongestionReattemptIndica
 	uint32_t encoded = 0;
 	uint8_t _5gsmcongestionreattemptindicator_bit = 0;
 	
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,_5GSM_CONGESTION_REATTEMPT_INDICATOR_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? _5GSM_CONGESTION_REATTEMPT_INDICATOR_MINIMUM_LENGTH_TLV : (_5GSM_CONGESTION_REATTEMPT_INDICATOR_MINIMUM_LENGTH_TLV-1)) , len);
     
 
     if( iei > 0 )

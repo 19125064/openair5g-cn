@@ -11,7 +11,7 @@ int encode_extended_protocol_configuration_options ( ExtendedProtocolConfigurati
     uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
     int encode_result = 0;
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MINIMUM_LENGTH_TLVE : EXTENDED_PROTOCOL_CONFIGURATION_OPTIONS_MINIMUM_LENGTH_TLVE-1), len);
     
 
     if( iei >0  )

@@ -10,7 +10,7 @@ int encode_maximum_number_of_supported_packet_filters ( MaximumNumberOfSupported
 {
     uint32_t encoded = 0;
 	
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_MINIMUM_LENGTH_TV : MAXIMUM_NUMBER_OF_SUPPORTED_PACKET_FILTERS_MINIMUM_LENGTH_TV-1), len);
     
 
     if( iei > 0 )

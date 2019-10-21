@@ -16,7 +16,7 @@ int encode_qos_rules ( QOSRules qosrules, uint8_t iei, uint8_t * buffer, uint32_
     int encode_result = 0;
 	int i = 0,j = 0;
 
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,QOS_RULES_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ?QOS_RULES_MINIMUM_LENGTH_TLVE : QOS_RULES_MINIMUM_LENGTH_LVE), len);
     
 
 	if( iei > 0 )

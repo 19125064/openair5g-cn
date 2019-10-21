@@ -11,7 +11,7 @@ int encode_eap_message ( EAPMessage eapmessage, uint8_t iei, uint8_t * buffer, u
     uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
     int encode_result = 0;
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,EAP_MESSAGE_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? EAP_MESSAGE_MINIMUM_LENGTH_TLVE : EAP_MESSAGE_MINIMUM_LENGTH_LVE) , len);
     
 
 	if( iei >0  )

@@ -11,7 +11,7 @@ int encode_session_ambr ( SessionAMBR sessionambr, uint8_t iei, uint8_t * buffer
     uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
     int encode_result;
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,SESSION_AMBR_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? SESSION_AMBR_MINIMUM_LENGTH_TLV : SESSION_AMBR_MINIMUM_LENGTH_LV) , len);
     
 	if( iei >0  )
 	{

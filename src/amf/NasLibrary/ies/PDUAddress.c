@@ -11,7 +11,7 @@ int encode_pdu_address ( PDUAddress pduaddress, uint8_t iei, uint8_t * buffer, u
     uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
     int encode_result = 0;
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,PDU_ADDRESS_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? PDU_ADDRESS_MINIMUM_LENGTH_TLV : PDU_ADDRESS_MINIMUM_LENGTH_TLV-1) , len);
     
 
 	if( iei > 0 )

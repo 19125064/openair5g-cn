@@ -11,7 +11,7 @@ int encode_intergrity_protection_maximum_data_rate ( IntergrityProtectionMaximum
     uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
     int encode_result = 0;
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,INTERGRITY_PROTECTION_MAXIMUM_DATA_RATE_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? INTERGRITY_PROTECTION_MAXIMUM_DATA_RATE_MINIMUM_LENGTH_TV : INTERGRITY_PROTECTION_MAXIMUM_DATA_RATE_MINIMUM_LENGTH_V) , len);
     
 
     if( iei > 0)

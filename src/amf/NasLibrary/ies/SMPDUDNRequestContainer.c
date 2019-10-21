@@ -11,7 +11,7 @@ int encode_smpdudn_request_container ( SMPDUDNRequestContainer smpdudnrequestcon
     uint8_t *lenPtr = NULL;
     uint32_t encoded = 0;
     int encode_result;
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,SMPDUDN_REQUEST_CONTAINER_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? SMPDUDN_REQUEST_CONTAINER_MINIMUM_LENGTH_TLV : SMPDUDN_REQUEST_CONTAINER_MINIMUM_LENGTH_TLV-1), len);
     
 
 	if( iei >0  )

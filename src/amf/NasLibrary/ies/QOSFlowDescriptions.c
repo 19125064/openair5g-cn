@@ -14,7 +14,7 @@ int encode_qos_flow_descriptions ( QOSFlowDescriptions qosflowdescriptions, uint
 	uint8_t bitstream = 0;
 	uint16_t bit16stream = 0;
 	uint8_t *lengthofparametercontents = NULL;
-	CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,QOS_FLOW_DESCRIPTIONS_MINIMUM_LENGTH , len);
+	CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? QOS_FLOW_DESCRIPTIONS_MINIMUM_LENGTH_TLVE : QOS_FLOW_DESCRIPTIONS_MINIMUM_LENGTH_TLVE-1) , len);
 
 	if( iei >0  )
 	{

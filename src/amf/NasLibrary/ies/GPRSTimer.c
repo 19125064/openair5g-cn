@@ -10,7 +10,7 @@ int encode_gprs_timer ( GPRSTimer gprstimer, uint8_t iei, uint8_t * buffer, uint
 {
     uint32_t encoded = 0;
 	uint8_t timeValue = 0;
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,GPRS_TIMER_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? GPRS_TIMER_MINIMUM_LENGTH_TV : GPRS_TIMER_MINIMUM_LENGTH_TV-1) , len);
     
 
 	if( iei > 0 )

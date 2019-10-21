@@ -10,7 +10,7 @@ int encode__5gsm_cause ( _5GSMCause _5gsmcause, uint8_t iei, uint8_t * buffer, u
 {
     uint32_t encoded = 0;
 	
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,_5GSM_CAUSE_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? _5GSM_CAUSE_MINIMUM_LENGTH_TV : _5GSM_CAUSE_MINIMUM_LENGTH_V) , len);
     
 
     if( iei > 0 )

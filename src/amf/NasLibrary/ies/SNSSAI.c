@@ -13,7 +13,7 @@ int encode_snssai ( SNSSAI snssai, uint8_t iei, uint8_t * buffer, uint32_t len  
 	uint8_t bitStream = 0;
 	uint32_t bit32Stream = 0;
 	
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,SNSSAI_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,((iei > 0) ? SNSSAI_MINIMUM_LENGTH_TLV : SNSSAI_MINIMUM_LENGTH_TLV-1) , len);
     
 	if( iei >0  )
 	{

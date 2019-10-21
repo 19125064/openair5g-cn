@@ -11,7 +11,7 @@ int encode_alwayson_pdu_session_indication ( AlwaysonPDUSessionIndication always
     uint32_t encoded = 0;
 	uint8_t bitStream = 0;
 		
-    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,ALWAYSON_PDU_SESSION_INDICATION_MINIMUM_LENGTH , len);
+    CHECK_PDU_POINTER_AND_LENGTH_ENCODER (buffer,ALWAYSON_PDU_SESSION_INDICATION_MINIMUM_LENGTH, len);
     
 
 	if(iei > 0){
