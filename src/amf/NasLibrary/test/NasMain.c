@@ -2606,6 +2606,34 @@ int security_mode_reject()
 }
 #endif
 
+//construct encode security context
+static fivegmm_security_context_t securityencode = {
+	.selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1,
+	.dl_count.overflow = 0xffff,
+	.dl_count.seq_num =  0x23,
+	.ul_count.overflow = 0xffff,
+	.ul_count.seq_num =  0x23,
+	.knas_enc[0] = 0x14,
+	.selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1,
+	.knas_int[0] = 0x41
+};
+//construct decode security context
+static fivegmm_security_context_t securitydecode = {
+	.selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1,
+	.dl_count.overflow = 0xffff,
+	.dl_count.seq_num =  0x23,
+	.ul_count.overflow = 0xffff,
+	.ul_count.seq_num =  0x23,
+	.knas_enc[0] = 0x14,
+	.selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1,
+	.knas_int[0] = 0x41
+};
+
+static uint8_t nas_msg_header_sequence_number(void)
+{
+	return securityencode.dl_count.seq_num;
+}
+
 #define BUF_LEN 512
 int  establishment_request(void)
 {
@@ -2613,15 +2641,16 @@ int  establishment_request(void)
 	int size = NAS_MESSAGE_SECURITY_HEADER_SIZE;
 	int bytes = 0;
 
+	
 	nas_message_t	nas_msg;
 	memset (&nas_msg,		 0, sizeof (nas_message_t));
 
 	nas_msg.header.extended_protocol_discriminator = FIVEGS_SESSION_MANAGEMENT_MESSAGES;
 	nas_msg.header.security_header_type = SECURITY_HEADER_TYPE_INTEGRITY_PROTECTED_CYPHERED;
-	uint8_t sequencenumber = 0xfe;
+	//uint8_t sequencenumber = 0x23;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 
 	nas_msg.security_protected.header = nas_msg.header;
@@ -2716,16 +2745,18 @@ int  establishment_request(void)
 	if(size <= 0){
 		return -1;
 	}
-
+#if 0
 	//construct security context
-	fivegmm_security_context_t * security = (fivegmm_security_context_t *)calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-
+	fivegmm_security_context_t * securityencode = (fivegmm_security_context_t *)calloc(1,sizeof(fivegmm_security_context_t));
+	securityencode->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
+	securityencode->dl_count.overflow = 0xffff;
+	securityencode->dl_count.seq_num =  0x23;
+	securityencode->ul_count.overflow = 0xffff;
+	securityencode->ul_count.seq_num =  0x23;
+	securityencode->knas_enc[0] = 0x14;
+	securityencode->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
+	securityencode->knas_int[0] = 0x41;
+#endif
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 	memset(data,0,sizeof(data));
@@ -2767,7 +2798,7 @@ int  establishment_request(void)
 	printf("extend_options buffer:0x%x 0x%x 0x%x 0x%x\n",(unsigned char)((sm_msg->specific_msg.pdu_session_establishment_request.extendedprotocolconfigurationoptions)->data[0]),(unsigned char)((sm_msg->specific_msg.pdu_session_establishment_request.extendedprotocolconfigurationoptions)->data[1]),(unsigned char)((sm_msg->specific_msg.pdu_session_establishment_request.extendedprotocolconfigurationoptions)->data[2]),(unsigned char)((sm_msg->specific_msg.pdu_session_establishment_request.extendedprotocolconfigurationoptions)->data[3]));
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -2805,16 +2836,18 @@ int  establishment_request(void)
 	nas_message_decode_status_t   decode_status = {0};
 
 	//  int bytes = nas_message_decrypt((*info)->data,plain_msg->data,&header,blength(*info),security,&decode_status);
-
+#if 0
 	//construct security context
-	fivegmm_security_context_t * securityul = (fivegmm_security_context_t *)calloc(1,sizeof(fivegmm_security_context_t));
-	securityul->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	securityul->ul_count.overflow = 0xffff;
-	securityul->ul_count.seq_num =  0x23;
-	securityul->knas_enc[0] = 0x14;
-	securityul->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	securityul->knas_int[0] = 0x41;
-
+	fivegmm_security_context_t * securitydecode = (fivegmm_security_context_t *)calloc(1,sizeof(fivegmm_security_context_t));
+	securitydecode->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
+	securitydecode->dl_count.overflow = 0xffff;
+	securitydecode->dl_count.seq_num =  0x23;
+	securitydecode->ul_count.overflow = 0xffff;
+	securitydecode->ul_count.seq_num =  0x23;
+	securitydecode->knas_enc[0] = 0x14;
+	securitydecode->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
+	securitydecode->knas_int[0] = 0x41;
+#endif
 
 	nas_message_t	decoded_nas_msg;
 	memset (&decoded_nas_msg,		 0, sizeof (nas_message_t));
@@ -2822,7 +2855,7 @@ int  establishment_request(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes/*sizeof(data)*/ /*blength(info)*/, securityul, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes/*sizeof(data)*/ /*blength(info)*/, &securitydecode, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -2873,7 +2906,7 @@ int establishment_accept(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 
 	nas_msg.security_protected.header = nas_msg.header;
@@ -3084,16 +3117,6 @@ int establishment_accept(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 	memset(data,0,sizeof(data));
@@ -3234,7 +3257,7 @@ int establishment_accept(void)
 			(unsigned char)(sm_msg->specific_msg.pdu_session_establishment_accept.dnn->data[2]));
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -3269,7 +3292,7 @@ int establishment_accept(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3418,7 +3441,7 @@ int establishment_reject(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -3493,16 +3516,6 @@ int establishment_reject(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 
@@ -3538,7 +3551,7 @@ int establishment_reject(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -3573,7 +3586,7 @@ int establishment_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3616,7 +3629,7 @@ int authentication_command(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -3680,15 +3693,6 @@ int authentication_command(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -3721,7 +3725,7 @@ int authentication_command(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -3756,7 +3760,7 @@ int authentication_command(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3795,7 +3799,7 @@ int authentication_complete(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -3859,16 +3863,6 @@ int authentication_complete(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 
@@ -3900,7 +3894,7 @@ int authentication_complete(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -3935,7 +3929,7 @@ int authentication_complete(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -3974,7 +3968,7 @@ int authentication_result(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -4038,15 +4032,6 @@ int authentication_result(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -4079,7 +4064,7 @@ int authentication_result(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -4114,7 +4099,7 @@ int authentication_result(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -4155,7 +4140,7 @@ int modification_request(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 
 	nas_msg.security_protected.header = nas_msg.header;
@@ -4342,16 +4327,6 @@ int modification_request(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 	memset(data,0,sizeof(data));
@@ -4473,7 +4448,7 @@ int modification_request(void)
 			(unsigned char)(sm_msg->specific_msg.pdu_session_modification_request.extendedprotocolconfigurationoptions->data[3]));
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -4508,7 +4483,7 @@ int modification_request(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -4636,7 +4611,7 @@ int modification_reject(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -4701,15 +4676,6 @@ int modification_reject(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -4744,7 +4710,7 @@ int modification_reject(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -4779,7 +4745,7 @@ int modification_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -4822,7 +4788,7 @@ int modification_command(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 
 	nas_msg.security_protected.header = nas_msg.header;
@@ -5000,15 +4966,6 @@ int modification_command(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -5128,7 +5085,7 @@ int modification_command(void)
 			(unsigned char)(sm_msg->specific_msg.pdu_session_modification_command.extendedprotocolconfigurationoptions->data[3]));
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -5163,7 +5120,7 @@ int modification_command(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5290,7 +5247,7 @@ int modification_complete(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -5349,15 +5306,6 @@ int modification_complete(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -5389,7 +5337,7 @@ int modification_complete(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -5424,7 +5372,7 @@ int modification_complete(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5463,7 +5411,7 @@ int modification_command_reject(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -5523,16 +5471,6 @@ int modification_command_reject(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 
@@ -5564,7 +5502,7 @@ int modification_command_reject(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -5599,7 +5537,7 @@ int modification_command_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5639,7 +5577,7 @@ int release_request(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -5699,15 +5637,6 @@ int release_request(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -5740,7 +5669,7 @@ int release_request(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -5775,7 +5704,7 @@ int release_request(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5814,7 +5743,7 @@ int release_reject(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -5873,16 +5802,7 @@ int release_reject(void)
 	if(size <= 0){
 		return -1;
 	}
-
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
+ 
 
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
@@ -5915,7 +5835,7 @@ int release_reject(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -5950,7 +5870,7 @@ int release_reject(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -5989,7 +5909,7 @@ int release_command(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -6062,16 +5982,6 @@ int release_command(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 
@@ -6106,7 +6016,7 @@ int release_command(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -6141,7 +6051,7 @@ int release_command(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6183,7 +6093,7 @@ int release_complete(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -6245,16 +6155,6 @@ int release_complete(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 
@@ -6286,7 +6186,7 @@ int release_complete(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -6321,7 +6221,7 @@ int release_complete(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6360,7 +6260,7 @@ int _5gsm_status_(void)
 	uint8_t sequencenumber = 0xfe;
 	//uint32_t mac = 0xffffeeee;
 	uint32_t mac = 0xffee;
-	nas_msg.header.sequence_number = sequencenumber;
+	nas_msg.header.sequence_number = nas_msg_header_sequence_number();
 	nas_msg.header.message_authentication_code= mac;
 	nas_msg.security_protected.header = nas_msg.header;
 	SM_msg * sm_msg;
@@ -6408,16 +6308,6 @@ int _5gsm_status_(void)
 		return -1;
 	}
 
-	//construct security context
-	fivegmm_security_context_t * security = calloc(1,sizeof(fivegmm_security_context_t));
-	security->selected_algorithms.encryption = NAS_SECURITY_ALGORITHMS_NEA1;
-	security->dl_count.overflow = 0xffff;
-	security->dl_count.seq_num =  0x23;
-	security->knas_enc[0] = 0x14;
-	security->selected_algorithms.integrity = NAS_SECURITY_ALGORITHMS_NIA1;
-	security->knas_int[0] = 0x41;
-	//complete sercurity context
-
 	int length = BUF_LEN;
 	unsigned char data[BUF_LEN] = {'\0'};
 
@@ -6448,7 +6338,7 @@ int _5gsm_status_(void)
 
 
 	//bytes = nas_message_encode (data, &nas_msg, 60/*don't know the size*/, security);
-	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, security);
+	bytes = nas_message_encode (data, &nas_msg, sizeof(data)/*don't know the size*/, &securityencode);
 
 
 	//printf("2 nas_message_encode over\n");
@@ -6483,7 +6373,7 @@ int _5gsm_status_(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, security, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes /*blength(info)*/, &securitydecode, &decode_status);
 
 
     printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6535,22 +6425,22 @@ int main()
   	#endif
 
   	CHECK_INIT_RETURN (OAILOG_INIT (MAX_LOG_ENV, OAILOG_LEVEL_DEBUG, MAX_LOG_PROTOS));
-	 establishment_request();
-	 establishment_accept();
-	 establishment_reject();
-	 authentication_command();
-	 authentication_complete();
-	 authentication_result();
-	 modification_request();
-	 modification_reject();
-	 modification_command();
-	 modification_complete();
-	 modification_command_reject();
-	 release_request();
-	 release_reject();
-	 release_command();
-	 release_complete();
-	 _5gsm_status_();
+	establishment_request();
+	establishment_accept();
+	establishment_reject();
+	authentication_command();
+	authentication_complete();
+	authentication_result();
+	modification_request();
+	modification_reject();
+	modification_command();
+	modification_complete();
+	modification_command_reject();
+	release_request();
+	release_reject();
+	release_command();
+	release_complete();
+	_5gsm_status_();
 
   	return 0;
 }

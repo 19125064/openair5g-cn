@@ -15,6 +15,8 @@
 #include "dynamic_memory_check.h"
 
 
+#define DIRECTION__ SECU_DIRECTION_DOWNLINK
+
 
 /****************************************************************************/
 /*******************  L O C A L    D E F I N I T I O N S  *******************/
@@ -146,26 +148,44 @@ int nas_message_encode (
        * Compute offset of the sequence number field
        */
       int                                     offset = size - sizeof (uint8_t);
-
+	
       /*
        * Compute the NAS message authentication code
        */
       OAILOG_DEBUG (LOG_NAS, "offset %d = %d - %lu, hdr encode = %d, length = %lu bytes = %d\n", offset, size, sizeof (uint8_t), size, length, bytes);
       uint32_t                                mac = _nas_message_get_mac (buffer + offset,
                                                                           bytes + size - offset,
-                                                                          SECU_DIRECTION_DOWNLINK,
+                                                                          /*SECU_DIRECTION_DOWNLINK,*/
+	  																	  DIRECTION__,
                                                                           fivegmm_security_context);
       /*
        * Set the message authentication code of the NAS message
        */
-
       *(uint32_t *) (buffer + 2*sizeof (uint8_t)) = htonl (mac);
+	  //if (fivegmm_security_context) {
+      //  fivegmm_security_context->dl_count.seq_num += 1;
+
+      //  if (!fivegmm_security_context->dl_count.seq_num) {
+      //    fivegmm_security_context->dl_count.overflow += 1;
+      //  }
+
+//**********test mac or encrypt*************
+#if DIRECTION__
       if (fivegmm_security_context) {
+        fivegmm_security_context->ul_count.seq_num += 1;
+
+        if (!fivegmm_security_context->ul_count.seq_num) {
+          fivegmm_security_context->ul_count.overflow += 1;
+        }
+#else
+		if (fivegmm_security_context) {
         fivegmm_security_context->dl_count.seq_num += 1;
 
         if (!fivegmm_security_context->dl_count.seq_num) {
           fivegmm_security_context->dl_count.overflow += 1;
         }
+#endif
+//***************test end*****************
 
         OAILOG_DEBUG (LOG_NAS, "Incremented fivegmm_security_context.dl_count.seq_num -> %u\n", fivegmm_security_context->dl_count.seq_num);
       } else {
@@ -234,18 +254,33 @@ int nas_message_decode (
      * Compute offset of the sequence number field
      */
     int offset = size - sizeof (uint8_t);
+
+//***********test mac or decrypt****************
+#if DIRECTION__
     if (fivegmm_security_context) {
       status->security_context_available = 1;
       if (fivegmm_security_context->ul_count.seq_num > msg->header.sequence_number) {
         fivegmm_security_context->ul_count.overflow += 1;
       }
       fivegmm_security_context->ul_count.seq_num = msg->header.sequence_number;
+#else
+	if (fivegmm_security_context) {
+      status->security_context_available = 1;
+      if (fivegmm_security_context->dl_count.seq_num > msg->header.sequence_number) {
+        fivegmm_security_context->dl_count.overflow += 1;
+      }
+      fivegmm_security_context->dl_count.seq_num = msg->header.sequence_number;
+#endif
+//***************test end*****************
+
+
       /*
        * Compute the NAS message authentication code, return 0 if no security context
        */
       mac = _nas_message_get_mac (buffer + offset,
           length - offset,
-          SECU_DIRECTION_UPLINK,
+          /*SECU_DIRECTION_UPLINK,*/
+		  DIRECTION__,
           fivegmm_security_context);
       /*
        * Check NAS message integrity
