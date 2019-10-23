@@ -172,7 +172,7 @@ int nas_message_encode (
       //  }
 
 //**********test mac or encrypt*************
-#if DIRECTION__
+#if !DIRECTION__
 		fivegmm_security_context->ul_count.seq_num += 1;
 
 		if (!fivegmm_security_context->ul_count.seq_num) 
@@ -264,7 +264,7 @@ int nas_message_decode (
     //  fivegmm_security_context->ul_count.seq_num = msg->header.sequence_number;
 
 //***********test mac or decrypt****************
-#if DIRECTION__
+#if !DIRECTION__
 		status->security_context_available = 1;
 		if (fivegmm_security_context->ul_count.seq_num > msg->header.sequence_number) 
 		{
