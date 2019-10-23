@@ -6426,6 +6426,7 @@ int main()
 
   	CHECK_INIT_RETURN (OAILOG_INIT (MAX_LOG_ENV, OAILOG_LEVEL_DEBUG, MAX_LOG_PROTOS));
 	establishment_request();
+	#if 1
 	establishment_accept();
 	establishment_reject();
 	authentication_command();
@@ -6441,6 +6442,7 @@ int main()
 	release_command();
 	release_complete();
 	_5gsm_status_();
+	#endif
 
   	return 0;
 }

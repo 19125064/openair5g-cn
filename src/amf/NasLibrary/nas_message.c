@@ -156,13 +156,15 @@ int nas_message_encode (
       uint32_t                                mac = _nas_message_get_mac (buffer + offset,
                                                                           bytes + size - offset,
                                                                           /*SECU_DIRECTION_DOWNLINK,*/
+	  																	  /******test******/
 	  																	  DIRECTION__,
+	  																	  /****test end********/
                                                                           fivegmm_security_context);
       /*
        * Set the message authentication code of the NAS message
        */
       *(uint32_t *) (buffer + 2*sizeof (uint8_t)) = htonl (mac);
-	  //if (fivegmm_security_context) {
+	  if (fivegmm_security_context) {
       //  fivegmm_security_context->dl_count.seq_num += 1;
 
       //  if (!fivegmm_security_context->dl_count.seq_num) {
@@ -171,19 +173,19 @@ int nas_message_encode (
 
 //**********test mac or encrypt*************
 #if DIRECTION__
-      if (fivegmm_security_context) {
-        fivegmm_security_context->ul_count.seq_num += 1;
+		fivegmm_security_context->ul_count.seq_num += 1;
 
-        if (!fivegmm_security_context->ul_count.seq_num) {
-          fivegmm_security_context->ul_count.overflow += 1;
-        }
+		if (!fivegmm_security_context->ul_count.seq_num) 
+		{
+			fivegmm_security_context->ul_count.overflow += 1;
+		}
 #else
-		if (fivegmm_security_context) {
-        fivegmm_security_context->dl_count.seq_num += 1;
+		fivegmm_security_context->dl_count.seq_num += 1;
 
-        if (!fivegmm_security_context->dl_count.seq_num) {
-          fivegmm_security_context->dl_count.overflow += 1;
-        }
+		if (!fivegmm_security_context->dl_count.seq_num) 
+		{
+			fivegmm_security_context->dl_count.overflow += 1;
+		}
 #endif
 //***************test end*****************
 
@@ -254,22 +256,28 @@ int nas_message_decode (
      * Compute offset of the sequence number field
      */
     int offset = size - sizeof (uint8_t);
+	if (fivegmm_security_context) {
+    //  status->security_context_available = 1;
+    //  if (fivegmm_security_context->ul_count.seq_num > msg->header.sequence_number) {
+    //    fivegmm_security_context->ul_count.overflow += 1;
+    //  }
+    //  fivegmm_security_context->ul_count.seq_num = msg->header.sequence_number;
 
 //***********test mac or decrypt****************
 #if DIRECTION__
-    if (fivegmm_security_context) {
-      status->security_context_available = 1;
-      if (fivegmm_security_context->ul_count.seq_num > msg->header.sequence_number) {
-        fivegmm_security_context->ul_count.overflow += 1;
-      }
-      fivegmm_security_context->ul_count.seq_num = msg->header.sequence_number;
+		status->security_context_available = 1;
+		if (fivegmm_security_context->ul_count.seq_num > msg->header.sequence_number) 
+		{
+			fivegmm_security_context->ul_count.overflow += 1;
+		}
+		fivegmm_security_context->ul_count.seq_num = msg->header.sequence_number;
 #else
-	if (fivegmm_security_context) {
-      status->security_context_available = 1;
-      if (fivegmm_security_context->dl_count.seq_num > msg->header.sequence_number) {
-        fivegmm_security_context->dl_count.overflow += 1;
-      }
-      fivegmm_security_context->dl_count.seq_num = msg->header.sequence_number;
+		status->security_context_available = 1;
+		if (fivegmm_security_context->dl_count.seq_num > msg->header.sequence_number) 
+		{
+			fivegmm_security_context->dl_count.overflow += 1;
+		}
+		fivegmm_security_context->dl_count.seq_num = msg->header.sequence_number;
 #endif
 //***************test end*****************
 
@@ -280,7 +288,9 @@ int nas_message_decode (
       mac = _nas_message_get_mac (buffer + offset,
           length - offset,
           /*SECU_DIRECTION_UPLINK,*/
+		  /******test******/
 		  DIRECTION__,
+		  /******test end*****/
           fivegmm_security_context);
       /*
        * Check NAS message integrity
@@ -447,9 +457,14 @@ static int _nas_message_protected_encode (
       printf("msg->header.message_authentication_code(0x%x)\n",msg->header.message_authentication_code);
       printf("msg->header.sequence_number(0x%x)\n",msg->header.sequence_number);
       #endif
+	  OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message encrypt front: ", plain_msg, size)
 	  bytes = _nas_message_encrypt (buffer, plain_msg, msg->header.security_header_type, msg->header.message_authentication_code, msg->header.sequence_number,
-                                    SECU_DIRECTION_DOWNLINK,
+                                    /*SECU_DIRECTION_DOWNLINK,*/
+	  								/******test*******/
+	  								DIRECTION__,
+	  								/*****test end*****/
                                     size, fivegmm_security_context);
+	  OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message encrypt back: ", buffer, size)
      //printf("_nas_message_encrypt, bytes: %d\n",bytes);
     }
 
@@ -570,33 +585,33 @@ static int _nas_message_encrypt (
         } else {
           //printf("fivegmm_security_context->dl_count.overflow = %x\n",((fivegmm_security_context->dl_count.overflow & 0x0000FFFF) ));
           //printf("fivegmm_security_context->dl_count.seq_num = %x\n",fivegmm_security_context->dl_count.seq_num);
-          count = 0x00000000 | ((fivegmm_security_context->dl_count.overflow & 0x0000FFFF) << 8) | (fivegmm_security_context->dl_count.seq_num & 0x000000FF);
+          count = 0x00000000 | ((fivegmm_security_context->dl_count.overflow && 0x0000FFFF) << 8) | (fivegmm_security_context->dl_count.seq_num & 0x000000FF);
         }
         //printf("count = %x\n",count);
         //OAILOG_DEBUG (LOG_NAS,
         //           "NAS_SECURITY_ALGORITHMS_EEA1 dir %s count.seq_num %u count %u\n",
         //           (direction == SECU_DIRECTION_UPLINK) ? "UPLINK" : "DOWNLINK", (direction == SECU_DIRECTION_UPLINK) ? fivegmm_security_context->ul_count.seq_num : fivegmm_security_context->dl_count.seq_num, count);
-        //stream_cipher.key = fivegmm_security_context->knas_enc;
-        //stream_cipher.key_length = AUTH_KNAS_ENC_SIZE;
-        //stream_cipher.count = count;
-        //stream_cipher.bearer = 0x00;    //33.401 section 8.1.1
-        //stream_cipher.direction = direction;
-        //stream_cipher.message = (uint8_t*)src;
+        stream_cipher.key = fivegmm_security_context->knas_enc;
+        stream_cipher.key_length = AUTH_KNAS_ENC_SIZE;
+        stream_cipher.count = count;
+        stream_cipher.bearer = 0x00;    //33.401 section 8.1.1
+        stream_cipher.direction = direction;
+        stream_cipher.message = (uint8_t*)src;
         /*
          * length in bits
          */
-        //stream_cipher.blength = length << 3;
-        //nas_stream_encrypt_nea1 (&stream_cipher, (uint8_t*)dest);
-        //OAILOG_FUNC_RETURN (LOG_NAS, length);
-        memcpy (dest, src, length);
-        return length;
+        stream_cipher.blength = length << 3;
+        nas_stream_encrypt_nea1 (&stream_cipher, (uint8_t*)dest);
+        OAILOG_FUNC_RETURN (LOG_NAS, length);
+        //memcpy (dest, src, length);
+        //return length;
           }
           break;
         case NAS_SECURITY_ALGORITHMS_NEA2:{
         if (direction == SECU_DIRECTION_UPLINK) {
-          count = 0x00000000 | ((fivegmm_security_context->ul_count.overflow & 0x0000FFFF) << 8) | (fivegmm_security_context->ul_count.seq_num & 0x000000FF);
+          count = 0x00000000 | ((fivegmm_security_context->ul_count.overflow && 0x0000FFFF) << 8) | (fivegmm_security_context->ul_count.seq_num & 0x000000FF);
         } else {
-          count = 0x00000000 | ((fivegmm_security_context->dl_count.overflow & 0x0000FFFF) << 8) | (fivegmm_security_context->dl_count.seq_num & 0x000000FF);
+          count = 0x00000000 | ((fivegmm_security_context->dl_count.overflow && 0x0000FFFF) << 8) | (fivegmm_security_context->dl_count.seq_num & 0x000000FF);
         }
 
         OAILOG_DEBUG (LOG_NAS,
@@ -844,6 +859,7 @@ static int _nas_message_protected_decode (
      */
     //printf("_nas_message_decrypt  ------- start\n");
     //header->extended_protocol_discriminator = _nas_message_decrypt (
+    OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message decrypt front: ", buffer, length)
     int rc = _nas_message_decrypt (
         plain_msg,
         buffer,
@@ -852,6 +868,7 @@ static int _nas_message_protected_decode (
         header->sequence_number,
         length, fivegmm_security_context,
         status);
+	OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message decrypt back: ", plain_msg, length)
 	 //printf("_nas_message_decrypt  ------- end\n");
     /*
      * Decode the decrypted message as plain NAS message
@@ -883,7 +900,10 @@ static int _nas_message_decrypt (
   int                                     size = 0;
   nas_message_security_header_t           header = {0};
 
-  direction = SECU_DIRECTION_UPLINK;
+  //direction = SECU_DIRECTION_UPLINK;
+  /******test*******/
+  direction = DIRECTION__;
+  /******test end*******/
 
   switch (security_header_type) {
   case SECURITY_HEADER_TYPE_NOT_PROTECTED:
@@ -929,16 +949,16 @@ static int _nas_message_decrypt (
            * length in bits
            */
           stream_cipher.blength = length << 3;
-          memcpy (dest, src, length);
-          //nas_stream_encrypt_nea1 (&stream_cipher, (uint8_t*)dest);
+          //memcpy (dest, src, length);
+          nas_stream_encrypt_nea1 (&stream_cipher, (uint8_t*)dest);
           /*
            * Decode the first octet (security header type or EPS bearer identity,
            * * * * and protocol discriminator)
            */
           //DECODE_U8 (dest, *(uint8_t *) (&header), size);
-          //DECODE_U8(dest,header.extended_protocol_discriminator,size);
-          //DECODE_U8(dest+size,header.security_header_type,size);
-          //OAILOG_FUNC_RETURN (LOG_NAS, header.extended_protocol_discriminator);
+          DECODE_U8(dest,header.extended_protocol_discriminator,size);
+          DECODE_U8(dest+size,header.security_header_type,size);
+          OAILOG_FUNC_RETURN (LOG_NAS, header.extended_protocol_discriminator);
         }
         break;
         case NAS_SECURITY_ALGORITHMS_NEA2:{
