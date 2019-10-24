@@ -122,6 +122,7 @@ int decode_qos_flow_descriptions ( QOSFlowDescriptions * qosflowdescriptions, ui
 		if((((*(buffer + decoded_tmp)>>6)&0x01) == PARAMETERS_LIST_IS_NOT_INCLUDED) && ((*(buffer + decoded_tmp - 1) >> 5) == DELETE_EXISTING_QOS_FLOW_DESCRIPTION))
 		{
 			numberparameters = 0;
+			decoded_tmp ++;
 		}
 		else
 		{

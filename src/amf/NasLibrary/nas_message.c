@@ -153,6 +153,7 @@ int nas_message_encode (
        * Compute the NAS message authentication code
        */
       OAILOG_DEBUG (LOG_NAS, "offset %d = %d - %lu, hdr encode = %d, length = %lu bytes = %d\n", offset, size, sizeof (uint8_t), size, length, bytes);
+	  printf("encode mac len = %d\n",bytes + size - offset);
       uint32_t                                mac = _nas_message_get_mac (buffer + offset,
                                                                           bytes + size - offset,
                                                                           /*SECU_DIRECTION_DOWNLINK,*/
@@ -285,6 +286,7 @@ int nas_message_decode (
       /*
        * Compute the NAS message authentication code, return 0 if no security context
        */
+       printf("decode mac len = %d\n",length - offset);
       mac = _nas_message_get_mac (buffer + offset,
           length - offset,
           /*SECU_DIRECTION_UPLINK,*/
@@ -464,7 +466,7 @@ static int _nas_message_protected_encode (
 	  								DIRECTION__,
 	  								/*****test end*****/
                                     size, fivegmm_security_context);
-	  OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message encrypt back: ", buffer, size)
+	  OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message encrypt back: ", buffer, size+10)
      //printf("_nas_message_encrypt, bytes: %d\n",bytes);
     }
 
@@ -868,7 +870,7 @@ static int _nas_message_protected_decode (
         header->sequence_number,
         length, fivegmm_security_context,
         status);
-	OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message decrypt back: ", plain_msg, length)
+	OAILOG_STREAM_HEX(OAILOG_LEVEL_DEBUG, LOG_NAS, "NAS message decrypt back: ", plain_msg, length+10)
 	 //printf("_nas_message_decrypt  ------- end\n");
     /*
      * Decode the decrypted message as plain NAS message

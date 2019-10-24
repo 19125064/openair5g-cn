@@ -2855,7 +2855,7 @@ int  establishment_request(void)
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes/*sizeof(data)*/ /*blength(info)*/, &securitydecode, &decode_status);
+	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes+1/*sizeof(data)*/ /*blength(info)*/, &securitydecode, &decode_status);
 
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
@@ -6427,21 +6427,21 @@ int main()
   	CHECK_INIT_RETURN (OAILOG_INIT (MAX_LOG_ENV, OAILOG_LEVEL_DEBUG, MAX_LOG_PROTOS));
 	establishment_request();
 	#if 1
-	establishment_accept();
-	establishment_reject();
-	authentication_command();
-	authentication_complete();
-	authentication_result();
-	modification_request();
-	modification_reject();
-	modification_command();
-	modification_complete();
-	modification_command_reject();
-	release_request();
-	release_reject();
-	release_command();
-	release_complete();
-	_5gsm_status_();
+	//establishment_accept();
+	//establishment_reject();
+	//authentication_command();
+	//authentication_complete();
+	//authentication_result();
+	//modification_request();
+	//modification_reject();
+	//modification_command();
+	//modification_complete();
+	//modification_command_reject();
+	//release_request();
+	//release_reject();
+	//release_command();
+	//release_complete();
+	//_5gsm_status_();
 	#endif
 
   	return 0;
