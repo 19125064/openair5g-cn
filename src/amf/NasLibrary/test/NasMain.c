@@ -2813,7 +2813,7 @@ int  establishment_request(void)
 	info->data = data;
 	info->slen = bytes;
 
-	#if 1
+	#if 0
 	char datahex[512];
 	for(int i=0;i<bytes;i++)
 		sprintf(datahex+i*2,"%02x",data[i]);
@@ -2854,9 +2854,12 @@ int  establishment_request(void)
 
 	int decoder_rc = RETURNok;
 	printf("calling nas_message_decode-----------\n");
+	uint8_t *encode_data = (uint8_t *)calloc(1,bytes);
+	memset(encode_data,0,sizeof(encode_data));
+	memcpy(encode_data,data,bytes);
 	//decoder_rc = nas_message_decode (plain_msg->data, &decoded_nas_msg, 60/*blength(info)*/, security, &decode_status);
-	decoder_rc = nas_message_decode (data, &decoded_nas_msg, bytes+1/*sizeof(data)*/ /*blength(info)*/, &securitydecode, &decode_status);
-
+	decoder_rc = nas_message_decode (encode_data, &decoded_nas_msg, bytes/*sizeof(data)*/ /*blength(info)*/, &securitydecode, &decode_status);
+	free(encode_data);
 
 	printf("nas header  decode extended_protocol_discriminator:0x%x\n, security_header_type:0x%x\n,sequence_number:0x%x\n,message_authentication_code:0x%x\n",
 	decoded_nas_msg.header.extended_protocol_discriminator,
